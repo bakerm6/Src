@@ -11,16 +11,12 @@ simulated function PostBeginPlay() {
 
 event Tick( float DeltaTime ) {
 	newLoc.z = 40;
-	Flashlight.SetLocation(self.Location);
-	Flashlight.SetLocation(newLoc);
+	//Flashlight.SetLocation(self.Location);
+	//Flashlight.SetLocation(newLoc);
+	Flashlight.SetRelativeLocation(newLoc);
 	Flashlight.SetBase(self);
 	Flashlight.LightComponent.SetEnabled(true);
 	//Flashlight.LightComponent.SetLightProperties(1000);
-	newRot.Pitch = 0;
-	Flashlight.SetRotation(newRot);
-
-	Flashlight.SetRotation(self.Rotation);
-	Flashlight.SetRelativeRotation(newRot);
 }
 
 defaultproperties {
