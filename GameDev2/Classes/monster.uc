@@ -38,7 +38,7 @@ local Pawn pawnLocal;
         //self.SetRotation(Rot(0,16384,0);
         //self.SetRotation(RInterpTo(Rotation,test,Delta,90000,true)); 
       }
-      t = false;
+      //t = false;
     }
 }
 function dead()
