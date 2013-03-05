@@ -13,7 +13,7 @@ DefaultProperties
  End Object
  CylinderComponent=CollisionCylinder
  Begin Object class=StaticMeshComponent Name=MyStaticMeshComponent
-    StaticMesh=StaticMesh'EngineMeshes.Cube'
+    StaticMesh=StaticMesh'E3_Demo.Meshes.SM_Barrel_01'
  End Object
   StaticMesh=MyStaticMeshComponent
   Components.Add(MyStaticMeshComponent)
@@ -21,4 +21,4 @@ DefaultProperties
    bJumpCapable=false
    bCanJump=false
    bNoDelete = false
-   }
+}

@@ -13,20 +13,11 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     Pawn.SetMovementPhysics();
     temp = true;
 }
-exec function attackb()
+simulated private function DebugPrint(string sMessage)
 {
-local actor t;
-local int y;
-t = GetALocalPlayerController().Pawn;
-y = VSize(t.Location - Pawn.Location);
-if(y<0)
-    y*=-1;
-if(y<150)
-{
-monster(Pawn).healtht=-10;
-DebugPrint("AAA");
+	GetALocalPlayerController().ClientMessage(sMessage);
 }
-}
+
 simulated function Tick(float DeltaTime)
 {
     super.Tick(DeltaTime);
@@ -35,10 +26,6 @@ simulated function Tick(float DeltaTime)
     PathFind();
     }
 }
-simulated private function DebugPrint(string sMessage)
-{
-	GetALocalPlayerController().ClientMessage(sMessage);
-}
 simulated function PathFind()
 {
     local int Distance;
@@ -46,7 +33,7 @@ simulated function PathFind()
 
 	if (Distance <= CloseEnough)
 		{	
-			_PathNode=_PathNode++;						// Head towards a random PathNode in our array
+			_PathNode=_PathNode++;						
             
 		}
         GoToState('Pathfinding');
@@ -62,10 +49,6 @@ Begin:
     x = VSize(Target.Location - Pawn.Location);
     if(x <0)
         x*=-1;
-    if((x<150))
-    {
-       //monster(Pawn).healtht =-10;
-    }
     if (x < 500)
     {
         if(temp!= false && count <1)
@@ -73,12 +56,6 @@ Begin:
         temp = false;
         count+=1;
         MoveToward(Target, Target, 128);
-        
-    }
-        if(monster(Pawn).healtht <= 0)
-    {
-        DebugPrint("DEAD");
-        monster(Pawn).Destroy();
     }
     else if(monster(Pawn).Waypoints[_PathNode] != None)
     {
