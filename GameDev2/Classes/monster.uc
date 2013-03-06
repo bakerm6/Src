@@ -3,6 +3,7 @@ class monster extends GamePawn
 var() StaticMeshComponent StaticMesh;
 var() array<Pathnode> Waypoints;
 var () int healtht;
+var int i;
 var rotator test;
 var bool t;
 event PostBeginPlay()
@@ -10,6 +11,26 @@ event PostBeginPlay()
  super.PostBeginPlay();
  t = false;
 }
+/*
+exec function findthenode()
+{
+local PathNode p;
+local monster u;
+local int y;
+local int l;
+l = 0;
+DebugPrint("workingmore");
+ForEach AllActors(class'monster',u) 
+{
+ForEach AllActors(class'PathNode',p) 
+{
+y = VSize(u.Location - p.Location);
+GetALocalPlayerController().ClientMessage(y);
+if(y<100000)
+u.Waypoints[l] = p;
+}
+}
+}*/
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
@@ -19,8 +40,8 @@ function Tick(float Delta)
 super.Tick(Delta);
 if(t==true)
 {
-Velocity = Normal(Vector(Rotation))*GroundSpeed;
-SetRotation(RInterpTo(Rotation,test,Delta,90000,true));
+//Velocity = Normal(Vector(Rotation))*GroundSpeed;
+//SetRotation(RInterpTo(Rotation,test,Delta,90000,true));
 }
 }
 event Bump(Actor Other, PrimitiveComponent OtherComp, Vector HitNormal)
@@ -35,6 +56,7 @@ local Pawn pawnLocal;
       {
         DebugPrint("touch");
         t = true;
+        //findthenode();
         //self.SetRotation(Rot(0,16384,0);
         //self.SetRotation(RInterpTo(Rotation,test,Delta,90000,true)); 
       }

@@ -13,6 +13,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     Pawn.SetMovementPhysics();
     temp = true;
 }
+
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);

@@ -26,6 +26,8 @@ DebugPrint("AAA");
 }
 }
 }
+
+
 defaultproperties
 {
    CameraClass=class'GameDev2.GD2PlayerCamera'
