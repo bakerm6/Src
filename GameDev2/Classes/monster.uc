@@ -66,7 +66,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     a = isclosec();
     d = GetALocalPlayerController().Pawn;
     y = VSize(self.Location - d.Location);
-    GetALocalPlayerController().ClientMessage(y);
+    //GetALocalPlayerController().ClientMessage(y);
     if(y<0)
     y*=-1;
     if(a==true && y>300)
