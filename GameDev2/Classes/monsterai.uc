@@ -8,6 +8,7 @@ var SoundCue scream;
 var bool temp;
 var float count;
 var bool attk;
+
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);

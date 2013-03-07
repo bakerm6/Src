@@ -6,6 +6,9 @@ var () int healtht;
 var int i;
 var rotator test;
 var bool t;
+var() const string Prompt;
+var() const string Prompt1;
+var() const string Prompt2;
 event PostBeginPlay()
 {
  super.PostBeginPlay();
@@ -31,6 +34,70 @@ u.Waypoints[l] = p;
 }
 }
 }*/
+function bool isclosec()
+{
+local actor s;
+local int y;
+s = GetALocalPlayerController().Pawn;
+y = VSize(s.Location - self.Location);
+if(y<0)
+    y*=-1;
+ if(y<700)
+ {
+    return true;
+ }
+ else 
+ return false;
+}
+
+simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
+{
+    local actor d;
+    local int y;
+    local bool a;
+    local string pr;
+    local string pr1;
+    local string pr2;
+    local Font previous_font;
+    pr = Prompt;
+    pr1= Prompt1;
+    pr2= Prompt2;
+    super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
+    a = isclosec();
+    d = GetALocalPlayerController().Pawn;
+    y = VSize(self.Location - d.Location);
+    GetALocalPlayerController().ClientMessage(y);
+    if(y<0)
+    y*=-1;
+    if(a==true && y>300)
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(400,300);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(pr); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font;
+    }
+    if(a==true && y<300)
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(400,300);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(pr1); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font;
+    }
+    else
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(400,300);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(pr2); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font;
+    }
+
+}
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
@@ -89,6 +156,7 @@ DefaultProperties
    bJumpCapable=false
    bCanJump=false
    bNoDelete = false
+bPostRenderIfNotVisible=true
    GroundSpeed=200.0
 }
 
