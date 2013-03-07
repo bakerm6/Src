@@ -7,6 +7,7 @@ var actor destination;
 var SoundCue scream;
 var bool temp;
 var float count;
+var bool attk;
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);
@@ -50,7 +51,7 @@ Begin:
     x = VSize(Target.Location - Pawn.Location);
     if(x <0)
         x*=-1;
-    if (x < 500)
+    if (x < 900)
     {
         if(temp!= false && count <1)
             PlaySound( scream );
@@ -58,6 +59,7 @@ Begin:
         count+=1;
         MoveToward(Target, Target, 128);
     }
+        
     else if(monster(Pawn).Waypoints[_PathNode] != None)
     {
     count = 0;
