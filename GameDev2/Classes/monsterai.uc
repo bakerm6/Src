@@ -2,25 +2,25 @@ class monsterai extends AIController;
 var int CloseEnough;
 var int _PathNode;
 var Actor Target;
-var float x;
+var float Distance;
 var actor destination;
 var SoundCue scream;
-var bool temp;
-var float count;
-var bool attk;
+var bool Sound_Bool;
+var float Path_Count;
 
+//Puts movement and a soundcue on the monster
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);
     Pawn.SetMovementPhysics();
-    temp = true;
+    Sound_Bool = true;
 }
-
+//Prints debug client messages
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
-
+//Updates each frame
 simulated function Tick(float DeltaTime)
 {
     super.Tick(DeltaTime);
@@ -29,12 +29,14 @@ simulated function Tick(float DeltaTime)
     PathFind();
     }
 }
+//Main function for pathfinding among an aray of pathnodes in order
+//The order is set in the monster properties
 simulated function PathFind()
 {
-    local int Distance;
-    Distance = VSize(monster(Pawn).Waypoints[_PathNode].Location-Pawn.Location);
+    local int Distance_p;
+    Distance_p = VSize(monster(Pawn).Waypoints[_PathNode].Location-Pawn.Location);
 
-	if (Distance <= CloseEnough)
+	if (Distance_p <= CloseEnough)
 		{	
 			_PathNode=_PathNode++;						
             
@@ -45,26 +47,28 @@ simulated function PathFind()
 			_PathNode = 0;
 		}
 }
+//State that does the pathfinding
+//It is set to chase the player if they get within a certain distance of the monster
 state Pathfinding 
 {
 Begin: 
     Target = GetALocalPlayerController().Pawn;
-    x = VSize(Target.Location - Pawn.Location);
-    if(x <0)
-        x*=-1;
-    if (x < 900)
+    Distance = VSize(Target.Location - Pawn.Location);
+    if(Distance <0)
+        Distance*=-1;
+    if (Distance < 900)
     {
-        if(temp!= false && count <1)
+        if(Sound_Bool!= false && Path_Count <1)
             PlaySound( scream );
-        temp = false;
-        count+=1;
+        Sound_Bool = false;
+        Path_Count+=1;
         MoveToward(Target, Target, 128);
     }
         
     else if(monster(Pawn).Waypoints[_PathNode] != None)
     {
-    count = 0;
-    temp = true;
+    Path_Count = 0;
+    Sound_Bool = true;
     MoveToward(monster(Pawn).Waypoints[_PathNode], monster(Pawn).Waypoints[_PathNode], 128);
     }   
     Sleep(0);
@@ -74,5 +78,5 @@ DefaultProperties
 {
     scream = SoundCue'Sounds.mstwoc'
     CloseEnough = 200
-    count = 0;
+    Path_Count = 0;
 }

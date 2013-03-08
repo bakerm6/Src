@@ -1,4 +1,5 @@
 class GD2PlayerController extends UTPlayerController;
+//Function to output debug messages
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
@@ -7,90 +8,46 @@ simulated private function DebugPrint(string sMessage)
 //combat function that exectues when z is pressed
 exec function attackb()
 {
-local monster u;
-local actor t;
-local int y;
-//DebugPrint("wprk");
-//a = isclosea();
-t = GetALocalPlayerController().Pawn;
-ForEach AllActors(class'monster',u)
+local monster ai;
+local actor Player_location_actor;
+local int Distance;
+Player_location_actor = GetALocalPlayerController().Pawn;
+ForEach AllActors(class'monster',ai)
 {
-y = VSize(t.Location - u.Location);
-GetALocalPlayerController().ClientMessage(y);
-if(y<0)
-    y*=-1;
-if(y>300&&y<700)
+Distance = VSize(Player_location_actor.Location - ai.Location);
+if(Distance<0)
+    Distance*=-1;
+if(Distance>300&&Distance<700)
 {
-u.healtht-=10;
-u.dead();
-DebugPrint("HIT");
+ai.monster_health-=10;
+ai.dead();
+//DebugPrint("HIT");
 }
 }
 }
-/*
-function bool isclosea(monster u)
-{
-//local monster u;
-local actor t;
-local int y;
-t = GetALocalPlayerController().Pawn;
-ForEach AllActors(class'monster',u)
-{
-y = VSize(t.Location - u.Location);
-if(y<0)
-    y*=-1;
- if(y<700)
- {
-    return true;
- }
- else 
- return false;
-}
-}*/
-/*
-function bool iscloseb(monster u)
-{
-//local monster u;
-local actor t;
-local int y;
-t = GetALocalPlayerController().Pawn;
-ForEach AllActors(class'monster',u)
-{
-y = VSize(t.Location - u.Location);
-if(y<0)
-    y*=-1;
- if(y<700)
- {
-    return true;
- }
- else 
- return false;
-}
-}*/
+//block function that executes when c is pressed
 exec function blockb()
 {
-local monster u;
-local actor t;
-local int y;
-//local bool a;
-//a = iscloseb();
-t = GetALocalPlayerController().Pawn;
-ForEach AllActors(class'monster',u)
+local monster ai;
+local actor Player_location_actor;
+local int Distance;
+Player_location_actor = GetALocalPlayerController().Pawn;
+ForEach AllActors(class'monster',ai)
 {
-//a = iscloseb(u);
-y = VSize(t.Location - u.Location);
-if(y<0)
-    y*=-1;
-if(y<700 && y<300)
+Distance = VSize(Player_location_actor.Location - ai.Location);
+if(Distance<0)
+    Distance*=-1;
+if(Distance<700 && Distance<300)
 {
 
-DebugPrint("Block");
+//DebugPrint("Block");
 }
 }
 }
 
 defaultproperties
 {
+
    CameraClass=class'GameDev2.GD2PlayerCamera'
    bCollideActors=true
    // bBehindView=false

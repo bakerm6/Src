@@ -1,5 +1,4 @@
 class GD2PlayerPawn extends UTPawn;
-
 var SpotLightMovable Flashlight;
 var Rotator newRot;
 var Vector newLoc;

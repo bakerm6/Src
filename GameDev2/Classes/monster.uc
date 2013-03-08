@@ -2,89 +2,70 @@ class monster extends GamePawn
     placeable;
 var() StaticMeshComponent StaticMesh;
 var() array<Pathnode> Waypoints;
-var () int healtht;
-var int i;
-var rotator test;
-var bool t;
-var() const string Prompt;
-var() const string Prompt1;
-var() const string Prompt2;
+var() int monster_health;
+var() const string Attack_Message;
+var() const string Attack_Message1;
+var() const string Attack_Message2;
 event PostBeginPlay()
 {
  super.PostBeginPlay();
- t = false;
 }
-/*
-exec function findthenode()
+//Debug Function
+simulated private function DebugPrint(string sMessage)
 {
-local PathNode p;
-local monster u;
-local int y;
-local int l;
-l = 0;
-DebugPrint("workingmore");
-ForEach AllActors(class'monster',u) 
-{
-ForEach AllActors(class'PathNode',p) 
-{
-y = VSize(u.Location - p.Location);
-GetALocalPlayerController().ClientMessage(y);
-if(y<100000)
-u.Waypoints[l] = p;
+	GetALocalPlayerController().ClientMessage(sMessage);
 }
-}
-}*/
-function bool isclosec()
+//Checks if monster is in range to render text
+function bool in_range()
 {
-local actor s;
-local int y;
-s = GetALocalPlayerController().Pawn;
-y = VSize(s.Location - self.Location);
-if(y<0)
-    y*=-1;
- if(y<700)
+local actor Player_location_actor;
+local int Distance;
+Player_location_actor = GetALocalPlayerController().Pawn;
+Distance = VSize(Player_location_actor.Location - self.Location);
+if(Distance<0)
+    Distance*=-1;
+ if(Distance<700)
  {
     return true;
  }
  else 
  return false;
 }
-
+//Renders text based on prompts that are inputed in the monster properties
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
-    local actor d;
-    local int y;
-    local bool a;
-    local string pr;
-    local string pr1;
-    local string pr2;
+    local actor Player_Location_Actor;
+    local int Distance;
+    local bool range_check;
+    local string Message;
+    local string Message1;
+    local string Message2;
     local Font previous_font;
-    pr = Prompt;
-    pr1= Prompt1;
-    pr2= Prompt2;
+    Message = Attack_Message;
+    Message1= Attack_Message1;
+    Message2= Attack_Message2;
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
-    a = isclosec();
-    d = GetALocalPlayerController().Pawn;
-    y = VSize(self.Location - d.Location);
-    //GetALocalPlayerController().ClientMessage(y);
-    if(y<0)
-    y*=-1;
-    if(a==true && y>300)
+    range_check = in_range();
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    Distance = VSize(self.Location - Player_Location_Actor.Location);
+    if(Distance<0)
+    Distance*=-1;
+    if(range_check==true && Distance>325)
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText(pr); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(Message); 
     Canvas.Font = previous_font;
     }
-    if(a==true && y<300)
+    if(range_check==true && Distance<300)
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText(pr1); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
     }
     else
@@ -93,24 +74,17 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText(pr2); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
     }
 
 }
-simulated private function DebugPrint(string sMessage)
-{
-	GetALocalPlayerController().ClientMessage(sMessage);
-}
+//Checks each frame
 function Tick(float Delta)
 {
 super.Tick(Delta);
-if(t==true)
-{
-//Velocity = Normal(Vector(Rotation))*GroundSpeed;
-//SetRotation(RInterpTo(Rotation,test,Delta,90000,true));
 }
-}
+//Checks for a bump
 event Bump(Actor Other, PrimitiveComponent OtherComp, Vector HitNormal)
 {
 local Pawn pawnLocal;  
@@ -121,23 +95,20 @@ local Pawn pawnLocal;
         //test if it is the Player
       if(pawnLocal.bCollideActors && !pawnLocal.controller.bIsPlayer)
       {
-        DebugPrint("touch");
-        t = true;
-        //findthenode();
-        //self.SetRotation(Rot(0,16384,0);
-        //self.SetRotation(RInterpTo(Rotation,test,Delta,90000,true)); 
+        //DebugPrint("touch");
       }
-      //t = false;
-    }
 }
+}
+// Checks if health is depleted and destroys the monster
 function dead()
 {
-    if(self.healtht <= 0)
+    if(self.monster_health <= 0)
     {
         DebugPrint("DEAD");
         self.Destroy();
     }
 }
+
 DefaultProperties
 {
  Begin Object Name=CollisionCylinder
@@ -156,7 +127,7 @@ DefaultProperties
    bJumpCapable=false
    bCanJump=false
    bNoDelete = false
-bPostRenderIfNotVisible=true
+   bPostRenderIfNotVisible=true
    GroundSpeed=200.0
 }
 
