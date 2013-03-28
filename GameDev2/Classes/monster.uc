@@ -1,6 +1,7 @@
 class monster extends GamePawn
     placeable;
-var() StaticMeshComponent StaticMesh;
+//var() SkeletalMeshComponent SkeletalMesh;
+var() AnimNodeSlot FullBodyAnimSlot;
 var() array<Pathnode> Waypoints;
 var() int monster_health;
 var() const string Attack_Message;
@@ -10,6 +11,7 @@ event PostBeginPlay()
 {
  super.PostBeginPlay();
 }
+   
 //Debug Function
 simulated private function DebugPrint(string sMessage)
 {
@@ -67,6 +69,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
+    //FullBodyAnimSlot.PlayCustomAnim('attck',1.f);
     }
     else
     {
@@ -116,11 +119,15 @@ DefaultProperties
        CollisionRadius=+20.00000
  End Object
  CylinderComponent=CollisionCylinder
- Begin Object class=StaticMeshComponent Name=MyStaticMeshComponent
-    StaticMesh=StaticMesh'Castle_Assets.Meshes.SM_MonkStatue_01'
+ Begin object class=AnimNodeSequence name=monsteranim 
+ End object
+ Begin Object class=SkeletalMeshComponent Name=MySkeletalMeshComponent
+    SkeletalMesh=SkeletalMesh'monster_animation.block_monster_attack'
+    AnimtreeTemplate= AnimTree'monster_animation.attack'
+    AnimSets(0)=AnimSet'monster_animation.box_anim'
  End Object
-  StaticMesh=MyStaticMeshComponent
-  Components.Add(MyStaticMeshComponent)
+  Mesh=MySkeletalMeshComponent
+  Components.Add(MySkeletalMeshComponent)
   ControllerClass=class'GameDev2.monsterai'
   RotationRate = (Pitch=6000,Yaw=6000,Roll=6000)
    bCollideActors=true
