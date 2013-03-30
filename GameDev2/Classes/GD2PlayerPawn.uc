@@ -2,13 +2,21 @@ class GD2PlayerPawn extends UTPawn;
 var SpotLightMovable Flashlight;
 var Rotator newRot;
 var Vector newLoc;
-
+var bool blockbb;
 simulated function PostBeginPlay() {
 	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
 	Super.PostBeginPlay();
 }
-
+simulated private function DebugPrint1(int sMessage)
+{
+	GetALocalPlayerController().ClientMessage(sMessage);
+}
 event Tick( float DeltaTime ) {
+    DebugPrint1(Health);
+    if(Health <= 0)
+    {
+    self.Destroy();
+    }
 	newLoc.z = 40;
 	//Flashlight.SetLocation(self.Location);
 	//Flashlight.SetLocation(newLoc);
@@ -16,9 +24,13 @@ event Tick( float DeltaTime ) {
 	Flashlight.SetBase(self);
 	Flashlight.LightComponent.SetEnabled(true);
 	//Flashlight.LightComponent.SetLightProperties(1000);
+    if(Health < 700&& Health > 0)
+    {
+    Health += 1;
+    }
 }
 
-defaultproperties {
+defaultproperties 
 	Begin Object Class=SpotLightMovable Name=MyFlashlight
 	  bEnabled=true
 	  Radius=10240.000000
@@ -27,5 +39,5 @@ defaultproperties {
 	End Object
 	Components.Add(MyFlashlight)
 	Flashlight=MyFlashlight
-	
+	blockbb = false
 	// weapon=GD2Flashlight

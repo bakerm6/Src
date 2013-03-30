@@ -10,6 +10,7 @@ var() const string Attack_Message2;
 event PostBeginPlay()
 {
  super.PostBeginPlay();
+ blocker();
 }
    
 //Debug Function
@@ -37,6 +38,7 @@ if(Distance<0)
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local actor Player_Location_Actor;
+    //local GD2PlayerPawn a;
     local int Distance;
     local bool range_check;
     local string Message;
@@ -49,7 +51,10 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     range_check = in_range();
     Player_Location_Actor = GetALocalPlayerController().Pawn;
+    //a = GD2PlayerPawn(Player_Location_Actor);
     Distance = VSize(self.Location - Player_Location_Actor.Location);
+    //if(a.Health < 0)
+    //DebugPrint("Quit");
     if(Distance<0)
     Distance*=-1;
     if(range_check==true && Distance>325)
@@ -69,6 +74,14 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
+    //if(a.blockbb == true)
+    //{
+    //a.Health -=10;
+    //}
+    //else
+    //{
+    //a.health -=100;
+    //}
     //FullBodyAnimSlot.PlayCustomAnim('attck',1.f);
     }
     else
@@ -80,12 +93,34 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
     }
-
+}
+function blocker()
+{
+    local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
+    local int Distance;
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
+    Distance = VSize(self.Location - Player_Location_Actor.Location);
+    if(Distance<0)
+    Distance*=-1;
+    if(Distance <300)
+    {
+    if(a.blockbb == true)
+    {
+    a.Health -=1;
+    }
+    else
+    {
+    a.health -=3;
+    }
+    }
 }
 //Checks each frame
 function Tick(float Delta)
 {
 super.Tick(Delta);
+blocker();
 }
 //Checks for a bump
 event Bump(Actor Other, PrimitiveComponent OtherComp, Vector HitNormal)
@@ -134,6 +169,7 @@ DefaultProperties
    bJumpCapable=false
    bCanJump=false
    bNoDelete = false
+   bStatic = false
    bPostRenderIfNotVisible=true
    GroundSpeed=200.0
 }
