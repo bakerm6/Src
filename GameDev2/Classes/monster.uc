@@ -112,7 +112,7 @@ function blocker()
     }
     else
     {
-    a.health -=3;
+    a.health -=10;
     }
     }
 }
