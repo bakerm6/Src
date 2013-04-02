@@ -76,7 +76,6 @@ GD2PlayerPawn(Pawn).blockbb = false;
 
 defaultproperties
 {
-
    CameraClass=class'GameDev2.GD2PlayerCamera'
    bCollideActors=true
    attackh =  SoundCue'Sounds.attack_hit_cue'
