@@ -33,6 +33,7 @@ simulated function Tick(float DeltaTime)
     if(Pawn !=None)
     {
     //PathFind();
+    //SetDestinationPosition(Location);
     }
 }
 //Main function for pathfinding among an aray of pathnodes in order
@@ -90,9 +91,17 @@ Begin:
     Sleep(0);
 }
 
+state backup
+{
+begin:
+movetoward(monster(Pawn).Waypoints[_PathNode],monster(Pawn).Waypoints[_PathNode],128);
+GoToState('pathfinding');
+}
+
 DefaultProperties
 {
     scream = SoundCue'Sounds.mstwoc'
     CloseEnough = 200
     Path_Count = 0;
+    bPreciseDestination = True
 }

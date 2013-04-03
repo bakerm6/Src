@@ -157,21 +157,40 @@ function Tick(float Delta)
 super.Tick(Delta);
 blocker();
 }
+/*simulated event RigidBodyCollision( PrimitiveComponent HitComponent, PrimitiveComponent OtherComponent,
+const out CollisionImpactData Collision, int ContactIndex )
+{
+DebugPrint("FUCK");
+}*/
+event HitWall (Object.Vector HitNormal, Actor Wall, PrimitiveComponent WallComp)
+{
+local Vector Location1;
+DebugPrint("Wall");
+//Location1 = ((self.Location) - (0,0,90));
+//self.Controller.SetDestinationPosition(self.Location);
+//StopLatentExecution();
+Location1 = vect(0,0,0);
+self.acceleration = Location1;
+self.controller.GoToState('backup');
+//self.controller.movetoward(Waypoints[0],Waypoints[0],128);
+}
 //Checks for a bump
 event Bump(Actor Other, PrimitiveComponent OtherComp, Vector HitNormal)
 {
-local Pawn pawnLocal;  
-   pawnLocal = Pawn( Other ); 
+//super.Bump(Other,OtherComp,HitNormal);
+//local Pawn pawnLocal;  
+//pawnLocal = Pawn( Other ); 
    
-   if(pawnLocal != None)
-   {
+  // if(pawnLocal != None)
+   //{
+        DebugPrint("Bumpity");
         //test if it is the Player
-      if(pawnLocal.bCollideActors && !pawnLocal.controller.bIsPlayer)
-      {
-        //DebugPrint("touch");
-      }
+     // if(pawnLocal.bCollideActors && !pawnLocal.controller.bIsPlayer)
+      //{
+        //DebugPrint("BUMP");
+      //}
 }
-}
+//}
 // Checks if health is depleted and destroys the monster
 function dead()
 {
@@ -185,8 +204,8 @@ function dead()
 DefaultProperties
 {
  Begin Object Name=CollisionCylinder
-       CollisionHeight =+44.000000
-       CollisionRadius=+20.00000
+       CollisionHeight =40.000000
+       CollisionRadius=20.00000
  End Object
  CylinderComponent=CollisionCylinder
  Begin object class=AnimNodeSequence name=monsteranim 
@@ -195,14 +214,16 @@ DefaultProperties
     SkeletalMesh=SkeletalMesh'test_anim.monster_test'
     AnimtreeTemplate= AnimTree'test_anim.walk_tree_test'
     AnimSets(0)=AnimSet'test_anim.walk_test'
+    Translation=(Z=0.0)
  End Object
   Mesh=MySkeletalMeshComponent
   Components.Add(MySkeletalMeshComponent)
   RotationRate=(Pitch=20000,Yaw=20000,Roll=20000)
   ControllerClass=class'GameDev2.monsterai'
    bCollideActors=true
+   bBlockActors=true
    bJumpCapable=false
-   
+   bCollideWorld=true
    bCanJump=false
    bNoDelete = false
    bStatic = false
