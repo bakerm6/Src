@@ -25,7 +25,7 @@ if(Distance<0)
     Distance*=-1;
  if(Distance<225)
 {
-self.GroundSpeed = 225.0;
+self.GroundSpeed = 215.0;
 Attack.PlayCustomAnim('melee_attack',1.0);
 }
 else
@@ -147,7 +147,7 @@ function blocker()
     }
     else
     {
-    a.health -=6;
+    a.health -=5;
     }
     }
 }
