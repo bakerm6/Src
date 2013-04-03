@@ -160,12 +160,12 @@ blocker();
 /*simulated event RigidBodyCollision( PrimitiveComponent HitComponent, PrimitiveComponent OtherComponent,
 const out CollisionImpactData Collision, int ContactIndex )
 {
-DebugPrint("FUCK");
+//DebugPrint("FUCK");
 }*/
 event HitWall (Object.Vector HitNormal, Actor Wall, PrimitiveComponent WallComp)
 {
 local Vector Location1;
-DebugPrint("Wall");
+//DebugPrint("Wall");
 //Location1 = ((self.Location) - (0,0,90));
 //self.Controller.SetDestinationPosition(self.Location);
 //StopLatentExecution();
@@ -183,7 +183,7 @@ event Bump(Actor Other, PrimitiveComponent OtherComp, Vector HitNormal)
    
   // if(pawnLocal != None)
    //{
-        DebugPrint("Bumpity");
+        //DebugPrint("Bumpity");
         //test if it is the Player
      // if(pawnLocal.bCollideActors && !pawnLocal.controller.bIsPlayer)
       //{
