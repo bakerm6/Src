@@ -7,19 +7,24 @@ var actor destination;
 var SoundCue scream;
 var bool Sound_Bool;
 var float Path_Count;
-
+var GD2PlayerPawn p;
 //Puts movement and a soundcue on the monster
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);
     Pawn.SetMovementPhysics();
     Sound_Bool = true;
-    SetTimer(1,true,'pathfind');
+    pathfind();
+    SetTimer(3,true,'pathfind');
 }
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
+}
+function idle()
+{
+monster(Pawn).Idle.PlayCustomAnim('Idle',1.0);
 }
 //Updates each frame
 simulated function Tick(float DeltaTime)
@@ -35,6 +40,7 @@ simulated function Tick(float DeltaTime)
 simulated function PathFind()
 {
     local int Distance_p;
+   
     Distance_p = VSize(monster(Pawn).Waypoints[_PathNode].Location-Pawn.Location);
 
 	if (Distance_p <= CloseEnough)
@@ -55,6 +61,7 @@ state Pathfinding
 {
 Begin:
     Target = GetALocalPlayerController().Pawn;
+    p  = GD2PlayerPawn(Target);
     Distance = VSize(Target.Location - Pawn.Location);
     if(Distance <0)
         Distance*=-1;
@@ -67,6 +74,10 @@ Begin:
         Sound_Bool = false;
         Path_Count+=1;
         MoveToward(Target, Target, 128);
+        if(p.health > 5)
+        {
+        pathfind();
+        }
     }
         
     else if(monster(Pawn).Waypoints[_PathNode] != None)
@@ -74,6 +85,7 @@ Begin:
     Path_Count = 0;
     Sound_Bool = true;
     MoveToward(monster(Pawn).Waypoints[_PathNode], monster(Pawn).Waypoints[_PathNode], 128);
+    idle();
     }   
     Sleep(0);
 }

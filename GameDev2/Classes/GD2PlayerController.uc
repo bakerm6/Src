@@ -5,7 +5,7 @@ var SoundCue heartb;
 var SoundCue heartf;
 var SoundCue level;
 //Function to output debug messages
-simulated private function DebugPrint(string sMessage)
+simulated private function DebugPrint(int sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
@@ -35,16 +35,27 @@ PlaySound(heartf);
 exec function attackb()
 {
 local monster ai;
+local float dot1;
+local vector v;
+local GD2PlayerPawn p;
 local actor Player_location_actor;
 local int Distance;
 Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+v = Vector(p.Rotation);
 GD2PlayerPawn(Pawn).blockbb = false;
+/*if(p.health <=0)
+{
+p.destroy();
+}*/
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
+dot1 =v dot (Player_location_actor.Location - ai.Location);
+DebugPrint(dot1);
 if(Distance<0)
     Distance*=-1;
-if(Distance>300&&Distance<700)
+if(Distance>175&&Distance<275&&dot1 < 0)
 {
 PlaySound(attackh);
 ai.monster_health-=10;
@@ -56,16 +67,26 @@ PlaySound(attackm);
 //block function that executes when c is pressed
 exec function blockb()
 {
+local float dot1;
+local vector v;
+local GD2PlayerPawn p;
 local monster ai;
 local actor Player_location_actor;
 local int Distance;
+/*if(p.health <=0)
+{
+p.destroy();
+}*/
 Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+v = Vector(p.Rotation);
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
+dot1 =v dot (Player_location_actor.Location - ai.Location);
 if(Distance<0)
     Distance*=-1;
-if(Distance<700 && Distance<300)
+if(Distance<700 && Distance<175 &&dot1 < 0)
 {
 GD2PlayerPawn(Pawn).blockbb = true;
 }

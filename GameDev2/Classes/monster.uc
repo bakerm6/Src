@@ -3,6 +3,7 @@ class monster extends GamePawn
 //var() SkeletalMeshComponent SkeletalMesh;
 var() AnimNodeSlot FullBodyAnimSlot;
 var AnimNodePlayCustomAnim Attack;
+var AnimNodePlayCustomAnim Idle;
 var() array<Pathnode> Waypoints;
 var() int monster_health;
 var() const string Attack_Message;
@@ -22,7 +23,7 @@ Player_location_actor = GetALocalPlayerController().Pawn;
 Distance = VSize(Player_location_actor.Location - self.Location);
 if(Distance<0)
     Distance*=-1;
- if(Distance<300)
+ if(Distance<225)
 {
 self.GroundSpeed = 400.0;
 Attack.PlayCustomAnim('melee_attack',1.0);
@@ -37,6 +38,7 @@ simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
     if (SkelComp == Mesh)
     {
         Attack = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim'));
+        Idle = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim2'));
     }
 }
 //Debug Function
@@ -53,7 +55,7 @@ Player_location_actor = GetALocalPlayerController().Pawn;
 Distance = VSize(Player_location_actor.Location - self.Location);
 if(Distance<0)
     Distance*=-1;
- if(Distance<700)
+ if(Distance<300)
  {
     return true;
  }
@@ -70,6 +72,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     local string Message;
     local string Message1;
     local string Message2;
+    local float dot1;
+    local vector v;
+    local GD2PlayerPawn p;
     local Font previous_font;
     Message = Attack_Message;
     Message1= Attack_Message1;
@@ -77,13 +82,26 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     range_check = in_range();
     Player_Location_Actor = GetALocalPlayerController().Pawn;
+    p  = GD2PlayerPawn(Player_Location_Actor);
+    v = Vector(p.Rotation);
     //a = GD2PlayerPawn(Player_Location_Actor);
     Distance = VSize(self.Location - Player_Location_Actor.Location);
+    dot1 =v dot (self.Location - Player_Location_Actor.Location);
     //if(a.Health < 0)
     //DebugPrint("Quit");
     if(Distance<0)
     Distance*=-1;
-    if(range_check==true && Distance>325)
+    if(p.health <=0)
+    {
+    Idle.PlayCustomAnim('Idle',1.0);
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(400,300);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(Message2);
+    Canvas.Font = previous_font;
+    }
+    if(range_check==true && Distance>200&&dot1 > 0)
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
@@ -92,7 +110,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText(Message); 
     Canvas.Font = previous_font;
     }
-    if(range_check==true && Distance<300)
+    if(range_check==true && Distance<175&& dot1 >0)
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
@@ -121,7 +139,7 @@ function blocker()
     Distance = VSize(self.Location - Player_Location_Actor.Location);
     if(Distance<0)
     Distance*=-1;
-    if(Distance <300)
+    if(Distance <220)
     {
     if(a.blockbb == true)
     {
@@ -129,7 +147,7 @@ function blocker()
     }
     else
     {
-    a.health -=5;
+    a.health -=10;
     }
     }
 }
