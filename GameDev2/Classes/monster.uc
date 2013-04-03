@@ -25,11 +25,11 @@ if(Distance<0)
     Distance*=-1;
  if(Distance<225)
 {
-self.GroundSpeed = 400.0;
+self.GroundSpeed = 225.0;
 Attack.PlayCustomAnim('melee_attack',1.0);
 }
 else
-self.GroundSpeed = 300.0;
+self.GroundSpeed = 175.0;
 }
 simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
 {
@@ -147,7 +147,7 @@ function blocker()
     }
     else
     {
-    a.health -=10;
+    a.health -=6;
     }
     }
 }
@@ -198,7 +198,7 @@ DefaultProperties
  End Object
   Mesh=MySkeletalMeshComponent
   Components.Add(MySkeletalMeshComponent)
-  RotationRate=(Pitch=15000,Yaw=15000,Roll=15000)
+  RotationRate=(Pitch=20000,Yaw=20000,Roll=20000)
   ControllerClass=class'GameDev2.monsterai'
    bCollideActors=true
    bJumpCapable=false

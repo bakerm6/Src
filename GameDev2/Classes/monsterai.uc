@@ -15,7 +15,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     Pawn.SetMovementPhysics();
     Sound_Bool = true;
     pathfind();
-    SetTimer(3,true,'pathfind');
+    SetTimer(4,true,'pathfind');
 }
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)

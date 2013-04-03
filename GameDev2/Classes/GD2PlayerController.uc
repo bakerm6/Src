@@ -52,7 +52,7 @@ ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
 dot1 =v dot (Player_location_actor.Location - ai.Location);
-DebugPrint(dot1);
+//DebugPrint(dot1);
 if(Distance<0)
     Distance*=-1;
 if(Distance>175&&Distance<275&&dot1 < 0)

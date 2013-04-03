@@ -58,5 +58,6 @@ defaultproperties
     bStatic = false
     HealthMax = 700;
     Health = 700;
-    GroundSpeed = 1000.0
+    GroundSpeed = 100
+    AirSpeed = 100
 	// weapon=GD2Flashlight
