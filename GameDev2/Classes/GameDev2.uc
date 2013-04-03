@@ -3,8 +3,6 @@ class GameDev2 extends FrameworkGame;
 event PostLogin( PlayerController NewPlayer )
 {
  super.PostLogin( NewPlayer );
-
- //NewPlayer.ClientMessage( "Welcome" $ NewPlayer.PlayerReplicationInfo.PlayerName);
 }
 
 defaultproperties

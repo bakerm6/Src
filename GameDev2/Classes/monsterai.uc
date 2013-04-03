@@ -14,6 +14,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     super.Possess(inPawn, bVehicleTransition);
     Pawn.SetMovementPhysics();
     Sound_Bool = true;
+    SetTimer(1,true,'pathfind');
 }
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)
@@ -26,7 +27,7 @@ simulated function Tick(float DeltaTime)
     super.Tick(DeltaTime);
     if(Pawn !=None)
     {
-    PathFind();
+    //PathFind();
     }
 }
 //Main function for pathfinding among an aray of pathnodes in order
@@ -47,11 +48,12 @@ simulated function PathFind()
 			_PathNode = 0;
 		}
 }
+
 //State that does the pathfinding
 //It is set to chase the player if they get within a certain distance of the monster
 state Pathfinding 
 {
-Begin: 
+Begin:
     Target = GetALocalPlayerController().Pawn;
     Distance = VSize(Target.Location - Pawn.Location);
     if(Distance <0)
@@ -59,7 +61,9 @@ Begin:
     if (Distance < 900)
     {
         if(Sound_Bool!= false && Path_Count <1)
+        {
             PlaySound( scream );
+        }
         Sound_Bool = false;
         Path_Count+=1;
         MoveToward(Target, Target, 128);

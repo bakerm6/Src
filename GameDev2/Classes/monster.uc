@@ -2,6 +2,7 @@ class monster extends GamePawn
     placeable;
 //var() SkeletalMeshComponent SkeletalMesh;
 var() AnimNodeSlot FullBodyAnimSlot;
+var AnimNodePlayCustomAnim Attack;
 var() array<Pathnode> Waypoints;
 var() int monster_health;
 var() const string Attack_Message;
@@ -11,8 +12,33 @@ event PostBeginPlay()
 {
  super.PostBeginPlay();
  blocker();
+ SetTimer(0.1,true,'attackanim');
 }
-   
+function attackanim()
+{
+local actor Player_location_actor;
+local int Distance;
+Player_location_actor = GetALocalPlayerController().Pawn;
+Distance = VSize(Player_location_actor.Location - self.Location);
+if(Distance<0)
+    Distance*=-1;
+ if(Distance<300)
+{
+self.GroundSpeed = 400.0;
+Attack.PlayCustomAnim('melee_attack',1.0);
+}
+else
+self.GroundSpeed = 300.0;
+}
+simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
+{
+    super.PostInitAnimTree(SkelComp);
+
+    if (SkelComp == Mesh)
+    {
+        Attack = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim'));
+    }
+}
 //Debug Function
 simulated private function DebugPrint(string sMessage)
 {
@@ -74,15 +100,6 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
-    //if(a.blockbb == true)
-    //{
-    //a.Health -=10;
-    //}
-    //else
-    //{
-    //a.health -=100;
-    //}
-    //FullBodyAnimSlot.PlayCustomAnim('attck',1.f);
     }
     else
     {
@@ -112,7 +129,7 @@ function blocker()
     }
     else
     {
-    a.health -=10;
+    a.health -=5;
     }
     }
 }
@@ -157,20 +174,21 @@ DefaultProperties
  Begin object class=AnimNodeSequence name=monsteranim 
  End object
  Begin Object class=SkeletalMeshComponent Name=MySkeletalMeshComponent
-    SkeletalMesh=SkeletalMesh'monster_animation.block_monster_attack'
-    AnimtreeTemplate= AnimTree'monster_animation.attack'
-    AnimSets(0)=AnimSet'monster_animation.box_anim'
+    SkeletalMesh=SkeletalMesh'test_anim.monster_test'
+    AnimtreeTemplate= AnimTree'test_anim.walk_tree_test'
+    AnimSets(0)=AnimSet'test_anim.walk_test'
  End Object
   Mesh=MySkeletalMeshComponent
   Components.Add(MySkeletalMeshComponent)
+  RotationRate=(Pitch=15000,Yaw=15000,Roll=15000)
   ControllerClass=class'GameDev2.monsterai'
-  RotationRate = (Pitch=6000,Yaw=6000,Roll=6000)
    bCollideActors=true
    bJumpCapable=false
+   
    bCanJump=false
    bNoDelete = false
    bStatic = false
    bPostRenderIfNotVisible=true
-   GroundSpeed=200.0
+   GroundSpeed=300.0
 }
 
