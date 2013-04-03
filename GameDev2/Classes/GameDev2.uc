@@ -14,3 +14,4 @@ defaultproperties
    HUDType=class'GameDev2.GD2Hud'
    bDelayedStart=false
 }
+
