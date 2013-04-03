@@ -5486,7 +5486,7 @@ defaultproperties
 	bCanDoubleJump=true
 	SightRadius=+12000.0
 
-	MaxMultiJump=1
+	MaxMultiJump=0
 	MultiJumpRemaining=1
 	MultiJumpBoost=-45.0
 
