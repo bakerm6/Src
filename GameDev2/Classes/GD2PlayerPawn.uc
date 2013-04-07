@@ -5,6 +5,8 @@ var Vector newLoc;
 var bool blockbb;
 var SoundCue heartb;
 var bool bCanDodge;
+var int waterbottlec;
+var bool mission1;
 
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
@@ -13,6 +15,7 @@ return super.Dodge(DoubleClickMove);
 
 return false;
 }
+
 simulated function PostBeginPlay()
 {
 	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
@@ -60,4 +63,7 @@ defaultproperties
     Health = 700;
     GroundSpeed = 100
     AirSpeed = 100
+    waterbottlec = 0
+    bPostRenderIfNotVisible=true
+    mission1=true
 	// weapon=GD2Flashlight
