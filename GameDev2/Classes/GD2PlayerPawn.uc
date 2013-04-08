@@ -6,8 +6,11 @@ var bool blockbb;
 var SoundCue heartb;
 var bool bCanDodge;
 var int waterbottlec;
+var int foodc;
+var int flashlightc;
+var int batteryc;
 var bool mission1;
-
+var bool done;
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
 if(bCanDodge)
@@ -36,17 +39,41 @@ function regen()
 }
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
+    super.Tick(DeltaTime);
     if(Health <= 0)
     {
     self.Destroy();
     }
-	newLoc.z = 40;
-	//Flashlight.SetLocation(self.Location);
-	//Flashlight.SetLocation(newLoc);
-	Flashlight.SetRelativeLocation(newLoc);
-	Flashlight.SetBase(self);
-	Flashlight.LightComponent.SetEnabled(true);
-	//Flashlight.LightComponent.SetLightProperties(1000);
+    if(done==false && batteryc == 1 && flashlightc == 1)
+    {
+    TriggerRemoteKismetEvent('flashlght_activate' );
+    //DebugPrint1(1);
+    done = true;
+    }
+    
+}
+function TriggerRemoteKismetEvent( name EventName )
+{
+	local array<SequenceObject> AllSeqEvents;
+	local Sequence GameSeq;
+	local int i;
+
+	GameSeq = WorldInfo.GetGameSequence();
+	if (GameSeq != None)
+	{
+		// reset the game sequence
+		GameSeq.Reset();
+
+		// find any Level Reset events that exist
+		GameSeq.FindSeqObjectsByClass(class'SeqEvent_RemoteEvent', true, AllSeqEvents);
+
+		// activate them
+		for (i = 0; i < AllSeqEvents.Length; i++)
+		{
+			if(SeqEvent_RemoteEvent(AllSeqEvents[i]).EventName == EventName)
+				SeqEvent_RemoteEvent(AllSeqEvents[i]).CheckActivate(WorldInfo, None);
+		}
+	}
 }
 defaultproperties 
 	Begin Object Class=SpotLightMovable Name=MyFlashlight
@@ -64,6 +91,10 @@ defaultproperties
     GroundSpeed = 100
     AirSpeed = 100
     waterbottlec = 0
+    foodc = 0
+    flashlightc = 0
+    batteryc = 0
     bPostRenderIfNotVisible=true
     mission1=true
+    done = false;
 	// weapon=GD2Flashlight

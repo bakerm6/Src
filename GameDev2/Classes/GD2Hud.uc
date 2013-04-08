@@ -15,15 +15,48 @@ function PostRender()
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
-    Canvas.SetPos(600,600);
+    Canvas.SetPos(900,50);
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(a.waterbottlec); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
-    Canvas.SetPos(615,600);
+    Canvas.SetPos(915,50);
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(" X    Watterbottles");
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,75);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.foodc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,75);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Food");
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,100);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.batteryc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,100);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Batteries");
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,125);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.flashlightc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,125);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Flashlight");
     }
 	ForEach DynamicActors(class'monster', DebugPawn)
 	{

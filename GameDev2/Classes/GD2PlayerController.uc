@@ -4,6 +4,7 @@ var SoundCue attackm;
 var SoundCue heartb;
 var SoundCue heartf;
 var SoundCue level;
+var bool done;
 //Function to output debug messages
 simulated private function DebugPrint(int sMessage)
 {
@@ -31,6 +32,29 @@ function playf()
 if(GD2PlayerPawn(Pawn).Health <= 300&& GD2PlayerPawn(Pawn).Health > 0)
 PlaySound(heartf);
 }
+/*function TriggerRemoteKismetEvent( name EventName )
+{
+	local array<SequenceObject> AllSeqEvents;
+	local Sequence GameSeq;
+	local int i;
+
+	GameSeq = WorldInfo.GetGameSequence();
+	if (GameSeq != None)
+	{
+		// reset the game sequence
+		GameSeq.Reset();
+
+		// find any Level Reset events that exist
+		GameSeq.FindSeqObjectsByClass(class'SeqEvent_RemoteEvent', true, AllSeqEvents);
+
+		// activate them
+		for (i = 0; i < AllSeqEvents.Length; i++)
+		{
+			if(SeqEvent_RemoteEvent(AllSeqEvents[i]).EventName == EventName)
+				SeqEvent_RemoteEvent(AllSeqEvents[i]).CheckActivate(WorldInfo, None);
+		}
+	}
+}*/
 function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, float minDot, bool bUsuableOnly, out array<trigger> out_useList)
 {
     //local int Idx;
@@ -52,7 +76,11 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             //8<------
  
             //If it's a usable actor and it hasn't already been added to the list, let's add it. 
-            if (ua(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            if (searchabletrash(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
+            if (searchablefoodcart(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
@@ -122,7 +150,22 @@ else
 GD2PlayerPawn(Pawn).blockbb = false;
 }
 }
-
+/*event Tick( float DeltaTime ) {
+    local GD2PlayerPawn p;
+    local actor Player_location_actor;
+    super.Tick(DeltaTime);
+    Player_location_actor = GetALocalPlayerController().Pawn;
+    p  = GD2PlayerPawn(Player_Location_Actor);
+    DebugPrint(p.batteryc);
+    DebugPrint(p.flashlightc);
+    if(p.batteryc == 1 && p.flashlightc == 1 && done == false)
+    {
+     TriggerRemoteKismetEvent('flashlight_toggle');
+     DebugPrint(1);
+     done = true;
+    }
+}*/
+    
 defaultproperties
 {
    CameraClass=class'GameDev2.GD2PlayerCamera'
@@ -132,6 +175,7 @@ defaultproperties
    heartb =  SoundCue'Sounds.heart_beatc'
    heartf =  SoundCue'Sounds.heart_beat_fastc'
    level = SoundCue'Sounds.windc'
+   done = false;
    // bBehindView=false
    // bForceBehindView=false
 }
