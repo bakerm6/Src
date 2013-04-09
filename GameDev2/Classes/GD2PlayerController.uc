@@ -4,6 +4,8 @@ var SoundCue attackm;
 var SoundCue heartb;
 var SoundCue heartf;
 var SoundCue crows;
+var SoundCue flashlights;
+var bool flashb;
 //var SoundCue level;
 var bool done;
 //Function to output debug messages
@@ -15,9 +17,11 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);
     crowp();
+    flash();
     SetTimer(5.51,true,'play');
     SetTimer(2.48,true,'playf');
     SetTimer(87,true,'crowp');
+    SetTimer(2,true,'flash');
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
@@ -26,6 +30,21 @@ function levelp()
 {
 PlaySound(level);
 }*/
+function flash()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+//DebugPrint(2);
+if(p.flashlightc == 1 && flashb == false)
+{
+//DebugPrint(1);
+PlaySound(flashlights);
+flashb = true;
+ClearTimer('flash');
+}
+}
 function crowp()
 {
 PlaySound(crows);
@@ -183,8 +202,10 @@ defaultproperties
    heartb =  SoundCue'Sounds.heart_beatc'
    heartf =  SoundCue'Sounds.heart_beat_fastc'
    crows = SoundCue'Sounds.crowsc'
+   flashlights = SoundCue'Sounds.hmmaflashlightc'
    //level = SoundCue'Sounds.windc'
    done = false;
+   flashb = false;
    // bBehindView=false
    // bForceBehindView=false
 }

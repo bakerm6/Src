@@ -11,6 +11,7 @@ var int flashlightc;
 var int batteryc;
 var bool mission1;
 var bool done;
+
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
 if(bCanDodge)
