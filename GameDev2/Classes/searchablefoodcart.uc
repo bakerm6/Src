@@ -5,13 +5,14 @@ var() int bottle;
 var() int food;
 var() int flashlight;
 var() int batteries;
-
+var SoundCue clicky;
 //var() StaticMeshComponent StaticMesh;
 //var() StaticMeshComponent MyMesh;
 var int inty;
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
+var bool play;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -124,6 +125,11 @@ function bool UsedBy(Pawn User)
     {
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
         search = 1;
+        if(play== false)
+        {
+        PlaySound(clicky);
+        play = true;
+        }
         //Put your own sound cue here. And ideally, don't directly reference assets in code.
         return true;
     }
@@ -144,6 +150,7 @@ DefaultProperties
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+    clicky = SoundCue'Sounds.clickc'
     bBlockActors=true
     bCollideActors=true
     bHidden=false
@@ -152,4 +159,5 @@ DefaultProperties
     inty = 1
     search = 0
     firsttime = true
+    play = false
 }

@@ -46,8 +46,8 @@ event Tick( float DeltaTime ) {
     }
     if(done==false && batteryc == 1 && flashlightc == 1)
     {
-    TriggerRemoteKismetEvent('flashlght_activate' );
-    DebugPrint1(1);
+    TriggerRemoteKismetEvent('flashlght_toggle' );
+    //DebugPrint1(1);
     done = true;
     }
     

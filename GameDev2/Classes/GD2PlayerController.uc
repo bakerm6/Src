@@ -3,7 +3,7 @@ var SoundCue attackh;
 var SoundCue attackm;
 var SoundCue heartb;
 var SoundCue heartf;
-var SoundCue level;
+//var SoundCue level;
 var bool done;
 //Function to output debug messages
 simulated private function DebugPrint(int sMessage)
@@ -15,16 +15,17 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     super.Possess(inPawn, bVehicleTransition);
     SetTimer(5.51,true,'play');
     SetTimer(2.48,true,'playf');
-    PlaySound(level);
-    SetTimer(43,true,'levelp');
+    //PlaySound(level);
+    //SetTimer(43,true,'levelp');
 }
+/*
 function levelp()
 {
 PlaySound(level);
-}
+}*/
 function play()
 {
-if(GD2PlayerPawn(Pawn).Health > 300)
+if(GD2PlayerPawn(Pawn).Health > 300 && GD2PlayerPawn(Pawn).Health < 700)
 PlaySound(heartb);
 }
 function playf()
@@ -174,7 +175,7 @@ defaultproperties
    attackm =  SoundCue'Sounds.attack_miss_cue'
    heartb =  SoundCue'Sounds.heart_beatc'
    heartf =  SoundCue'Sounds.heart_beat_fastc'
-   level = SoundCue'Sounds.windc'
+   //level = SoundCue'Sounds.windc'
    done = false;
    // bBehindView=false
    // bForceBehindView=false

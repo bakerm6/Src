@@ -1,5 +1,6 @@
 Class mission1t extends Trigger;
-
+var soundcue player;
+var bool play;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
@@ -11,6 +12,12 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     a.mission1 = true;
+    if(play == false)
+    {
+    PlaySound(player);
+    play = true;
+    }
+    
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         //PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         //IsInInteractionRange = true;
@@ -25,10 +32,11 @@ Begin Object Name=Sprite
     Begin Object Class=StaticMeshComponent Name=MyMesh
         StaticMesh=StaticMesh'NodeBuddies.3D_Icons.NodeBuddy__BASE_SHORT'
     End Object
- 
+    player = Soundcue'Sounds.wellifimgoingtobeherethislongc'
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
     bBlockActors=false
     bHidden=true
+    play = false
     bPostRenderIfNotVisible=true
     }
