@@ -62,9 +62,9 @@ event PostRender(Canvas Canvas)
 
 function DrawTransition(Canvas Canvas)
 {
-	local int Pos;
-	local string MapName, Desc;
-	local string ParseStr;
+	//local int Pos;
+	//local string MapName, Desc;
+	//local string ParseStr;
 	local class<UTGame> GameClass;
 	local string HintMessage;
 	local bool bAllowHints;
@@ -76,7 +76,7 @@ function DrawTransition(Canvas Canvas)
 		bAllowHints = true;
 
 		// we want to show the name of the map except for a number of maps were we want to remap their name
-		if( "UDKFrontEndMap" == Outer.TransitionDescription )
+		/*if( "UDKFrontEndMap" == Outer.TransitionDescription )
 		{
 			MapName = UTFrontEndString; //"Main Menu"
 
@@ -144,11 +144,12 @@ function DrawTransition(Canvas Canvas)
 		// NOTE: The position and scale values will be automatically corrected for aspect ratio (to match the movie image)
 
 		// Game type name
-		class'Engine'.static.AddOverlay(LoadingScreenGameTypeNameFont, Desc, 0.1822, 0.435, 1.0, 1.0, false);
+		//class'Engine'.static.AddOverlay(LoadingScreenGameTypeNameFont, Desc, 0.1822, 0.435, 1.0, 1.0, false);
 
 		// Map name
-		class'Engine'.static.AddOverlay(LoadingScreenMapNameFont, MapName, 0.1822, 0.46, 2.0, 2.0, false);
-
+		//class'Engine'.static.AddOverlay(LoadingScreenMapNameFont, MapName, 0.1822, 0.46, 2.0, 2.0, false);
+*/
+        GameClass = class<UTGame>(FindObject(Outer.TransitionGameType, class'Class'));
 		// We don't want to draw hints for the Main Menu or FrontEnd maps, so we'll make sure we have a valid game class
 		if( bAllowHints )
 		{
