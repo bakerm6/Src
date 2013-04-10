@@ -15,9 +15,9 @@ var int strip;
 var bool mission1;
 var bool mission2a;
 var bool mission2b;
+var bool mission3;
 var bool done;
 var bool twocall;
-
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
 if(bCanDodge)
@@ -32,6 +32,11 @@ SetTimer(26,false,'reset');
 function reset()
 {
 groundspeed = 100;
+SetTimer(5,false,'mission3start');
+}
+function mission3start()
+{
+mission3 = true;
 }
 simulated function PostBeginPlay()
 {
@@ -122,6 +127,7 @@ defaultproperties
     mission1= true
     mission2a = false
     mission2b = false
+    mission3 = false;
     twocall = false
     done = false
     SpawnSound=none

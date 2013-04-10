@@ -6,8 +6,10 @@ var SoundCue heartf;
 var SoundCue crows;
 var SoundCue flashlights;
 var SoundCue findphone;
+var SoundCue power;
 var bool flashb;
 var bool mission2start;
+var bool mission3start;
 //var SoundCue level;
 var bool done;
 
@@ -26,6 +28,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     SetTimer(87,true,'crowp');
     SetTimer(2,true,'flash');
     SetTimer(2,true,'mission2s');
+    SetTimer(2,true,'mission3s');
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
@@ -34,6 +37,19 @@ function levelp()
 {
 PlaySound(level);
 }*/
+function mission3s()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+//DebugPrint(2);
+if(p.mission3 == true && mission3start == false)
+{
+PlaySound(power);
+mission2start = true;
+}
+}
 function mission2s()
 {
 local GD2PlayerPawn p;
@@ -44,7 +60,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 if(p.mission2a == true && mission2start == false)
 {
 PlaySound(findphone);
-mission2start = true;
+mission3start = true;
 }
 }
 function flash()
@@ -237,6 +253,7 @@ defaultproperties
    crows = SoundCue'Sounds.crowsc'
    flashlights = SoundCue'Sounds.hmmaflashlightc'
    findphone = SoundCue'Sounds.findaphonec'
+   power = SoundCue'Sounds.letsgetthepoweronc'
    //level = SoundCue'Sounds.windc'
    done = false;
    flashb = false;

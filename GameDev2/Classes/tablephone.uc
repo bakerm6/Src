@@ -11,6 +11,7 @@ var SoundCue us;
 var SoundCue island;
 var SoundCue relax;
 var SoundCue dial;
+
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
