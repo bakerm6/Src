@@ -1,21 +1,14 @@
-class tablephone extends trigger;
+class ducttape extends trigger;
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
 var bool playa;
-var SoundCue duc;
-var SoundCue linesdead;
-var SoundCue hello;
-var SoundCue us;
-var SoundCue island;
-var SoundCue relax;
-var SoundCue dial;
+var SoundCue clicky;
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
-
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -25,7 +18,6 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
-        //idle();
         //DebugPrint("here");
     }
 }
@@ -44,7 +36,6 @@ event UnTouch(Actor Other)
     }
 }
 
-
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -53,38 +44,22 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
-    if(search == 0 && a.mission2a == true)
+    if(search == 0 && a.mission2b == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText("Press E to Investigate"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Press E to Pick Up"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     //a.mission2b = true;
     }
-    else if(search == 1 && a.mission2b == true)
+    else if(search == 1)
     {
-    previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
-    Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText("Press E to Repair"); //Prompt is a string variable defined in our new actor's class.
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+    self.Destroy();
     }
-    if(search == 2)
-    {
-    /*previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
-    Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText(); //Prompt is a string variable defined in our new actor's class.
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;*/
-    }
-    
+
 }
 
 function bool UsedBy(Pawn User)
@@ -96,29 +71,16 @@ function bool UsedBy(Pawn User)
     used = super.UsedBy(User);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
-    if (IsInInteractionRange&&search!=2&&a.mission2a==true)
+    if (IsInInteractionRange&&search!=1&&a.mission2b==true)
     {
         //DebugPrint("F");
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
         search = 1;
         if(play== false)
         {
-        PlaySound(linesdead);
+        PlaySound(clicky);
         play = true;
-        a.mission2b = true;
-        }
-        if(a.duct == 1 && a.wire == 1 && a.strip == 1&& playa == false)
-        {
-        PlaySound(duc);
-        PlaySound(dial);
-        search = 2;
-        a.GroundSpeed = 0;
-        playa = true;
-        PlaySound(hello);
-        PlaySound(us);
-        PlaySound(island);
-        PlaySound(relax);
-        a.wait();
+        a.duct+=1;
         }
         //Put your own sound cue here. And ideally, don't directly reference assets in code.
         return true;
@@ -137,21 +99,16 @@ DefaultProperties
     CylinderComponent=CollisionCylinder
     //may need .mesh when textured
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'table_comp_phone.table_comp_phone'
+       StaticMesh=StaticMesh'duct_tape.duct_tape'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-    linesdead = SoundCue'Sounds.shitthelineisdeadc'
-    duc = SoundCue'Sounds.duct_tapec'
-    hello = SoundCue'Sounds.hello_hello_crapc'
-    us = SoundCue'Sounds.uss103c'
-    island = SoundCue'Sounds.imonanisladnc'
-    relax = SoundCue'Sounds.relaxlocationc'
-    dial = SoundCue'Sounds.dialc'
+    clicky = SoundCue'Sounds.clickc'
     bBlockActors=true
     bCollideActors=true
     bHidden=false
-    bStatic = true
+    bNoDelete = false
+    bStatic = false
     bPostRenderIfNotVisible=true
     search = 0
     firsttime = true

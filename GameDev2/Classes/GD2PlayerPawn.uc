@@ -25,7 +25,14 @@ return super.Dodge(DoubleClickMove);
 
 return false;
 }
-
+function wait()
+{
+SetTimer(26,false,'reset');
+}
+function reset()
+{
+groundspeed = 100;
+}
 simulated function PostBeginPlay()
 {
 	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
@@ -116,7 +123,7 @@ defaultproperties
     mission2a = false
     mission2b = false
     twocall = false
-    done = false;
+    done = false
     SpawnSound=none
     RespawnSound=none
 	// weapon=GD2Flashlight

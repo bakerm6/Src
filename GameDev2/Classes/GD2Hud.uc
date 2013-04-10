@@ -62,7 +62,7 @@ function PostRender()
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText(" X    Flashlight");
     }
-    if(a.mission1 == true && a.mission2a == true)
+    if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
     {
     //DebugPrint("F");
     previous_font = Canvas.Font;
@@ -71,6 +71,43 @@ function PostRender()
     Canvas.SetDrawColor(0,255,0,255);
     Canvas.DrawText("Find a telephone"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    }
+    if(a.mission1 == true && a.mission2a == true && a.mission2b == true)
+    {
+     previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,50);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.duct); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,50);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Roll of Duct Tape");
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,75);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.wire); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,75);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Copper Wire");
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(900,100);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(a.strip); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.SetPos(915,100);
+    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.DrawText(" X    Wire Stripper");
     previous_font = Canvas.Font;
     }
 	ForEach DynamicActors(class'monster', DebugPawn)

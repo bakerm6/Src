@@ -132,6 +132,18 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
+            if (ducttape(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
+            if (wire(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
+            if (strips(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
         }
     }
 }
