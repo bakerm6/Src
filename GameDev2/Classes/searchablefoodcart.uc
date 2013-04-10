@@ -121,7 +121,7 @@ function bool UsedBy(Pawn User)
  
     used = super.UsedBy(User);
  
-    if (IsInInteractionRange)
+    if (IsInInteractionRange&&search!=2)
     {
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
         search = 1;

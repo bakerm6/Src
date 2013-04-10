@@ -98,5 +98,6 @@ defaultproperties
     bPostRenderIfNotVisible=true
     mission1=true
     done = false;
-    spawnsound=none
+    SpawnSound=none
+    RespawnSound=none
 	// weapon=GD2Flashlight
