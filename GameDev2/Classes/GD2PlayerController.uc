@@ -5,9 +5,12 @@ var SoundCue heartb;
 var SoundCue heartf;
 var SoundCue crows;
 var SoundCue flashlights;
+var SoundCue findphone;
 var bool flashb;
+var bool mission2start;
 //var SoundCue level;
 var bool done;
+
 //Function to output debug messages
 simulated private function DebugPrint(int sMessage)
 {
@@ -22,6 +25,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     SetTimer(2.48,true,'playf');
     SetTimer(87,true,'crowp');
     SetTimer(2,true,'flash');
+    SetTimer(2,true,'mission2s');
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
@@ -30,6 +34,19 @@ function levelp()
 {
 PlaySound(level);
 }*/
+function mission2s()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+//DebugPrint(2);
+if(p.mission2a == true && mission2start == false)
+{
+PlaySound(findphone);
+mission2start = true;
+}
+}
 function flash()
 {
 local GD2PlayerPawn p;
@@ -203,9 +220,11 @@ defaultproperties
    heartf =  SoundCue'Sounds.heart_beat_fastc'
    crows = SoundCue'Sounds.crowsc'
    flashlights = SoundCue'Sounds.hmmaflashlightc'
+   findphone = SoundCue'Sounds.findaphonec'
    //level = SoundCue'Sounds.windc'
    done = false;
    flashb = false;
+   mission2start = false;
    // bBehindView=false
    // bForceBehindView=false
 }

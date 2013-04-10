@@ -10,7 +10,9 @@ var int foodc;
 var int flashlightc;
 var int batteryc;
 var bool mission1;
+var bool mission2a;
 var bool done;
+var bool twocall;
 
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
@@ -38,6 +40,7 @@ function regen()
     Health += 12;
     }
 }
+
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
     super.Tick(DeltaTime);
@@ -50,6 +53,12 @@ event Tick( float DeltaTime ) {
     TriggerRemoteKismetEvent('flashlght_toggle' );
     //DebugPrint1(1);
     done = true;
+    }
+    if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
+    {
+    //DebugPrint1(1);
+    mission2a = true;
+    twocall = true;
     }
     
 }
@@ -96,7 +105,9 @@ defaultproperties
     flashlightc = 0
     batteryc = 0
     bPostRenderIfNotVisible=true
-    mission1=true
+    mission1= true
+    mission2a = false
+    twocall = false
     done = false;
     SpawnSound=none
     RespawnSound=none
