@@ -62,6 +62,7 @@ if(p.mission2a == true && mission2start == false)
 PlaySound(findphone);
 mission3start = true;
 }
+
 }
 function flash()
 {
