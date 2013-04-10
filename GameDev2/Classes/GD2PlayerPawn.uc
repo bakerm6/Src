@@ -9,8 +9,12 @@ var int waterbottlec;
 var int foodc;
 var int flashlightc;
 var int batteryc;
+var int duct;
+var int wire;
+var int strip;
 var bool mission1;
 var bool mission2a;
+var bool mission2b;
 var bool done;
 var bool twocall;
 
@@ -104,9 +108,13 @@ defaultproperties
     foodc = 0
     flashlightc = 0
     batteryc = 0
+    duct = 0;
+    wire = 0;
+    strip = 0;
     bPostRenderIfNotVisible=true
     mission1= true
     mission2a = false
+    mission2b = false
     twocall = false
     done = false;
     SpawnSound=none
