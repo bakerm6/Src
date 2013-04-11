@@ -66,8 +66,7 @@ event Tick( float DeltaTime ) {
     }
     if(done==false && batteryc == 1 && flashlightc == 1)
     {
-    TriggerRemoteKismetEvent('flashlght_toggle' );
-    //DebugPrint1(1);
+    TriggerRemoteKismetEvent('flashlight_toggle' );
     done = true;
     }
     if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
