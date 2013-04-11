@@ -171,8 +171,8 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
 }
 function quit()
 {
-ConsoleCommand("quit");
-//ConsoleCommand("open alphamen");
+//ConsoleCommand("quit");
+ConsoleCommand("open alphamen1");
 DebugPrint(10);
 }
 //combat function that exectues when z is pressed

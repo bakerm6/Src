@@ -156,9 +156,9 @@ function PostRender()
     {
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
-    Canvas.SetPos(500,500);
+    Canvas.SetPos(575,450);
     Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText("Quit[Y/N]"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Return to Main Menu[Y/N]"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
