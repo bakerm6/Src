@@ -101,6 +101,7 @@ function TriggerRemoteKismetEvent( name EventName )
 		}
 	}
 }
+
 defaultproperties 
 	Begin Object Class=SpotLightMovable Name=MyFlashlight
 	  bEnabled=true

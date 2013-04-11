@@ -32,6 +32,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
+
 /*
 function levelp()
 {
@@ -167,6 +168,12 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             }
         }
     }
+}
+function quit()
+{
+ConsoleCommand("quit");
+//ConsoleCommand("open alphamen");
+DebugPrint(10);
 }
 //combat function that exectues when z is pressed
 exec function attackb()
