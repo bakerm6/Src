@@ -10,7 +10,10 @@ event PostLogin( PlayerController NewPlayer )
 {
 PlaySound(level);
 }
-
+static event class<GameInfo> SetGameType(string MapName, string Options, string Portal)
+{
+return Default.class;
+}
 
 defaultproperties
 {
