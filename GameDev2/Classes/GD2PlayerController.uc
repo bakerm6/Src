@@ -29,6 +29,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     SetTimer(2,true,'flash');
     SetTimer(2,true,'mission2s');
     SetTimer(2,true,'mission3s');
+    SetTimer(10,true,'quitg');
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
@@ -177,7 +178,6 @@ function quit()
 {
 //ConsoleCommand("quit");
 ConsoleCommand("open alphamen1");
-DebugPrint(10);
 }
 //combat function that exectues when z is pressed
 exec function attackb()
@@ -229,6 +229,15 @@ aidle.dead();
 }
 }
 PlaySound(attackm);
+}
+function quitg()
+{
+  local GD2PlayerPawn p;
+  local actor Player_location_actor;
+  Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+if(p.health <=0)
+  consolecommand("quit");
 }
 //block function that executes when c is pressed
 exec function blockb()

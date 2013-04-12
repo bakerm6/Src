@@ -63,6 +63,7 @@ if(Distance<0)
  else 
  return false;
 }
+
 //Renders text based on prompts that are inputed in the monster properties
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
@@ -74,7 +75,6 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     local vector v;
     local GD2PlayerPawn p;
     local Font previous_font;
-    DebugPrint("yo22");
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     range_check = in_range();
     Player_Location_Actor = GetALocalPlayerController().Pawn;
@@ -89,6 +89,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Distance*=-1;
     if(p.health <=0)
     {
+    self.Destroy();
     Idle.PlayCustomAnim('Idle',1.0);
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
@@ -112,13 +113,11 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(0,255,0,255);
-    DebugPrint("here");
     Canvas.DrawText("Press C to Block");
     Canvas.Font = previous_font;
     }
     else
     {
-    DebugPrint("yo");
     previous_font = Canvas.Font;
     Canvas.Font = class'Engine'.Static.GetMediumFont(); 
     Canvas.SetPos(400,300);

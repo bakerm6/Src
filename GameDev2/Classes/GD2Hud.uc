@@ -68,6 +68,7 @@ function TogglePauseMenu()
 function PostRender()
 {	
 	local monster DebugPawn;
+    local monsteridle Deb;
 	local Vector CameraLocation;
 	local Rotator CameraRotation;
     local Font previous_font;
@@ -195,6 +196,10 @@ function PostRender()
 	ForEach DynamicActors(class'monster', DebugPawn)
 	{
 		AddPostRenderedActor(DebugPawn);
+	}
+    ForEach DynamicActors(class'monsteridle', Deb)
+	{
+		AddPostRenderedActor(Deb);
 	}
 
 	if (PlayerOwner != None)
