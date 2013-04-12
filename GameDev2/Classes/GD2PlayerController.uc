@@ -183,11 +183,14 @@ DebugPrint(10);
 exec function attackb()
 {
 local monster ai;
+local monsteridle aidle;
 local float dot1;
+local float dot12;
 local vector v;
 local GD2PlayerPawn p;
 local actor Player_location_actor;
 local int Distance;
+local int Distance1;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
@@ -210,17 +213,35 @@ ai.monster_health-=10;
 ai.dead();
 }
 }
+
+ForEach AllActors(class'monsteridle',aidle)
+{
+Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+dot12 =v dot (Player_location_actor.Location - aidle.Location);
+//DebugPrint(dot1);
+if(Distance<0)
+    Distance*=-1;
+if(Distance1>175&&Distance1<275&&dot12 < 0)
+{
+PlaySound(attackh);
+aidle.monster_health-=10;
+aidle.dead();
+}
+}
 PlaySound(attackm);
 }
 //block function that executes when c is pressed
 exec function blockb()
 {
 local float dot1;
+local float dot12;
 local vector v;
 local GD2PlayerPawn p;
 local monster ai;
+local monsteridle aidle;
 local actor Player_location_actor;
 local int Distance;
+local int Distance1;
 /*if(p.health <=0)
 {
 p.destroy();
@@ -241,7 +262,22 @@ GD2PlayerPawn(Pawn).blockbb = true;
 else
 GD2PlayerPawn(Pawn).blockbb = false;
 }
+ForEach AllActors(class'monsteridle',aidle)
+{
+Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+dot12 =v dot (Player_location_actor.Location - aidle.Location);
+//DebugPrint(dot1);
+if(Distance<0)
+    Distance*=-1;
+if(Distance1<700 && Distance1<175 &&dot12 < 0)
+{
+GD2PlayerPawn(Pawn).blockbb = true;
 }
+else
+GD2PlayerPawn(Pawn).blockbb = false;
+}
+}
+
 /*event Tick( float DeltaTime ) {
     local GD2PlayerPawn p;
     local actor Player_location_actor;
