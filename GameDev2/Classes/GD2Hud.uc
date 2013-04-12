@@ -28,6 +28,7 @@ x = false;
 exec function ShowMenu()
 {
 	// if using GFx HUD, use GFx pause menu
+    PauseMenu.AddFocusIgnoreKey('E');
 	TogglePauseMenu();
 }
 
@@ -35,6 +36,7 @@ function TogglePauseMenu()
 {
     if ( PauseMenu != none && PauseMenu.bMovieIsOpen )
 	{
+    PauseMenu.AddFocusIgnoreKey('E');
     PlayerOwner.SetPause(False);
     PauseMenu.Close(False);   
     x = false;
@@ -53,10 +55,12 @@ function TogglePauseMenu()
             PauseMenu.LocalPlayerOwnerIndex = class'Engine'.static.GetEngine().GamePlayers.Find(LocalPlayer(PlayerOwner.Player));
             PauseMenu.SetTimingMode(TM_Real);
             PlayerOwner.SetPause(True);
+            PauseMenu.AddFocusIgnoreKey('E');
         }
 
         //SetVisible(false);
         PauseMenu.Start();
+        PauseMenu.AddFocusIgnoreKey('E');
         PlayerOwner.SetPause(True);
     }
 }

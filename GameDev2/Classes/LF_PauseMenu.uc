@@ -12,7 +12,7 @@ function bool Start(optional bool StartPaused = false)
 defaultproperties
 {
     bEnableGammaCorrection=FALSE
-	bPauseGameWhileActive=False
+	bPauseGameWhileActive=True
 	bIgnoreMouseInput = false
 	bCaptureInput=False
 }

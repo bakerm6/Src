@@ -48,7 +48,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 if(p.mission3 == true && mission3start == false)
 {
 PlaySound(power);
-mission2start = true;
+mission3start = true;
 }
 }
 function mission2s()
@@ -61,7 +61,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 if(p.mission2a == true && mission2start == false)
 {
 PlaySound(findphone);
-mission3start = true;
+mission2start = true;
 }
 
 }
