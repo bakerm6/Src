@@ -31,7 +31,7 @@ SetTimer(26,false,'reset');
 }
 function reset()
 {
-groundspeed = 100;
+groundspeed = 300;
 SetTimer(5,false,'mission3start');
 }
 function mission3start()
