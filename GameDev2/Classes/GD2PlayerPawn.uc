@@ -16,6 +16,7 @@ var bool mission1;
 var bool mission2a;
 var bool mission2b;
 var bool mission3;
+var bool mission4;
 var bool done;
 var bool twocall;
 function bool Dodge(eDoubleClickDir DoubleClickMove)
@@ -127,7 +128,8 @@ defaultproperties
     mission1= true
     mission2a = false
     mission2b = false
-    mission3 = false;
+    mission3 = false
+    mission4 = false
     twocall = false
     done = false
     SpawnSound=none

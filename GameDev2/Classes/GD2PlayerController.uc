@@ -7,6 +7,7 @@ var SoundCue crows;
 var SoundCue flashlights;
 var SoundCue findphone;
 var SoundCue power;
+var int mapc;
 var bool flashb;
 var bool mission2start;
 var bool mission3start;
@@ -14,7 +15,7 @@ var bool mission3start;
 var bool done;
 
 //Function to output debug messages
-simulated private function DebugPrint(int sMessage)
+simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
@@ -171,12 +172,15 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
+             if (puzzlet(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
         }
     }
 }
 function quit()
 {
-//ConsoleCommand("quit");
 ConsoleCommand("open alphamen1");
 }
 //combat function that exectues when z is pressed
@@ -233,11 +237,25 @@ PlaySound(attackm);
 function quitg()
 {
   local GD2PlayerPawn p;
-  local actor Player_location_actor;
-  Player_location_actor = GetALocalPlayerController().Pawn;
+ local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
+//DebugPrint(MyMapName);
 if(p.health <=0)
-  consolecommand("quit");
+{
+//ConsoleCommand("quit");
+if(mapc == 1)
+{
+DebugPrint("b");
+ConsoleCommand("open base.udk");
+}
+if (mapc == 2)
+{
+//ConsoleCommand("open newbase.udk");
+ConsoleCommand("quit");
+}
+//consolecommand("open " $ MyMapName);
+}
 }
 //block function that executes when c is pressed
 exec function blockb()
@@ -319,6 +337,7 @@ defaultproperties
    done = false;
    flashb = false;
    mission2start = false;
+   mapc = 1;
    // bBehindView=false
    // bForceBehindView=false
 }
