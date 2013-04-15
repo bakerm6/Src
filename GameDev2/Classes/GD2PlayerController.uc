@@ -13,6 +13,7 @@ var bool mission2start;
 var bool mission3start;
 //var SoundCue level;
 var bool done;
+var bool canattack;
 
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
@@ -226,6 +227,8 @@ GD2PlayerPawn(Pawn).blockbb = false;
 {
 p.destroy();
 }*/
+if (canattack == true)
+{
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
@@ -256,6 +259,17 @@ aidle.dead();
 }
 }
 PlaySound(attackm);
+canattack = false;
+await();
+}
+}
+function await()
+{
+SetTimer(3,false,'waiter');
+}
+function waiter()
+{
+canattack = true;
 }
 function quitg()
 {
@@ -361,6 +375,7 @@ defaultproperties
    flashb = false;
    mission2start = false;
    mapc = 1;
+   canattack = true
    // bBehindView=false
    // bForceBehindView=false
 }
