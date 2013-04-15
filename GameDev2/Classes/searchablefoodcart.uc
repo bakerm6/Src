@@ -13,6 +13,7 @@ var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
+var(Rendertext) Font lf;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -51,9 +52,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     if(search == 0)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to search"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -61,9 +62,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     else if(search == 1)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Searched"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -95,9 +96,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
     }
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,325);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Prompt); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     //firsttime = false;
@@ -105,9 +106,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     if(search == 2)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Searched"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -160,4 +161,5 @@ DefaultProperties
     search = 0
     firsttime = true
     play = false
+    lf = Font'Sounds.lffont'
 }

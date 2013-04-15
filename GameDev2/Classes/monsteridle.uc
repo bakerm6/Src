@@ -6,6 +6,7 @@ var AnimNodePlayCustomAnim Attack;
 var AnimNodePlayCustomAnim Idle;
 var() array<Pathnode> Waypoints;
 var int monster_health;
+var(Rendertext) Font lf;
 //var const string Attack_Message;
 //var const string Attack_Message1;
 //var const string Attack_Message2;
@@ -92,36 +93,36 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     self.Destroy();
     Idle.PlayCustomAnim('Idle',1.0);
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("");
     Canvas.Font = previous_font;
     }
     if(range_check==true && Distance>200&&dot1 > 0)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press Z to Attack"); 
     Canvas.Font = previous_font;
     }
     if(range_check==true && Distance<175&& dot1 >0)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press C to Block");
     Canvas.Font = previous_font;
     }
     else
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("");
     Canvas.Font = previous_font;
     }
@@ -190,4 +191,5 @@ DefaultProperties
    bPostRenderIfNotVisible=true
    GroundSpeed=0.0
    monster_health = 30
+   lf = Font'Sounds.lffont'
 }

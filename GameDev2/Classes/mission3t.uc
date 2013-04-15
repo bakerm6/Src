@@ -16,6 +16,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     if(play == false)
     {
     PlaySound(player);
+    a.mission3p = true;
     play = true;
     }
     }

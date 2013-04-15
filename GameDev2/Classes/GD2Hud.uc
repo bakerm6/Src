@@ -1,8 +1,8 @@
 class GD2Hud extends MobileHUD;
-//var LF_PauseMenu PauseMenuMovie;
 var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
+var(Rendertext) Font lf;
 simulated private function DebugPrint(int sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
@@ -81,67 +81,67 @@ function PostRender()
     if(x == true)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(575,450);
-    Canvas.SetDrawColor(0,255,0,255);
-    Canvas.DrawText("Return to Main Menu[Y/N]"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.SetDrawColor(255,50,15,255);
+    Canvas.DrawText("Return to Main Menu Y/N"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
     if(a.mission1 == true && a.mission2a == false)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.waterbottlec); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Watterbottles");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,75);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.foodc); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,75);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Food");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,100);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.batteryc); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,100);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Batteries");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,125);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.flashlightc); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,125);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Flashlight");
     }
     if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
     {
     //DebugPrint("F");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Find a telephone"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -149,47 +149,57 @@ function PostRender()
     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3==false)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.duct); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;;
     Canvas.SetPos(915,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Roll of Duct Tape");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,75);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.wire); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,75);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Copper Wire");
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,100);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.strip); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(915,100);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Wire Stripper");
     previous_font = Canvas.Font;
     }
-    if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true)
+    if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == false)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Find a power source"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    }
+     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == true)
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = lf;; 
+    Canvas.SetPos(900,50);
+    Canvas.SetDrawColor(255,50,15,255);
+    Canvas.DrawText("Turn on the power"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
@@ -213,4 +223,5 @@ defaultproperties
 {
 y = false;
 x = false;
+lf = Font'Sounds.lffont'
 }

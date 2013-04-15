@@ -9,6 +9,7 @@ var() int monster_health;
 var() const string Attack_Message;
 var() const string Attack_Message1;
 var() const string Attack_Message2;
+var(Rendertext) Font lf;
 event PostBeginPlay()
 {
  super.PostBeginPlay();
@@ -95,36 +96,36 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     {
     Idle.PlayCustomAnim('Idle',1.0);
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
     }
     if(range_check==true && Distance>200&&dot1 > 0)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Message); 
     Canvas.Font = previous_font;
     }
     if(range_check==true && Distance<175&& dot1 >0)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
     }
     else
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
     }
@@ -229,5 +230,6 @@ DefaultProperties
    bStatic = false
    bPostRenderIfNotVisible=true
    GroundSpeed=300.0
+   lf = Font'Sounds.lffont'
 }
 

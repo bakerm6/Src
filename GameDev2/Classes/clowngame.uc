@@ -1,6 +1,7 @@
 class clowngame extends trigger;
 var Soundcue laugh;
 var bool IsInInteractionRange;
+var(Rendertext) Font lf;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -29,9 +30,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
 {
     local Font previous_font;
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to interact"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -74,4 +75,5 @@ DefaultProperties
     bHidden=false
     bStatic = true
     bPostRenderIfNotVisible=true
+    lf = Font'Sounds.lffont'
 }

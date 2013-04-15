@@ -16,6 +16,7 @@ var bool mission1;
 var bool mission2a;
 var bool mission2b;
 var bool mission3;
+var bool mission3p;
 var bool mission4;
 var bool done;
 var bool twocall;
@@ -129,6 +130,7 @@ defaultproperties
     mission2a = false
     mission2b = false
     mission3 = false
+    mission3p = false
     mission4 = false
     twocall = false
     done = false

@@ -11,7 +11,7 @@ var SoundCue us;
 var SoundCue island;
 var SoundCue relax;
 var SoundCue dial;
-
+var(Rendertext) Font lf;
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
@@ -57,9 +57,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     if(search == 0 && a.mission2a == true)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to Investigate"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -68,9 +68,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     else if(search == 1 && a.mission2b == true)
     {
     previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to Repair"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
@@ -78,9 +78,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     if(search == 2)
     {
     /*previous_font = Canvas.Font;
-    Canvas.Font = class'Engine'.Static.GetMediumFont(); 
+    Canvas.Font = lf;
     Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(0,255,0,255);
+    Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;*/
@@ -158,4 +158,5 @@ DefaultProperties
     firsttime = true
     play = false
     playa = false
+    lf = Font'Sounds.lffont'
 }
