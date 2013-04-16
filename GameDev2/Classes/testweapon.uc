@@ -9,7 +9,8 @@ simulated event SetPosition(UDKPawn Holder)
     Holder.GetAxes(Holder.Controller.Rotation,X,Y,Z);
  
     FinalLocation= Holder.GetPawnViewLocation(); //this is in world space.
-    FinalLocation= FinalLocation- Y * 12 - Z * 32; // Rough position adjustment
+    FinalLocation= FinalLocation -Y * 12 -Z * 32; // Rough position adjustment
+    //FinalLocation= FinalLocation- Y * -12 - Z * -32;
     SetHidden(False);
     SetLocation(FinalLocation);
     SetBase(Holder);
@@ -18,8 +19,8 @@ simulated event SetPosition(UDKPawn Holder)
 
 DefaultProperties
 {
-    Begin Object Class=SkeletalMeshComponent Name=GunMesh
-        SkeletalMesh=SkeletalMesh'WP_LinkGun.Mesh.SK_WP_Linkgun_1P'
+    Begin Object Class=StaticMeshComponent Name=GunMesh
+        StaticMesh=StaticMesh'FP_arms_test.FParms_test_mesh'
         HiddenGame=FALSE
         HiddenEditor=FALSE
     end object

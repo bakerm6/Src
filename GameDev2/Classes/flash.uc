@@ -100,7 +100,7 @@ DefaultProperties
     CylinderComponent=CollisionCylinder
     //may need .mesh when textured
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'flashlight_model.high_poly_flashlight'
+       StaticMesh=StaticMesh'flashlight_model.flashlight_uved_low'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
