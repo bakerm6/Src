@@ -102,6 +102,10 @@ function TriggerRemoteKismetEvent( name EventName )
 		}
 	}
 }
+function AddDefaultInventory()
+{
+    InvManager.CreateInventory(class'GameDev2.testweapon'); //InvManager is the pawn's InventoryManager
+}
 
 defaultproperties 
 	Begin Object Class=SpotLightMovable Name=MyFlashlight
@@ -112,6 +116,7 @@ defaultproperties
 	End Object
 	Components.Add(MyFlashlight)
 	Flashlight=MyFlashlight
+    InventoryManagerClass=class'GameDev2.testmanager'
 	blockbb = false
     bStatic = false
     HealthMax = 700;
