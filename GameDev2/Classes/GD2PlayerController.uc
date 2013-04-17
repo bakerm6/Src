@@ -25,8 +25,8 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     super.Possess(inPawn, bVehicleTransition);
     crowp();
     flash();
-    SetTimer(5.51,true,'play');
-    SetTimer(2.48,true,'playf');
+    SetTimer(1.94,true,'play');
+    SetTimer(1.46,true,'playf');
     SetTimer(87,true,'crowp');
     SetTimer(2,true,'flash');
     SetTimer(2,true,'mission2s');
@@ -364,8 +364,8 @@ defaultproperties
    bCollideActors=true
    attackh =  SoundCue'Sounds.attack_hit_cue'
    attackm =  SoundCue'Sounds.attack_miss_cue'
-   heartb =  SoundCue'Sounds.heart_beatc'
-   heartf =  SoundCue'Sounds.heart_beat_fastc'
+   heartb =  SoundCue'Sounds.heart_beatfixc'
+   heartf =  SoundCue'Sounds.heart_beat_fastfixc'
    crows = SoundCue'Sounds.crowsc'
    flashlights = SoundCue'Sounds.hmmaflashlightc'
    findphone = SoundCue'Sounds.findaphonec'

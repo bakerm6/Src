@@ -5,16 +5,19 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 {
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+    local puzzlekmat k;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
- 
+    
     if (Pawn(Other) != none)
     {
+    k = Spawn(class'puzzlekmat');
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     if(a.mission3 == true)
     {
     if(play == false)
     {
+    a.InvManager.AddInventory(k);
     PlaySound(player);
     a.mission3p = true;
     play = true;
