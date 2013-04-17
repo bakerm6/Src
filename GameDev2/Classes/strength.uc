@@ -1,8 +1,8 @@
-class clowngame extends trigger;
-var Soundcue laugh;
+class strength extends trigger;
+var Soundcue bell;
 var bool IsInInteractionRange;
+var bool bbell;
 var(Rendertext) Font lf;
-var bool blaugh;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -12,7 +12,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
-        blaugh = true;
+        bbell=true;
     }
 }
  
@@ -24,10 +24,9 @@ event UnTouch(Actor Other)
     {
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
-        blaugh = false;
+        bbell = false;
     }
 }
-
 
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
@@ -50,8 +49,11 @@ function bool UsedBy(Pawn User)
     if (IsInInteractionRange)
     {
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
-    PlaySound(laugh);
-    blaugh = false;
+    if(bbell == true)
+    {
+    PlaySound(bell);
+    bbell=false;
+    }
         //Put your own sound cue here. And ideally, don't directly reference assets in code.
         return true;
     }
@@ -69,16 +71,16 @@ DefaultProperties
     End Object
     CylinderComponent=CollisionCylinder
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'Arcade_packg.arcade_clown_game'
+       StaticMesh=StaticMesh'strength_test_pkg.Mesh.strength_test'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-    laugh = SoundCue'Sounds.clown_laughc'
+    bell = SoundCue'Sounds.bellc'
     bBlockActors=true
     bCollideActors=true
     bHidden=false
     bStatic = true
-    blaugh=true
+    bbell = true
     bPostRenderIfNotVisible=true
     lf = Font'Sounds.lffont'
 }

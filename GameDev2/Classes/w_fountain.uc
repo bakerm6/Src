@@ -1,8 +1,7 @@
-class clowngame extends trigger;
-var Soundcue laugh;
+class w_fountain extends trigger;
+var Soundcue water;
 var bool IsInInteractionRange;
 var(Rendertext) Font lf;
-var bool blaugh;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -12,7 +11,6 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
-        blaugh = true;
     }
 }
  
@@ -24,7 +22,6 @@ event UnTouch(Actor Other)
     {
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
-        blaugh = false;
     }
 }
 
@@ -50,8 +47,7 @@ function bool UsedBy(Pawn User)
     if (IsInInteractionRange)
     {
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
-    PlaySound(laugh);
-    blaugh = false;
+    PlaySound(water);
         //Put your own sound cue here. And ideally, don't directly reference assets in code.
         return true;
     }
@@ -69,16 +65,15 @@ DefaultProperties
     End Object
     CylinderComponent=CollisionCylinder
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'Arcade_packg.arcade_clown_game'
+       StaticMesh=StaticMesh'water_fountain_pkg.Mesh.water_fountain'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-    laugh = SoundCue'Sounds.clown_laughc'
+    water = SoundCue'Sounds.wfountainc'
     bBlockActors=true
     bCollideActors=true
     bHidden=false
     bStatic = true
-    blaugh=true
     bPostRenderIfNotVisible=true
     lf = Font'Sounds.lffont'
 }
