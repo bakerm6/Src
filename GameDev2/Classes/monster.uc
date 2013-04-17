@@ -75,11 +75,13 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     local string Message2;
     local float dot1;
     local vector v;
+    local monsterai c;
     local GD2PlayerPawn p;
     local Font previous_font;
     Message = Attack_Message;
     Message1= Attack_Message1;
     Message2= Attack_Message2;
+    c = monsterai(self.controller);
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     range_check = in_range();
     Player_Location_Actor = GetALocalPlayerController().Pawn;
@@ -102,7 +104,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
     }
-    if(range_check==true && Distance>200&&dot1 > 0)
+    if(range_check==true && Distance>200&&dot1 > 0&& c.seebool == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -111,7 +113,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText(Message); 
     Canvas.Font = previous_font;
     }
-    if(range_check==true && Distance<175&& dot1 >0)
+    if(range_check==true && Distance<175&& dot1 >0&&c.seebool == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -120,7 +122,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText(Message1);
     Canvas.Font = previous_font;
     }
-    else
+    else if (range_check == false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -128,6 +130,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(Message2);
     Canvas.Font = previous_font;
+    c.seebool = false;
     }
 }
 function blocker()

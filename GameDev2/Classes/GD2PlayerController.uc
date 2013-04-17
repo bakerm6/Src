@@ -373,6 +373,7 @@ defaultproperties
    //level = SoundCue'Sounds.windc'
    done = false;
    flashb = false;
+   bIsPlayer = true
    mission2start = false;
    mapc = 1;
    canattack = true

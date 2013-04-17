@@ -6,6 +6,7 @@ var float Distance;
 var actor destination;
 var SoundCue scream;
 var bool Sound_Bool;
+var bool seebool;
 var float Path_Count;
 var GD2PlayerPawn p;
 //Puts movement and a soundcue on the monster
@@ -16,6 +17,11 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     Sound_Bool = true;
     pathfind();
     SetTimer(4,true,'pathfind');
+}
+event SeePlayer(pawn seen)
+{
+Super.SeePlayer(seen);
+seebool = true;
 }
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)
@@ -103,5 +109,6 @@ DefaultProperties
     scream = SoundCue'Sounds.mstwoc'
     CloseEnough = 200
     Path_Count = 0;
+    seebool = false
     bPreciseDestination = True
 }

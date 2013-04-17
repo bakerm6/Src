@@ -7,6 +7,7 @@ var actor destination;
 var SoundCue scream;
 var bool Sound_Bool;
 var bool spawny;
+var bool seebool;
 var float Path_Count;
 var GD2PlayerPawn p;
 //Puts movement and a soundcue on the monster
@@ -17,6 +18,11 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     Sound_Bool = true;
     SetTimer(0.35,true,'idle');
     SetTimer(13,false,'attacking');
+}
+event SeePlayer(pawn seen)
+{
+Super.SeePlayer(seen);
+seebool = true;
 }
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)
@@ -55,4 +61,5 @@ DefaultProperties
     Path_Count = 0;
     spawny = true
     bPreciseDestination = True
+    seebool = false
 }

@@ -16,6 +16,7 @@ event PostBeginPlay()
  blocker();
  SetTimer(0.1,true,'attackanim');
 }
+
 simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
 {
     super.PostInitAnimTree(SkelComp);
@@ -69,6 +70,7 @@ if(Distance<0)
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local actor Player_Location_Actor;
+     local monsteraidle c;
     //local GD2PlayerPawn a;
     local int Distance;
     local bool range_check;
@@ -78,6 +80,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     local Font previous_font;
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     range_check = in_range();
+    c = monsteraidle(self.controller);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     p  = GD2PlayerPawn(Player_Location_Actor);
     v = Vector(p.Rotation);
@@ -99,7 +102,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.DrawText("");
     Canvas.Font = previous_font;
     }
-    if(range_check==true && Distance>200&&dot1 > 0)
+    if(range_check==true && Distance>200&&dot1 > 0&&c.seebool==true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -107,8 +110,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press Z to Attack"); 
     Canvas.Font = previous_font;
+    //c.seebool=false;
     }
-    if(range_check==true && Distance<175&& dot1 >0)
+    if(range_check==true && Distance<175&& dot1 >0&&c.seebool==true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -116,8 +120,9 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press C to Block");
     Canvas.Font = previous_font;
+    //c.seebool=false;
     }
-    else
+    else if (range_check == false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -125,6 +130,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("");
     Canvas.Font = previous_font;
+    c.seebool = false;
     }
 }
 function blocker()
