@@ -135,9 +135,11 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
 }
 function blocker()
 {
-    local actor Player_Location_Actor;
+ local actor Player_Location_Actor;
     local GD2PlayerPawn a;
     local int Distance;
+    local monsteraidle c;
+    c = monsteraidle(self.controller);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     Distance = VSize(self.Location - Player_Location_Actor.Location);
@@ -145,11 +147,11 @@ function blocker()
     Distance*=-1;
     if(Distance <220)
     {
-    if(a.blockbb == true)
+    if(a.blockbb == true && c.seebool == true)
     {
     a.Health -=1;
     }
-    else
+    else if(a.blockbb == false && c.seebool == true)
     {
     a.health -=5;
     }
