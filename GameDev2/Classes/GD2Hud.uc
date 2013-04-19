@@ -199,7 +199,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Turn on the power"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Get the main switch working"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }

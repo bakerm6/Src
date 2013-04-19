@@ -1,4 +1,4 @@
-class GD2PlayerCamera extends Camera;
+class GD2PlayerCamera extends GamePlayerCamera;
 
 var Vector CamOffset;
 var float CameraZOffset;
