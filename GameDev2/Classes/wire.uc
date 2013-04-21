@@ -40,12 +40,12 @@ event UnTouch(Actor Other)
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
-    local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
+    //local actor Player_Location_Actor;
+    //local GD2PlayerPawn a;
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
-    Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
-    if(search == 0 && a.mission2b == true)
+    //Player_Location_Actor = GetALocalPlayerController().Pawn;
+    //a = GD2PlayerPawn(Player_Location_Actor);
+    if(search == 0 )//&& a.mission2b == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -72,7 +72,7 @@ function bool UsedBy(Pawn User)
     used = super.UsedBy(User);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
-    if (IsInInteractionRange&&search!=1&&a.mission2b==true)
+    if (IsInInteractionRange&&search!=1)//&&a.mission2b==true)
     {
         //DebugPrint("F");
         //If it matters, you might want to double check here that the user is a player-controlled pawn.
