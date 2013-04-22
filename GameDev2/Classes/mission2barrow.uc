@@ -34,5 +34,7 @@ defaultproperties
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+       RotatingSpeed = 25000
+    SpeedFade = 1
 bHidden = true
 }
