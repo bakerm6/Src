@@ -205,7 +205,6 @@ local GD2PlayerPawn p;
 local actor Player_location_actor;
 local int Distance;
 local int Distance1;
-//local testweapon k;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
