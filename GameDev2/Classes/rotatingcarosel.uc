@@ -21,5 +21,5 @@ defaultproperties
     Components.Add(MyMesh)
        RotatingSpeed = 12000
     SpeedFade = 1
-bHidden = false
+    bHidden = false
 }
