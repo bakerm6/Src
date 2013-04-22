@@ -68,6 +68,7 @@ function bool UsedBy(Pawn User)
     local bool used;
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+    local testweapon k;
     //DebugPrint("f");
     used = super.UsedBy(User);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
@@ -79,6 +80,11 @@ function bool UsedBy(Pawn User)
         search = 1;
         if(play== false)
         {
+        k = Spawn(class'testweapon');
+
+    if(play == false)
+    {
+        a.InvManager.AddInventory(k);
         PlaySound(clicky);
         play = true;
         a.flashlightc+=1;
@@ -88,6 +94,7 @@ function bool UsedBy(Pawn User)
     }
     return used;
 } 
+}
 DefaultProperties
 {
     Begin Object Name=Sprite
