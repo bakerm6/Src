@@ -86,7 +86,7 @@ var float CameraScaleMin, CameraScaleMax;
 
 defaultproperties
 {
-   CamOffset=(X=12.0,Y=0.0,Z=0.0)
+   CamOffset=(X=0.0,Y=.0,Z=0.0)
    CurrentCameraScale=1.0
    CameraScale=9.0
    CameraScaleMin=3.0
