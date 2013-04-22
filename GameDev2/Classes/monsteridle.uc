@@ -97,7 +97,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Idle.PlayCustomAnim('Idle',1.0);
     previous_font = Canvas.Font;
     Canvas.Font = lf;
-    Canvas.SetPos(400,300);
+    Canvas.SetPos(200,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("");
     Canvas.Font = previous_font;
@@ -106,7 +106,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
-    Canvas.SetPos(400,300);
+    Canvas.SetPos(200,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press Z to Attack"); 
     Canvas.Font = previous_font;
@@ -116,7 +116,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
-    Canvas.SetPos(400,300);
+    Canvas.SetPos(200,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press C to Block");
     Canvas.Font = previous_font;
@@ -126,7 +126,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;
-    Canvas.SetPos(400,300);
+    Canvas.SetPos(200,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("");
     Canvas.Font = previous_font;

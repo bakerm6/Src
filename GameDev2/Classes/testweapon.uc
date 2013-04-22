@@ -27,6 +27,12 @@ DefaultProperties
         HiddenEditor=FALSE
         CastShadow = False
     end object
+    /*Begin Object class=SkeletalMeshComponent Name=MySkeletalMeshComponent
+    SkeletalMesh=SkeletalMesh'test_anim.monster_test'
+    AnimtreeTemplate= AnimTree'test_anim.walk_tree_test'
+    AnimSets(0)=AnimSet'test_anim.walk_test'
+    Translation=(Z=0.0)
+    End Object*/
     Mesh=GunMesh
     //bCastShadows = false
     Components.Add(GunMesh)
