@@ -11,9 +11,9 @@ var int mapc;
 var bool flashb;
 var bool mission2start;
 var bool mission3start;
-//var SoundCue level;
 var bool done;
 var bool canattack;
+var bool canblock;
 
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
@@ -97,29 +97,6 @@ function playf()
 if(GD2PlayerPawn(Pawn).Health <= 300&& GD2PlayerPawn(Pawn).Health > 0)
 PlaySound(heartf);
 }
-/*function TriggerRemoteKismetEvent( name EventName )
-{
-	local array<SequenceObject> AllSeqEvents;
-	local Sequence GameSeq;
-	local int i;
-
-	GameSeq = WorldInfo.GetGameSequence();
-	if (GameSeq != None)
-	{
-		// reset the game sequence
-		GameSeq.Reset();
-
-		// find any Level Reset events that exist
-		GameSeq.FindSeqObjectsByClass(class'SeqEvent_RemoteEvent', true, AllSeqEvents);
-
-		// activate them
-		for (i = 0; i < AllSeqEvents.Length; i++)
-		{
-			if(SeqEvent_RemoteEvent(AllSeqEvents[i]).EventName == EventName)
-				SeqEvent_RemoteEvent(AllSeqEvents[i]).CheckActivate(WorldInfo, None);
-		}
-	}
-}*/
 function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, float minDot, bool bUsuableOnly, out array<trigger> out_useList)
 {
     local int Idx;
@@ -273,7 +250,7 @@ await();
 }
 function await()
 {
-SetTimer(3,false,'waiter');
+SetTimer(1.25,false,'waiter');
 }
 function waiter()
 {
@@ -321,6 +298,11 @@ p.destroy();
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
+if(p.flashlightc == 1 && p.batteryc == 1)
+{
+p.TriggerRemoteKismetEvent('flashlight_toggle' );
+SetTimer(1.4,false,'flashon');
+}
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
@@ -329,11 +311,12 @@ if(Distance<0)
     Distance*=-1;
 if(Distance<700 && Distance<175 &&dot1 < 0)
 {
-GD2PlayerPawn(Pawn).blockbb = true;
+blockingtime();
 }
 else
 GD2PlayerPawn(Pawn).blockbb = false;
 }
+
 ForEach AllActors(class'monsteridle',aidle)
 {
 Distance1 = VSize(Player_location_actor.Location - aidle.Location);
@@ -343,28 +326,39 @@ if(Distance<0)
     Distance*=-1;
 if(Distance1<700 && Distance1<175 &&dot12 < 0)
 {
-GD2PlayerPawn(Pawn).blockbb = true;
+blockingtime();
 }
 else
 GD2PlayerPawn(Pawn).blockbb = false;
 }
+canblock = false;
+bwait();
 }
-
-/*event Tick( float DeltaTime ) {
-    local GD2PlayerPawn p;
-    local actor Player_location_actor;
-    super.Tick(DeltaTime);
-    Player_location_actor = GetALocalPlayerController().Pawn;
-    p  = GD2PlayerPawn(Player_Location_Actor);
-    DebugPrint(p.batteryc);
-    DebugPrint(p.flashlightc);
-    if(p.batteryc == 1 && p.flashlightc == 1 && done == false)
-    {
-     TriggerRemoteKismetEvent('flashlight_toggle');
-     DebugPrint(1);
-     done = true;
-    }
-}*/
+function bwait()
+{
+SetTimer(1.4,false,'blockwaiter');
+}
+function blockwaiter()
+{
+canblock = true;
+}
+function flashon()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+p.TriggerRemoteKismetEvent('flashlight_toggle' );
+}
+function blockingtime()
+{
+GD2PlayerPawn(Pawn).blockbb = true;
+SetTimer(1.4,false,'resetblock');
+}
+function resetblock()
+{
+GD2PlayerPawn(Pawn).blockbb = false;
+}
     
 defaultproperties
 {
@@ -385,6 +379,7 @@ defaultproperties
    mission2start = false;
    mapc = 1;
    canattack = true
+   canblock = true
    // bBehindView=false
    // bForceBehindView=false
 }

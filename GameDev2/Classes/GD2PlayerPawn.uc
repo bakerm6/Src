@@ -61,7 +61,9 @@ function regen()
 
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
+    local GD2PlayerController g;
     super.Tick(DeltaTime);
+    g= GD2PlayerController(self.controller);
     if(Health <= 0)
     {
     self.Destroy();
@@ -76,6 +78,10 @@ event Tick( float DeltaTime ) {
     //DebugPrint1(1);
     mission2a = true;
     twocall = true;
+    }
+    if(mission4 == true)
+    {
+    g.mapc = 2;
     }
     
 }
