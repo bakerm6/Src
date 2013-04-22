@@ -2,9 +2,12 @@ class destructablearrows extends trigger;
 
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
+    local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
- 
-    if (Pawn(Other) != none)
+     Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
+    if (Pawn(Other) == a)
     {
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         self.Destroy();
@@ -28,5 +31,10 @@ defaultproperties
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-    
+     bBlockActors=true
+    bCollideActors=true
+    bHidden=false
+    bNoDelete = false
+    bStatic = false
+    bPostRenderIfNotVisible=true
     }
