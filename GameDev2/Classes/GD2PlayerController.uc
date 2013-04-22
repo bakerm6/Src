@@ -14,7 +14,8 @@ var bool mission3start;
 var bool done;
 var bool canattack;
 var bool canblock;
-
+var bool checka;
+var bool checkb;
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
 {
@@ -193,7 +194,7 @@ function quit()
 ConsoleCommand("open alphamen1");
 }
 //combat function that exectues when z is pressed
-exec function attackb()
+exec function  attackb()
 {
 local monster ai;
 local monsteridle aidle;
@@ -204,9 +205,11 @@ local GD2PlayerPawn p;
 local actor Player_location_actor;
 local int Distance;
 local int Distance1;
+//local testweapon k;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
+//k =testweapon(owner);
 GD2PlayerPawn(Pawn).blockbb = false;
 /*if(p.health <=0)
 {
@@ -214,6 +217,8 @@ p.destroy();
 }*/
 if (canattack == true)
 {
+checka = true;
+//k.Attack.PlayCustomAnim('FP_attack',1.0);
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
@@ -243,7 +248,7 @@ aidle.monster_health-=10;
 aidle.dead();
 }
 }
-PlaySound(attackm);
+//PlaySound(attackm);
 canattack = false;
 await();
 }
@@ -251,10 +256,24 @@ await();
 function await()
 {
 SetTimer(1.25,false,'waiter');
+SetTimer(0.8,false,'noisea');
+}
+function noisea()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+if(p.flashlightc == 1)
+{
+PlaySound(attackm);
+}
 }
 function waiter()
 {
+
 canattack = true;
+checka = false;
 }
 function quitg()
 {
@@ -303,6 +322,9 @@ if(p.flashlightc == 1 && p.batteryc == 1)
 p.TriggerRemoteKismetEvent('flashlight_toggle' );
 SetTimer(1.4,false,'flashon');
 }
+if(canblock == true)
+{
+checkb = true;
 ForEach AllActors(class'monster',ai)
 {
 Distance = VSize(Player_location_actor.Location - ai.Location);
@@ -334,6 +356,7 @@ GD2PlayerPawn(Pawn).blockbb = false;
 canblock = false;
 bwait();
 }
+}
 function bwait()
 {
 SetTimer(1.4,false,'blockwaiter');
@@ -341,6 +364,7 @@ SetTimer(1.4,false,'blockwaiter');
 function blockwaiter()
 {
 canblock = true;
+checkb = false;
 }
 function flashon()
 {
@@ -380,6 +404,8 @@ defaultproperties
    mapc = 1;
    canattack = true
    canblock = true
+   checka = false
+   checkb = false
    // bBehindView=false
    // bForceBehindView=false
 }
