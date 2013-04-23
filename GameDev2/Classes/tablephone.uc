@@ -1,4 +1,10 @@
 class tablephone extends trigger;
+/*
+Interactable table used for dialog excahnge in landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
@@ -12,11 +18,12 @@ var SoundCue island;
 var SoundCue relax;
 var SoundCue dial;
 var(Rendertext) Font lf;
+//Debug Function
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
-
+//When touched it is interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -30,6 +37,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //DebugPrint("here");
     }
 }
+//Can no longer interact when the line is dead
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -45,7 +53,7 @@ event UnTouch(Actor Other)
     }
 }
 
-
+//Renders prompts based on the state of the trigger
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -87,7 +95,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
     
 }
-
+//When used, depending on the trigger state, a certain dialog sequence will play
 function bool UsedBy(Pawn User)
 {
     local bool used;

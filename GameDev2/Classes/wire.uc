@@ -1,4 +1,10 @@
 class wire extends trigger;
+/*
+Copper wire used in mission 2 of Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
@@ -6,10 +12,12 @@ var bool play;
 var bool playa;
 var SoundCue clicky;
 var(Rendertext) Font lf;
+//Debug Function
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//On touch can be interacted with
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -22,6 +30,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //DebugPrint("here");
     }
 }
+//No longer interactable when not touched
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -36,7 +45,7 @@ event UnTouch(Actor Other)
         }*/
     }
 }
-
+//Renders prompt when interactable
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -62,7 +71,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
 
 }
-
+//Destroys itself and adds to player inventory when used
 function bool UsedBy(Pawn User)
 {
     local bool used;

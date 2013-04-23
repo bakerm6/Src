@@ -1,7 +1,14 @@
 class w_fountain extends trigger;
+/*
+Interactable water fountain in Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var Soundcue water;
 var bool IsInInteractionRange;
 var(Rendertext) Font lf;
+//Can be interacted with when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -13,7 +20,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         IsInInteractionRange = true;
     }
 }
- 
+//No longer interactable when touched
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -25,7 +32,7 @@ event UnTouch(Actor Other)
     }
 }
 
-
+//Renders prompt if interactable
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -37,7 +44,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 }
-
+//Plays sound when used
 function bool UsedBy(Pawn User)
 {
     local bool used;

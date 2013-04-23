@@ -1,5 +1,11 @@
 Class searchabletrash extends Trigger;
- 
+ /*
+ Interactable trashcans in Landfall
+ allow for variables to be set in editor for custimization
+ DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+ */
 var() const string Prompt;
 var() int bottle;
 var() int food;
@@ -14,6 +20,7 @@ var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
 var(Rendertext) Font lf;
+//Becomes interactiable when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -25,7 +32,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         IsInInteractionRange = true;
     }
 }
- 
+ // Untouch removes interaction
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -40,7 +47,7 @@ event UnTouch(Actor Other)
         }
     }
 }
- 
+ //Renders prompts based on state of the trigger
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -115,7 +122,8 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
     
 }
-
+//when used, use is disabled
+//the player is given any item set in defaults
 function bool UsedBy(Pawn User)
 {
     local bool used;

@@ -1,7 +1,14 @@
 class rotatinglights extends actor
 placeable;
+/*
+Rotates the lights on the carosel
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int RotatingSpeed;
 var int SpeedFade;
+//Changes yaw every frame to allow a spin
 event Tick( float DeltaTime ) 
 {
     local Rotator final_rot;

@@ -1,5 +1,11 @@
 Class searchablefoodcart extends Trigger;
- 
+/*
+Searchable object in Landfall
+has variables that are set in editor to allow for variation
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var() const string Prompt;
 var() int bottle;
 var() int food;
@@ -14,6 +20,7 @@ var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
 var(Rendertext) Font lf;
+//Becomes interactable when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -25,7 +32,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         IsInInteractionRange = true;
     }
 }
- 
+ //An untouch removes interaction
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -40,7 +47,7 @@ event UnTouch(Actor Other)
         }
     }
 }
- 
+ //Renders prompt based on state of trigger
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -115,7 +122,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
     
 }
-
+// when used removes ability to use again and adds any items to inventory that player receives
 function bool UsedBy(Pawn User)
 {
     local bool used;
