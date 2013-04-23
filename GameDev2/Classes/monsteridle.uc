@@ -1,22 +1,29 @@
 class monsteridle extends GamePawn
     placeable;
+/*
+Single instance idle monster in Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 //var() SkeletalMeshComponent SkeletalMesh;
 var() AnimNodeSlot FullBodyAnimSlot;
 var AnimNodePlayCustomAnim Attack;
 var AnimNodePlayCustomAnim Idle;
-var() array<Pathnode> Waypoints;
+//var() array<Pathnode> Waypoints;
 var int monster_health;
 var(Rendertext) Font lf;
 //var const string Attack_Message;
 //var const string Attack_Message1;
 //var const string Attack_Message2;
+//Gives it syncing for attack animation
 event PostBeginPlay()
 {
  super.PostBeginPlay();
  blocker();
  SetTimer(0.1,true,'attackanim');
 }
-
+//Sets animation nodes for unreal script usage
 simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
 {
     super.PostInitAnimTree(SkelComp);
@@ -27,6 +34,7 @@ simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
         Idle = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim2'));
     }
 }
+//Plays attack animation when within a certain distance of the player
 function attackanim()
 {
 local actor Player_location_actor;
@@ -50,6 +58,7 @@ simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//Checks if the monster is in range to attack
 function bool in_range()
 {
 local actor Player_location_actor;
@@ -133,6 +142,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     c.seebool = false;
     }
 }
+//checks if player is blocking and does damage accordingly
 function blocker()
 {
  local actor Player_Location_Actor;
@@ -157,6 +167,7 @@ function blocker()
     }
     }
 }
+//Dying function
 simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
 	GotoState('Dying');
@@ -168,6 +179,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 
 	KismetDeathDelayTime = default.KismetDeathDelayTime + WorldInfo.TimeSeconds;
 }
+//sets up ragdolling for death animation
 function dead()
 {
 local actor Player_Location_Actor;
@@ -208,10 +220,12 @@ local actor Player_Location_Actor;
         a.killcount += 1;
     }
 }
+//destroys actor
 function kill()
 {
    self.Destroy();
 }
+//checks for block every frame
 function Tick(float Delta)
 {
 super.Tick(Delta);

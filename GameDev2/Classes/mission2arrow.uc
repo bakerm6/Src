@@ -1,6 +1,13 @@
 class mission2arrow extends trigger;
+/*
+Rotating mission 2 arrow in Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int RotatingSpeed;
 var int SpeedFade;
+// Checks for when to hide and changes yaw to allow for rotation
 event Tick( float DeltaTime ) 
 {
     local actor Player_Location_Actor;

@@ -1,7 +1,13 @@
 class mission1arrow extends trigger;
+/*
+Rotating objective arrow 
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int RotatingSpeed;
 var int SpeedFade;
-
+//Checks when to hide the actor and changes its yaw to allow for rotation
 event Tick( float DeltaTime ) 
 {
     local actor Player_Location_Actor;

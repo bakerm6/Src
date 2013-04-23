@@ -1,6 +1,16 @@
 Class mission3t extends Trigger;
+/*
+trigger that allows for mission 3 puzzle to 
+activate in Landfall
+The puzzle is a kismetsequence that checks for
+the puzzlekmat weapon to be in the player inventory
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var soundcue player;
 var bool play;
+// When touched it checks if mission 3 has started and gives the player the weapon if it has
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;

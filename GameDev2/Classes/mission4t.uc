@@ -1,7 +1,15 @@
 Class mission4t extends Trigger;
+/*
+Activates mission 4 and allows for player controller
+to know to respawn player on new map
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var soundcue player;
 var bool play;
 var SoundCue circus;
+// on touch mission 4 begins
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
@@ -30,6 +38,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //IsInInteractionRange = true;
     }
 }
+// plays ambient theme park music
 function circusong()
 {
 PlaySound(circus);

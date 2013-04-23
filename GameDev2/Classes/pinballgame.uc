@@ -1,5 +1,12 @@
 class pinballgame extends trigger;
+/*
+Simple trigger that plays sound when touched in LandFall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var Soundcue pball;
+//plays soundcue when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -10,7 +17,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 
     }
 }
- 
+//checks for untouch
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);

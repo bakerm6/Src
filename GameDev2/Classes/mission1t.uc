@@ -1,6 +1,13 @@
 Class mission1t extends Trigger;
+/*
+Invisible trigger to start mission 1 in Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var soundcue player;
 var bool play;
+// on a touch of the trigger mission 1 starts
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
@@ -17,10 +24,6 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     PlaySound(player);
     play = true;
     }
-    
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
-        //PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
-        //IsInInteractionRange = true;
     }
 }
 DefaultProperties

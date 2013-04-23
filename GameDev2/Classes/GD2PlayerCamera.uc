@@ -1,5 +1,10 @@
 class GD2PlayerCamera extends GamePlayerCamera;
-
+/*
+Camera class for Landfall 
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var Vector CamOffset;
 var float CameraZOffset;
 var float CameraScale, CurrentCameraScale; /** multiplier to default camera distance */

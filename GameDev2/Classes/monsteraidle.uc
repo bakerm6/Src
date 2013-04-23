@@ -1,4 +1,13 @@
 class monsteraidle extends AIController;
+/*
+Controller class for the singleinstance ai after interacting
+with the phone table
+It is not as sophisticated as the other monsters, it simply
+waits for a while in one spot and then chases the player
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int CloseEnough;
 var int _PathNode;
 var actor Target;
@@ -19,6 +28,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     SetTimer(0.35,true,'idle');
     SetTimer(13,false,'attacking');
 }
+//Checks if it can see the player
 event SeePlayer(pawn seen)
 {
 Super.SeePlayer(seen);
@@ -29,16 +39,19 @@ simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//Plays idle animation
 function idle()
 {
 monsteridle(Pawn).Idle.PlayCustomAnim('Idle',0.3);
 }
+//Goes to attck state
 function attacking()
 {
 ClearTimer('idle');
 GoToState('moving');
 
 }
+//Chases and attacks player indefinatly
 State moving
 {
 begin:
