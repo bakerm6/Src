@@ -2,7 +2,9 @@ class testweapon extends UDKWeapon;
 /*
 First person arms for Landfall
 Contains animations that are called based on bools in player pawn and player controller
-
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
 */
 var bool check;
 var AnimNodePlayCustomAnim Attack;

@@ -2,7 +2,9 @@ class GD2PlayerPawn extends UTPawn;
 /*
 Player class for Landfall
 Contains many gloabl counting variables and bools to trigger in game events
-
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
 */
 var SpotLightMovable Flashlight;
 var Rotator newRot;

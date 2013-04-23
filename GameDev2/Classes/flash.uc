@@ -1,4 +1,11 @@
 class flash extends trigger;
+/*
+The flashlight used for Landfall
+it is a spotlight attached to the player
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
@@ -6,10 +13,12 @@ var bool play;
 var bool playa;
 var SoundCue clicky;
 var(Rendertext) Font lf;
+//Debug function
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//Allows for interaction when touching trigger
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -22,6 +31,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //DebugPrint("here");
     }
 }
+// Disables interaction when not touching
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -36,7 +46,7 @@ event UnTouch(Actor Other)
         }*/
     }
 }
-
+//Renders prompt for interacting
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -62,7 +72,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
 
 }
-
+//Spawns the first person arms when interacting with the flashlight
 function bool UsedBy(Pawn User)
 {
     local bool used;

@@ -1,5 +1,12 @@
 class destructablearrows extends trigger;
-
+/*
+Non colliding destructable triggers that allow for illuminating
+Paths for the player in the thick fog
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+//if the touching actor is the player the arrow destroys itself
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;

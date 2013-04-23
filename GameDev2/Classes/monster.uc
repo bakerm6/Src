@@ -4,6 +4,9 @@ class monster extends GamePawn
 Monster ai class for Landfall
 Each monster has a gloabal set of prompts and array of pathnodes that are set in the editor 
 The monster also has animations
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
 */    
 //var() SkeletalMeshComponent SkeletalMesh;
 var() AnimNodeSlot FullBodyAnimSlot;

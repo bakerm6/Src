@@ -1,16 +1,28 @@
 class GD2Hud extends MobileHUD;
+/*
+HUD class for Landfall
+contains exec functions for returning to main menu
+renders pause menu
+renders text prompts for all missions
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
 var(Rendertext) Font lf;
+//Debug function
 simulated private function DebugPrint(int sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//prompts an are you sure message 
 exec function  mainmen()
 {
 x = true;
 }
+//goes to main menu if pressed while prompt is displayed
 exec function yes()
 {
 
@@ -21,17 +33,19 @@ if(x==true)
 c.quit();
 }
 }
+//deletes prompt and continues game
 exec function no()
 {
 x = false;
 }
+//Rebinds escape to show the pause menu
 exec function ShowMenu()
 {
 	// if using GFx HUD, use GFx pause menu
     PauseMenu.AddFocusIgnoreKey('E');
 	TogglePauseMenu();
 }
-
+// Displays the pause menu defined in LF_PauseMenu
 function TogglePauseMenu()
 {
     if ( PauseMenu != none && PauseMenu.bMovieIsOpen )
@@ -64,7 +78,8 @@ function TogglePauseMenu()
         PlayerOwner.SetPause(True);
     }
 }
-
+//Renders all mission based prompts
+// Gives dynamic actors rendering ability... e.g. monsters...
 function PostRender()
 {	
 	local monster DebugPawn;

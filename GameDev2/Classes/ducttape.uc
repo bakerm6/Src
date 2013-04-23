@@ -1,4 +1,11 @@
 class ducttape extends trigger;
+/*
+Interactable duct tape needed for mission2
+of Lanfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
@@ -6,10 +13,12 @@ var bool play;
 var bool playa;
 var SoundCue clicky;
 var(Rendertext) Font lf;
+//Debug Print
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+// When touching the trigger it becomes interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -22,6 +31,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //DebugPrint("here");
     }
 }
+// An un touch makes the trigger no longer interactable
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -36,7 +46,7 @@ event UnTouch(Actor Other)
         }*/
     }
 }
-
+// Prompts user to interact with duct tape when touching it
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
@@ -62,7 +72,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     }
 
 }
-
+// Plays a sound and destroys the duct tape when initialized
 function bool UsedBy(Pawn User)
 {
     local bool used;

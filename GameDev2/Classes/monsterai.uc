@@ -1,4 +1,12 @@
 class monsterai extends AIController;
+/*
+Monster ai controller class
+The monster pathfinds among an array of pathnodes
+it will chase the player if they get too clase
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 var int CloseEnough;
 var int _PathNode;
 var Actor Target;
