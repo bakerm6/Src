@@ -23,6 +23,8 @@ var bool canattack;
 var bool canblock;
 var bool checka;
 var bool checkb;
+var bool onepress;
+
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
 {
@@ -328,9 +330,10 @@ p.destroy();
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
-if(p.flashlightc == 1 && p.batteryc == 1)
+if(p.flashlightc == 1 && p.batteryc == 1&&onepress == true)
 {
 p.TriggerRemoteKismetEvent('flashlight_toggle' );
+onepress = false;
 SetTimer(1.4,false,'flashon');
 }
 if(canblock == true)
@@ -383,6 +386,7 @@ function flashon()
 {
 local GD2PlayerPawn p;
 local actor Player_location_actor;
+onepress = true;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 p.TriggerRemoteKismetEvent('flashlight_toggle' );
@@ -420,6 +424,7 @@ defaultproperties
    canblock = true
    checka = false
    checkb = false
+   onepress = true
    // bBehindView=false
    // bForceBehindView=false
 }
