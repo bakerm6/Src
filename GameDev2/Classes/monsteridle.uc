@@ -157,13 +157,60 @@ function blocker()
     }
     }
 }
+simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
+{
+	GotoState('Dying');
+	bReplicateMovement = false;
+	bTearOff = true;
+	Velocity += TearOffMomentum;
+	SetDyingPhysics();
+	bPlayedDeath = true;
+
+	KismetDeathDelayTime = default.KismetDeathDelayTime + WorldInfo.TimeSeconds;
+}
 function dead()
 {
+local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
     if(self.monster_health <= 0)
     {
         DebugPrint("DEAD");
-        self.Destroy();
+        //self.Destroy();
+        Mesh.MinDistFactorForKinematicUpdate = 0.0;
+
+		Mesh.SetRBCollidesWithChannel(RBCC_Default,TRUE);
+		Mesh.ForceSkelUpdate();
+		Mesh.SetTickGroup(TG_PostAsyncWork);
+		CollisionComponent = Mesh;
+
+		// Turn collision on for skelmeshcomp and off for cylinder
+		CylinderComponent.SetActorCollision(false, false);
+		Mesh.SetActorCollision(true, true);
+		Mesh.SetTraceBlocking(true, true);
+		SetPhysics(PHYS_RigidBody);
+		Mesh.PhysicsWeight = 1.0;
+
+		// If we had stopped updating kinematic bodies on this character due to distance from camera, force an update of bones now.
+		if( Mesh.bNotUpdatingKinematicDueToDistance )
+		{
+			Mesh.UpdateRBBonesFromSpaceBases(TRUE, TRUE);
+		}
+
+		Mesh.PhysicsAssetInstance.SetAllBodiesFixed(FALSE);
+		Mesh.bUpdateKinematicBonesFromAnimation=FALSE;
+		Mesh.SetRBLinearVelocity(Velocity, false);
+		Mesh.SetTranslation(vect(0,0,1) * 7);//BaseTranslationOffset);
+		Mesh.WakeRigidBody();
+        Idle.PlayCustomAnim('Idle',1.0);
+        SetTimer(2,false,'kill');
+        a.killcount += 1;
     }
+}
+function kill()
+{
+   self.Destroy();
 }
 function Tick(float Delta)
 {

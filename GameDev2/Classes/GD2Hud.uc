@@ -203,6 +203,26 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+    if(a.mission4 == true&&a.mission5 == false)
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = lf;; 
+    Canvas.SetPos(900,50);
+    Canvas.SetDrawColor(255,50,15,255);
+    Canvas.DrawText("Defeat all the monsters and escape"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    }
+    if(a.mission4 == true&&a.mission5 == true)
+    {
+    previous_font = Canvas.Font;
+    Canvas.Font = lf;; 
+    Canvas.SetPos(900,50);
+    Canvas.SetDrawColor(255,50,15,255);
+    Canvas.DrawText("Get to the pier!"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    }
 	ForEach DynamicActors(class'monster', DebugPawn)
 	{
 		AddPostRenderedActor(DebugPawn);

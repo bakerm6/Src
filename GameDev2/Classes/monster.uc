@@ -211,6 +211,10 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 }
 function dead()
 {
+    local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
     if(self.monster_health <= 0)
     {
         DebugPrint("DEAD");
@@ -242,7 +246,8 @@ function dead()
 		Mesh.WakeRigidBody();
         Idle.PlayCustomAnim('Idle',1.0);
         SetTimer(2,false,'kill');
-    }
+        a.killcount += 1;
+}
 }
 function kill()
 {

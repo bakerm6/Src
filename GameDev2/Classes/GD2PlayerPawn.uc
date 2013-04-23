@@ -12,12 +12,14 @@ var int batteryc;
 var int duct;
 var int wire;
 var int strip;
+var int killcount;
 var bool mission1;
 var bool mission2a;
 var bool mission2b;
 var bool mission3;
 var bool mission3p;
 var bool mission4;
+var bool mission5;
 var bool done;
 var bool twocall;
 function bool Dodge(eDoubleClickDir DoubleClickMove)
@@ -83,6 +85,10 @@ event Tick( float DeltaTime ) {
     {
     g.mapc = 2;
     }
+    if(killcount > 5)
+    {
+    mission5 = true;
+    }
     
 }
 function TriggerRemoteKismetEvent( name EventName )
@@ -143,8 +149,10 @@ defaultproperties
     mission3 = false
     mission3p = false
     mission4 = false
+    mission5 = false
     twocall = false
     done = false
+    killcount = 0
     SpawnSound=none
     RespawnSound=none
 	// weapon=GD2Flashlight
