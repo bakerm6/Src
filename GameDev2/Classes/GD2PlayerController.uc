@@ -291,8 +291,8 @@ ConsoleCommand("open base.udk");
 }
 if (mapc == 2)
 {
-//ConsoleCommand("open newbase.udk");
-ConsoleCommand("quit");
+ConsoleCommand("open base2.udk");
+//ConsoleCommand("quit");
 }
 //consolecommand("open " $ MyMapName);
 }
