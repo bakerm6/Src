@@ -1,4 +1,7 @@
 class GD2PlayerController extends UTPlayerController;
+/*
+Player controller class for Landfall
+*/
 var SoundCue attackh;
 var SoundCue attackm;
 var SoundCue heartb;
@@ -21,6 +24,7 @@ simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//Allocates timers for ambient soundcues and mission objective soundcues
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
     super.Possess(inPawn, bVehicleTransition);
@@ -36,12 +40,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
 }
-
-/*
-function levelp()
-{
-PlaySound(level);
-}*/
+//Plays soundcue for starting mission 3 if player pawn returns mission 3 true
 function mission3s()
 {
 local GD2PlayerPawn p;
@@ -55,6 +54,7 @@ PlaySound(power);
 mission3start = true;
 }
 }
+//Plays soundcue for starting mission 2 if player pawn returns mission 2 true
 function mission2s()
 {
 local GD2PlayerPawn p;
@@ -69,6 +69,7 @@ mission2start = true;
 }
 
 }
+//Checks for possesion of the flashlight and clears itself once the player aquires one
 function flash()
 {
 local GD2PlayerPawn p;
@@ -84,20 +85,24 @@ flashb = true;
 ClearTimer('flash');
 }
 }
+//Plays ambient crow sound
 function crowp()
 {
 PlaySound(crows);
 }
+//plays heartbeat
 function play()
 {
 if(GD2PlayerPawn(Pawn).Health > 300 && GD2PlayerPawn(Pawn).Health < 700)
 PlaySound(heartb);
 }
+//plays fast heartbeat
 function playf()
 {
 if(GD2PlayerPawn(Pawn).Health <= 300&& GD2PlayerPawn(Pawn).Health > 0)
 PlaySound(heartf);
 }
+//Gets the triggers that the player uses
 function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, float minDot, bool bUsuableOnly, out array<trigger> out_useList)
 {
     local int Idx;
@@ -189,11 +194,12 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
         }
     }
 }
+//Exits to main menu
 function quit()
 {
 ConsoleCommand("open alphamen1");
 }
-//combat function that exectues when z is pressed
+//combat function that exectues when z or left mouse is pressed
 exec function  attackb()
 {
 local monster ai;
@@ -252,6 +258,7 @@ canattack = false;
 await();
 }
 }
+//function to sync animation with attack
 function await()
 {
 SetTimer(1.25,false,'waiter');
@@ -274,9 +281,10 @@ function waiter()
 canattack = true;
 checka = false;
 }
+//loads a level when the player dies
 function quitg()
 {
-  local GD2PlayerPawn p;
+ local GD2PlayerPawn p;
  local actor Player_location_actor;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
@@ -286,7 +294,7 @@ if(p.health <=0)
 //ConsoleCommand("quit");
 if(mapc == 1)
 {
-DebugPrint("b");
+//DebugPrint("b");
 ConsoleCommand("open base.udk");
 }
 if (mapc == 2)
@@ -297,7 +305,7 @@ ConsoleCommand("open base2.udk");
 //consolecommand("open " $ MyMapName);
 }
 }
-//block function that executes when c is pressed
+//block function that executes when c or right mouse is pressed
 exec function blockb()
 {
 local float dot1;
@@ -356,6 +364,7 @@ canblock = false;
 bwait();
 }
 }
+//syncs block animation
 function bwait()
 {
 SetTimer(1.4,false,'blockwaiter');
@@ -365,6 +374,7 @@ function blockwaiter()
 canblock = true;
 checkb = false;
 }
+//turns flashlight on/off
 function flashon()
 {
 local GD2PlayerPawn p;
@@ -378,6 +388,7 @@ function blockingtime()
 GD2PlayerPawn(Pawn).blockbb = true;
 SetTimer(1.4,false,'resetblock');
 }
+//resets block ability when animation is done
 function resetblock()
 {
 GD2PlayerPawn(Pawn).blockbb = false;
