@@ -302,6 +302,6 @@ bHasPhysicsAssetInstance=true
    bStatic = false
    bPostRenderIfNotVisible=true
    GroundSpeed=300.0
-   lf = Font'Sounds.lffont'
+   lf = Font'EngineFonts.lffont'
 }
 

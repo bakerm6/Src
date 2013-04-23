@@ -258,5 +258,5 @@ defaultproperties
 {
 y = false;
 x = false;
-lf = Font'Sounds.lffont'
+lf = Font'EngineFonts.lffont'
 }

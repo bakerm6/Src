@@ -260,5 +260,5 @@ DefaultProperties
    bPostRenderIfNotVisible=true
    GroundSpeed=0.0
    monster_health = 30
-   lf = Font'Sounds.lffont'
+   lf = Font'EngineFonts.lffont'
 }

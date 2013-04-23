@@ -114,5 +114,5 @@ DefaultProperties
     inty = 1
     search = 0
     firsttime = true
-    lf = Font'Sounds.lffont'
+    lf = Font'EngineFonts.lffont'
 }

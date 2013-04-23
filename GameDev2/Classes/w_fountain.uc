@@ -82,5 +82,5 @@ DefaultProperties
     bHidden=false
     bStatic = true
     bPostRenderIfNotVisible=true
-    lf = Font'Sounds.lffont'
+    lf = Font'EngineFonts.lffont'
 }

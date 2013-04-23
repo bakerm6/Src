@@ -169,5 +169,5 @@ DefaultProperties
     search = 0
     firsttime = true
     play = false
-    lf = Font'Sounds.lffont'
+    lf = Font'EngineFonts.lffont'
 }

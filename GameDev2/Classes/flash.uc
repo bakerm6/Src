@@ -132,5 +132,5 @@ DefaultProperties
     firsttime = true
     play = false
     playa = false
-    lf = Font'Sounds.lffont'
+    lf = Font'EngineFonts.lffont'
 }
