@@ -18,6 +18,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     pathfind();
     SetTimer(4,true,'pathfind');
 }
+//checks if the player is seen 
 event SeePlayer(pawn seen)
 {
 Super.SeePlayer(seen);
@@ -28,6 +29,7 @@ simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//allows for idle animation to play
 function idle()
 {
 monster(Pawn).Idle.PlayCustomAnim('Idle',1.0);
@@ -96,7 +98,7 @@ Begin:
     }   
     Sleep(0);
 }
-
+//if the monster hits a wall it will go back to pathfinding instead of getting stuck
 state backup
 {
 begin:

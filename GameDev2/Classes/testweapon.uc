@@ -1,8 +1,14 @@
 class testweapon extends UDKWeapon;
+/*
+First person arms for Landfall
+Contains animations that are called based on bools in player pawn and player controller
+
+*/
 var bool check;
 var AnimNodePlayCustomAnim Attack;
 //var AnimNodePlayCustomAnim Idle;
 var AnimNodePlayCustomAnim Block;
+// Sets animation node slots so they can be called in unrealscript
 simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
 {
     super.PostInitAnimTree(SkelComp);
@@ -14,6 +20,8 @@ simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
         //Idle = AnimNodePlayCustomAnim(SkelComp.FindAnimNode(');      //('FP_idle'));
     }
 }
+//Sets the arms in a position in front of player to look like arms
+//checks the player controller attack and block bools to know whether to play an animation
 simulated event SetPosition(UDKPawn Holder)
 {
     local vector FinalLocation;

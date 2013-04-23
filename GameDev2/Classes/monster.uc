@@ -1,5 +1,10 @@
 class monster extends GamePawn
     placeable;
+/*
+Monster ai class for Landfall
+Each monster has a gloabal set of prompts and array of pathnodes that are set in the editor 
+The monster also has animations
+*/    
 //var() SkeletalMeshComponent SkeletalMesh;
 var() AnimNodeSlot FullBodyAnimSlot;
 var AnimNodePlayCustomAnim Attack;
@@ -10,12 +15,15 @@ var() const string Attack_Message;
 var() const string Attack_Message1;
 var() const string Attack_Message2;
 var(Rendertext) Font lf;
+//sets a timer for the attack animation
 event PostBeginPlay()
 {
  super.PostBeginPlay();
  blocker();
  SetTimer(0.1,true,'attackanim');
 }
+//checks distance between player and monster and plays attack animation
+//monster also gains speed if attacking to simulate it 'chasing' more
 function attackanim()
 {
 local actor Player_location_actor;
@@ -32,6 +40,7 @@ Attack.PlayCustomAnim('melee_attack',1.0);
 else
 self.GroundSpeed = 175.0;
 }
+//Sets monster animations for use in inrealscript
 simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
 {
     super.PostInitAnimTree(SkelComp);
@@ -133,6 +142,8 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     c.seebool = false;
     }
 }
+//checks if the player is currently blocking or not and does damage accordingly
+//damage is dealt each frame
 function blocker()
 {
     local actor Player_Location_Actor;
@@ -168,6 +179,8 @@ const out CollisionImpactData Collision, int ContactIndex )
 {
 //DebugPrint("FUCK");
 }*/
+//if the monster hits a wall it will reset its pathfinding
+//this avoids getting stuck on walls
 event HitWall (Object.Vector HitNormal, Actor Wall, PrimitiveComponent WallComp)
 {
 local Vector Location1;
@@ -209,6 +222,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 
 	KismetDeathDelayTime = default.KismetDeathDelayTime + WorldInfo.TimeSeconds;
 }
+//Readys the monster for its death animation by ragdolling it and stopping all other executions
 function dead()
 {
     local actor Player_Location_Actor;
@@ -249,6 +263,7 @@ function dead()
         a.killcount += 1;
 }
 }
+//deletes it form the map
 function kill()
 {
    self.Destroy();

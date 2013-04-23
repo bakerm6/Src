@@ -1,4 +1,9 @@
 class GD2PlayerPawn extends UTPawn;
+/*
+Player class for Landfall
+Contains many gloabl counting variables and bools to trigger in game events
+
+*/
 var SpotLightMovable Flashlight;
 var Rotator newRot;
 var Vector newLoc;
@@ -22,6 +27,7 @@ var bool mission4;
 var bool mission5;
 var bool done;
 var bool twocall;
+//disables dodge
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
 if(bCanDodge)
@@ -29,19 +35,23 @@ return super.Dodge(DoubleClickMove);
 
 return false;
 }
+//initiates for dialog sequence
 function wait()
 {
 SetTimer(26,false,'reset');
 }
+//resets player movement ability
 function reset()
 {
 groundspeed = 300;
 SetTimer(5,false,'mission3start');
 }
+//allows for soundcue in controller class to activate
 function mission3start()
 {
 mission3 = true;
 }
+//sets health and speed for health regeneration
 simulated function PostBeginPlay()
 {
 	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
@@ -49,10 +59,12 @@ simulated function PostBeginPlay()
     Health = 700;
     SetTimer(1,true,'regen');
 }
+//debug function
 simulated private function DebugPrint1(int sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+//Regenerates health
 function regen()
 {
     if(Health < 700&& Health > 0)
@@ -60,7 +72,7 @@ function regen()
     Health += 12;
     }
 }
-
+//checks every frame for certain events such as dying,completing missions, and activiating kismet sequences
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
     local GD2PlayerController g;
@@ -91,6 +103,7 @@ event Tick( float DeltaTime ) {
     }
     
 }
+//allows for kismet events to be called through unreal script
 function TriggerRemoteKismetEvent( name EventName )
 {
 	local array<SequenceObject> AllSeqEvents;
@@ -114,6 +127,7 @@ function TriggerRemoteKismetEvent( name EventName )
 		}
 	}
 }
+//adds default inventory
 //function AddDefaultInventory()
 //{
     //InvManager.CreateInventory(class'GameDev2.testweapon'); //InvManager is the pawn's InventoryManager

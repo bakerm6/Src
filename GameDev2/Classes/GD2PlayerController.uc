@@ -1,6 +1,7 @@
 class GD2PlayerController extends UTPlayerController;
 /*
 Player controller class for Landfall
+Bool are used to check for attack syncing for exec functions
 */
 var SoundCue attackh;
 var SoundCue attackm;
