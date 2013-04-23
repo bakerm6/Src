@@ -35,7 +35,7 @@ Player_location_actor = GetALocalPlayerController().Pawn;
 Distance = VSize(Player_location_actor.Location - self.Location);
 if(Distance<0)
     Distance*=-1;
- if(Distance<225)
+ if(Distance<325)
 {
 self.GroundSpeed = 215.0;
 Attack.PlayCustomAnim('melee_attack',1.0);
@@ -68,7 +68,7 @@ Player_location_actor = GetALocalPlayerController().Pawn;
 Distance = VSize(Player_location_actor.Location - self.Location);
 if(Distance<0)
     Distance*=-1;
- if(Distance<300)
+ if(Distance<400)
  {
     return true;
  }

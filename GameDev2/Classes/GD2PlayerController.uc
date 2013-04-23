@@ -235,7 +235,7 @@ dot1 =v dot (Player_location_actor.Location - ai.Location);
 //DebugPrint(dot1);
 if(Distance<0)
     Distance*=-1;
-if(Distance>175&&Distance<275&&dot1 < 0)
+if(Distance>175&&Distance<350&&dot1 < 0)
 {
 PlaySound(attackh);
 ai.monster_health-=10;
@@ -250,7 +250,7 @@ dot12 =v dot (Player_location_actor.Location - aidle.Location);
 //DebugPrint(dot1);
 if(Distance<0)
     Distance*=-1;
-if(Distance1>175&&Distance1<275&&dot12 < 0)
+if(Distance1>175&&Distance1<350&&dot12 < 0)
 {
 PlaySound(attackh);
 aidle.monster_health-=10;
