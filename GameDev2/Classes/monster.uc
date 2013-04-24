@@ -12,6 +12,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var() AnimNodeSlot FullBodyAnimSlot;
 var AnimNodePlayCustomAnim Attack;
 var AnimNodePlayCustomAnim Idle;
+var AnimNodePlayCustomAnim death;
 var() array<Pathnode> Waypoints;
 var() int monster_health;
 var() const string Attack_Message;
@@ -52,6 +53,7 @@ simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
     {
         Attack = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim'));
         Idle = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('CustomAnim2'));
+        death = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('monster_death'));
     }
 }
 //Debug Function
@@ -261,8 +263,8 @@ function dead()
 		Mesh.SetRBLinearVelocity(Velocity, false);
 		Mesh.SetTranslation(vect(0,0,1) * 7);//BaseTranslationOffset);
 		Mesh.WakeRigidBody();
-        Idle.PlayCustomAnim('Idle',1.0);
-        SetTimer(2,false,'kill');
+        death.PlayCustomAnim('monster_death',1.0);
+        SetTimer(4,false,'kill');
         a.killcount += 1;
 }
 }
