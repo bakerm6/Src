@@ -186,6 +186,8 @@ function dead()
 {
 local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+    local monsteraidle b;
+    b = monsteraidle(self.controller);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     if(self.monster_health <= 0)
@@ -217,8 +219,9 @@ local actor Player_Location_Actor;
 		Mesh.SetRBLinearVelocity(Velocity, false);
 		Mesh.SetTranslation(vect(0,0,1) * 7);//BaseTranslationOffset);
 		Mesh.WakeRigidBody();
-         death.PlayCustomAnim('monster_death',1.0);
-        SetTimer(2,false,'kill');
+         death.PlayCustomAnim('monster_death',0.5);
+        SetTimer(5,false,'kill');
+                b.PlaySound(b.scream);
         a.killcount += 1;
     }
 }

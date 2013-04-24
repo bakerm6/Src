@@ -232,8 +232,10 @@ function dead()
 {
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+    local monsterai b;
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
+    b = monsterai(self.controller);
     if(self.monster_health <= 0)
     {
         //DebugPrint("DEAD");
@@ -263,11 +265,19 @@ function dead()
 		Mesh.SetRBLinearVelocity(Velocity, false);
 		Mesh.SetTranslation(vect(0,0,1) * 7);//BaseTranslationOffset);
 		Mesh.WakeRigidBody();
-        death.PlayCustomAnim('monster_death',1.0);
-        SetTimer(4,false,'kill');
+        death.PlayCustomAnim('monster_death',0.5);
+        //SetTimer(2.7,false,'toff');
+        SetTimer(5,false,'kill');
+        b.PlaySound(b.scream);
+        //self.TurnOff();
         a.killcount += 1;
 }
 }
+//Freezes the bot 
+/*function toff()
+{
+self.TurnOff();
+}*/
 //deletes it form the map
 function kill()
 {
