@@ -37,7 +37,7 @@ simulated event SetPosition(UDKPawn Holder)
     //local rotator c;
     Holder.GetAxes(Holder.Controller.Rotation,X,Y,Z);
     FinalLocation= Holder.GetPawnViewLocation(); //this is in world space.
-    FinalLocation= FinalLocation-Y*9-Z*20; // Rough position adjustment
+    FinalLocation= FinalLocation-Y*9-Z*10+X*5; // Rough position adjustment
     //FinalLocation= FinalLocation- Y * -12 - Z * -32;
     SetHidden(False);
     SetLocation(FinalLocation);
@@ -72,6 +72,7 @@ DefaultProperties
     AnimtreeTemplate= AnimTree'FP_arms_pckg.FP_arms_animtree'
     AnimSets(0)=AnimSet'FP_arms_pckg.FP_arms_animset'
     Translation=(Z=0.0)
+	scale=0.4
     End Object
     Mesh=MySkeletalMeshComponent
     //bCastShadows = false
