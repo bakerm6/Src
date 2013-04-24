@@ -16,7 +16,7 @@ DefaultProperties
  CylinderComponent=CollisionCylinder
  Begin Object class=StaticMeshComponent Name=MyMeshy
     StaticMesh=StaticMesh'bumper_car_pkg.bumper_car'
-    Rotation= (yaw=4000)
+    Rotation=(yaw=4000)
  End Object
   CollisionComponent=MyMeshy
   Components.Add(MyMeshy)
@@ -24,9 +24,9 @@ DefaultProperties
    ControllerClass=class'GameDev2.bumperai'
    bCollideActors=true
    bBlockActors=true
-   bJumpCapable=false
+   bJumpCapable=true
    bCollideWorld=true
-   bCanJump=false
+   bCanJump=true
    bNoDelete = false
    bStatic = false
    bPostRenderIfNotVisible=true
