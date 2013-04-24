@@ -27,7 +27,8 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
      c = GD2PlayerController(GetALocalPlayerController());
     a.mission4 = true;
     c.mapc = 2;   
-     k = Spawn(class'testweapon');    
+     k = Spawn(class'testweapon');  
+        a.InvManager.AddInventory(k);
     if(play == false)
     {
     PlaySound(player);
@@ -36,7 +37,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     c.flashb = true;
     a.flashlightc = 1;
     a.batteryc = 1;
-     a.InvManager.AddInventory(k);
+    a.InvManager.AddInventory(k);
     
     
         //Ideally, we should also check that the touching pawn is a player-controlled one.
