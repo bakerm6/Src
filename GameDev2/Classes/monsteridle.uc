@@ -245,6 +245,7 @@ DefaultProperties
    AnimtreeTemplate= AnimTree'test_anim.walk_tree_test'
    AnimSets(0)=AnimSet'test_anim.walk_test'
     Translation=(Z=0.0)
+	scale=5.94032
  End Object
   Mesh=MySkeletalMeshComponent
   Components.Add(MySkeletalMeshComponent)
