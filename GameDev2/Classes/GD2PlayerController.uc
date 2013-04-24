@@ -14,6 +14,7 @@ var SoundCue crows;
 var SoundCue flashlights;
 var SoundCue findphone;
 var SoundCue power;
+var SoundCue gotopier;
 var int mapc;
 var bool flashb;
 var bool mission2start;
@@ -43,8 +44,21 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     SetTimer(2,true,'mission2s');
     SetTimer(2,true,'mission3s');
     SetTimer(10,true,'quitg');
+    SetTimer(15,true,'endgame');
     //PlaySound(level);
     //SetTimer(43,true,'levelp');
+}
+function endgame()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+if(p.mission5 == true)
+{
+PlaySound(gotopier);
+cleartimer('endgame');
+}
 }
 //Plays soundcue for starting mission 3 if player pawn returns mission 3 true
 function mission3s()
@@ -401,7 +415,10 @@ function resetblock()
 {
 GD2PlayerPawn(Pawn).blockbb = false;
 }
-    
+function endgamescene()
+{
+consolecommand("open alphamen1.udk");
+} 
 defaultproperties
 {
    CameraClass=class'GameDev2.GD2PlayerCamera'
@@ -414,6 +431,7 @@ defaultproperties
    flashlights = SoundCue'Sounds.hmmaflashlightc'
    findphone = SoundCue'Sounds.findaphonec'
    power = SoundCue'Sounds.letsgetthepoweronc'
+   gotopier = Soundcue 'Sounds.ineedtogetoutc'
    //level = SoundCue'Sounds.windc'
    done = false;
    flashb = false;
