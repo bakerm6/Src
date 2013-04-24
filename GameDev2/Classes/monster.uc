@@ -267,7 +267,7 @@ function dead()
 		Mesh.WakeRigidBody();
         death.PlayCustomAnim('monster_death',0.5);
         //SetTimer(2.7,false,'toff');
-        SetTimer(5,false,'kill');
+        SetTimer(6.1,false,'kill');
         b.PlaySound(b.scream);
         //self.TurnOff();
         a.killcount += 1;

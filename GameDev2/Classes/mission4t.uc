@@ -9,6 +9,8 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var soundcue player;
 var bool play;
 var SoundCue circus;
+var SoundCue carosel;
+var int count;
 // on touch mission 4 begins
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -16,7 +18,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     local GD2PlayerPawn a;
     local GD2PlayerController c;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
- 
+  
     if (Pawn(Other) != none)
     {
     Player_Location_Actor = GetALocalPlayerController().Pawn;
@@ -41,9 +43,15 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 // plays ambient theme park music
 function circusong()
 {
-PlaySound(circus);
-SetTimer(155,true,'circussong');
+PlaySound(carosel);
+//SetTimer(155,false,'caroselsong');
 }
+
+/*function caroselsong()
+{
+PlaySound(carosel);
+//SetTimer(236,false,'circussong');
+}*/
 DefaultProperties
 {
 Begin Object Name=Sprite
@@ -55,10 +63,12 @@ Begin Object Name=Sprite
     End Object
     player = Soundcue'Sounds.ohnothatsnotgoodc'
     circus = SoundCue'Sounds.circusc'
+    carosel = SoundCue'Sounds.caroselc'
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
     bBlockActors=false
     bHidden=true
     play = false
+    count = 0;
     bPostRenderIfNotVisible=true
 }

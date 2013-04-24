@@ -80,6 +80,7 @@ event Tick( float DeltaTime ) {
     local GD2PlayerController g;
     super.Tick(DeltaTime);
     g= GD2PlayerController(self.controller);
+    //DebugPrint1(killcount);
     if(Health <= 0)
     {
     self.Destroy();

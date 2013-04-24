@@ -220,7 +220,7 @@ local actor Player_Location_Actor;
 		Mesh.SetTranslation(vect(0,0,1) * 7);//BaseTranslationOffset);
 		Mesh.WakeRigidBody();
          death.PlayCustomAnim('monster_death',0.5);
-        SetTimer(5,false,'kill');
+        SetTimer(6.1,false,'kill');
                 b.PlaySound(b.scream);
         a.killcount += 1;
     }
