@@ -17,6 +17,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
     local GD2PlayerController c;
+    local testweapon k;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
   
     if (Pawn(Other) != none)
@@ -25,20 +26,24 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     a = GD2PlayerPawn(Player_Location_Actor);
      c = GD2PlayerController(GetALocalPlayerController());
     a.mission4 = true;
-    c.mapc = 2;
-    
+    c.mapc = 2;   
+     k = Spawn(class'testweapon');    
     if(play == false)
     {
     PlaySound(player);
     circusong();
     play = true;
-    }
+    c.flashb = true;
+    a.flashlightc = 1;
+    a.batteryc = 1;
+     a.InvManager.AddInventory(k);
     
     
         //Ideally, we should also check that the touching pawn is a player-controlled one.
         //PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         //IsInInteractionRange = true;
     }
+}
 }
 // plays ambient theme park music
 function circusong()
