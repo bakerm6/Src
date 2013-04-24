@@ -234,7 +234,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Get to the pier!"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Get to the top of the island!"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
