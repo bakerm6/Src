@@ -37,7 +37,7 @@ simulated event SetPosition(UDKPawn Holder)
     //local rotator c;
     Holder.GetAxes(Holder.Controller.Rotation,X,Y,Z);
     FinalLocation= Holder.GetPawnViewLocation(); //this is in world space.
-    FinalLocation= FinalLocation-Y*9-Z*10+X*5; // Rough position adjustment
+    FinalLocation= FinalLocation-Y*9-Z*7+X*25; // Rough position adjustment
     //FinalLocation= FinalLocation- Y * -12 - Z * -32;
     SetHidden(False);
     SetLocation(FinalLocation);
