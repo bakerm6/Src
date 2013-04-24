@@ -234,7 +234,7 @@ function dead()
     a = GD2PlayerPawn(Player_Location_Actor);
     if(self.monster_health <= 0)
     {
-        DebugPrint("DEAD");
+        //DebugPrint("DEAD");
         //self.Destroy();
         Mesh.MinDistFactorForKinematicUpdate = 0.0;
 
@@ -288,6 +288,7 @@ DefaultProperties
     BlockRigidBody=TRUE
 bHasPhysicsAssetInstance=true
     Translation=(Z=0.0)
+    scale=5.94032
  End Object
   Mesh=MySkeletalMeshComponent
   Components.Add(MySkeletalMeshComponent)
