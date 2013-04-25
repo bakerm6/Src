@@ -15,6 +15,7 @@ var SoundCue flashlights;
 var SoundCue findphone;
 var SoundCue power;
 var SoundCue gotopier;
+var SoundCue mgrunt;
 var int mapc;
 var bool flashb;
 var bool mission2start;
@@ -25,7 +26,7 @@ var bool canblock;
 var bool checka;
 var bool checkb;
 var bool onepress;
-
+var bool hit;
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
 {
@@ -253,8 +254,10 @@ if(Distance<0)
     Distance*=-1;
 if(Distance>175&&Distance<350&&dot1 < 0)
 {
-PlaySound(attackh);
+//PlaySound(attackh);
 ai.monster_health-=10;
+hit = true;
+SetTimer(1.25,false,'grunter');
 ai.dead();
 }
 }
@@ -268,8 +271,9 @@ if(Distance<0)
     Distance*=-1;
 if(Distance1>175&&Distance1<350&&dot12 < 0)
 {
-PlaySound(attackh);
+//PlaySound(attackh);
 aidle.monster_health-=10;
+SetTimer(1.25,false,'grunter');
 aidle.dead();
 }
 }
@@ -277,6 +281,11 @@ aidle.dead();
 canattack = false;
 await();
 }
+}
+function grunter()
+{
+PlaySound(mgrunt);
+hit = false;
 }
 //function to sync animation with attack
 function await()
@@ -290,7 +299,7 @@ local GD2PlayerPawn p;
 local actor Player_location_actor;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
-if(p.flashlightc == 1)
+if(p.flashlightc == 1&&hit == false)
 {
 PlaySound(attackm);
 }
@@ -433,6 +442,7 @@ defaultproperties
    power = SoundCue'Sounds.letsgetthepoweronc'
    gotopier = Soundcue 'Sounds.ineedtogetoutc'
    //level = SoundCue'Sounds.windc'
+   mgrunt = SoundCue'Sounds.mgruntc'
    done = false;
    flashb = false;
    bIsPlayer = true
@@ -443,6 +453,7 @@ defaultproperties
    checka = false
    checkb = false
    onepress = true
+   hit = false
    // bBehindView=false
    // bForceBehindView=false
 }

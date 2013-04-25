@@ -194,6 +194,10 @@ local actor Player_Location_Actor;
     {
         //DebugPrint("DEAD");
         //self.Destroy();
+				a.stopdoingthings = true;
+        //DebugPrint("DEAD");
+        //self.Destroy();
+		bPostRenderIfNotVisible = false;
         Mesh.MinDistFactorForKinematicUpdate = 0.0;
 
 		Mesh.SetRBCollidesWithChannel(RBCC_Default,TRUE);
@@ -228,6 +232,11 @@ local actor Player_Location_Actor;
 //destroys actor
 function kill()
 {
+		local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
+	a.stopdoingthings = false;
    self.Destroy();
 }
 //checks for block every frame
@@ -240,7 +249,7 @@ DefaultProperties
 {
  Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
-       CollisionRadius=20.00000
+       CollisionRadius=30.00000
  End Object
  CylinderComponent=CollisionCylinder
  Begin object class=AnimNodeSequence name=monsteranim 

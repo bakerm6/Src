@@ -37,7 +37,7 @@ simulated event SetPosition(UDKPawn Holder)
     //local rotator c;
     Holder.GetAxes(Holder.Controller.Rotation,X,Y,Z);
     FinalLocation= Holder.GetPawnViewLocation(); //this is in world space.
-    FinalLocation= FinalLocation-Y*9-Z*11+X*25; // Rough position adjustment
+    FinalLocation= FinalLocation+Y*5-Z*11+X*25; // Rough position adjustment
     //FinalLocation= FinalLocation- Y * -12 - Z * -32;
     SetHidden(False);
     SetLocation(FinalLocation);
@@ -50,6 +50,7 @@ simulated event SetPosition(UDKPawn Holder)
     if(k.checkb == true)
     {
     Block.playcustomanim('FP_block',1.0 );
+	k.checkb = false;
     }
     //Attack.playcustomanim('FP_attack',1.0 );
     //c.yaw = c.yaw - 15000;

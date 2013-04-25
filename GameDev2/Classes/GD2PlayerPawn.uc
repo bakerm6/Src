@@ -29,6 +29,7 @@ var bool mission4;
 var bool mission5;
 var bool done;
 var bool twocall;
+var bool stopdoingthings;
 //disables dodge
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
@@ -172,4 +173,5 @@ defaultproperties
     killcount = 0
     SpawnSound=none
     RespawnSound=none
+	stopdoingthings = false
 	// weapon=GD2Flashlight

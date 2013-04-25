@@ -236,10 +236,14 @@ function dead()
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     b = monsterai(self.controller);
+
     if(self.monster_health <= 0)
     {
+		a.stopdoingthings = true;
         //DebugPrint("DEAD");
         //self.Destroy();
+		bPostRenderIfNotVisible = false;
+	     self.Controller = none;
         Mesh.MinDistFactorForKinematicUpdate = 0.0;
 
 		Mesh.SetRBCollidesWithChannel(RBCC_Default,TRUE);
@@ -281,14 +285,19 @@ self.TurnOff();
 //deletes it form the map
 function kill()
 {
-   self.Destroy();
+	local actor Player_Location_Actor;
+    local GD2PlayerPawn a;
+    Player_Location_Actor = GetALocalPlayerController().Pawn;
+    a = GD2PlayerPawn(Player_Location_Actor);
+	a.stopdoingthings = false;
+    self.Destroy();
 }
 
 DefaultProperties
 {
  Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
-       CollisionRadius=20.00000
+       CollisionRadius=30.0
  End Object
  CylinderComponent=CollisionCylinder
  Begin object class=AnimNodeSequence name=monsteranim 
