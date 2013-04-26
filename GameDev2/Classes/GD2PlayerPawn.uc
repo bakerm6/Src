@@ -72,7 +72,8 @@ function regen()
 {
     if(Health < 700&& Health > 0)
     {
-    Health += 12;
+    //Health += 12;
+    Health += 700;
     }
 }
 //checks every frame for certain events such as dying,completing missions, and activiating kismet sequences
