@@ -1,4 +1,4 @@
-class mission2arrow extends trigger;
+class mission5arrow extends trigger;
 /*
 Rotating mission 2 arrow in Landfall
 DangerZone Games: James Ross (rossj511@gmail.com)
@@ -20,7 +20,7 @@ event Tick( float DeltaTime )
 	SetRotation(final_rot);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
-    if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
+    if(a.mission5 == true)
     SetHidden(false);// = false;
     else
     SetHidden(true);

@@ -66,6 +66,7 @@ DefaultProperties
         HiddenEditor=FALSE
         CastShadow = False
     end object*/
+
     Begin object class=AnimNodeSequence name=armanim 
     End object
     Begin Object class=SkeletalMeshComponent Name=MySkeletalMeshComponent
