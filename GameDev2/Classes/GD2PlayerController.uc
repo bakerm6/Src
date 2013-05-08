@@ -426,7 +426,7 @@ GD2PlayerPawn(Pawn).blockbb = false;
 }
 function endgamescene()
 {
-consolecommand("open alphamen1.udk");
+consolecommand("open credits.udk");
 } 
 defaultproperties
 {
