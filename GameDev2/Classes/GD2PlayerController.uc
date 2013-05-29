@@ -220,6 +220,25 @@ function quit()
 {
 ConsoleCommand("open alphamen1");
 }
+//"sprinting"
+exec function sprinting()
+{
+local GD2PlayerPawn p;
+local actor playerp;
+playerp = GetALocalPlayerController().Pawn;
+p = GD2PlayerPawn(playerp);
+p.GroundSpeed = 300;
+//DebugPrint("sprint");
+}
+exec function walking()
+{
+local GD2PlayerPawn p;
+local actor playerp;
+playerp = GetALocalPlayerController().Pawn;
+p = GD2PlayerPawn(playerp);
+p.GroundSpeed = 200;
+//DebugPrint("walk");
+}
 //combat function that exectues when z or left mouse is pressed
 exec function  attackb()
 {
