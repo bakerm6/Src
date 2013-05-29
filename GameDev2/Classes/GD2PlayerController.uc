@@ -260,6 +260,14 @@ hit = true;
 SetTimer(1.25,false,'grunter');
 ai.dead();
 }
+if(Distance < 175&&dot1 < 0)
+{
+ai.monster_health-=10;
+hit = true;
+SetTimer(1.25,false,'grunter');
+p.health -= 25;
+ai.dead();
+}
 }
 
 ForEach AllActors(class'monsteridle',aidle)

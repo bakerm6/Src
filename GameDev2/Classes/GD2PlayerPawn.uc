@@ -72,8 +72,8 @@ function regen()
 {
     if(Health < 700&& Health > 0)
     {
-    //Health += 12;
-    Health += 700;
+    Health += 12;
+    //Health += 700;
     }
 }
 //checks every frame for certain events such as dying,completing missions, and activiating kismet sequences
@@ -151,7 +151,7 @@ defaultproperties
 	blockbb = false
     bStatic = false
     HealthMax = 700;
-    Health = 700;
+    Health = 0;
     GroundSpeed = 100
     AirSpeed = 100
     waterbottlec = 0
