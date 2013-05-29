@@ -129,7 +129,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = lf;
     Canvas.SetPos(200,300);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Press C to Block");
+    Canvas.DrawText("Press C to Block/ Z to attack");
     Canvas.Font = previous_font;
     //c.seebool=false;
     }

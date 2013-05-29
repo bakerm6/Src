@@ -230,6 +230,7 @@ p = GD2PlayerPawn(playerp);
 p.GroundSpeed = 300;
 //DebugPrint("sprint");
 }
+//walk speed reset
 exec function walking()
 {
 local GD2PlayerPawn p;

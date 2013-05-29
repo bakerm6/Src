@@ -93,6 +93,16 @@ function PostRender()
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     //a.mission1 = true;
+	if(a.health < 150)
+	{
+	previous_font = Canvas.Font;
+    Canvas.Font = lf;; 
+    Canvas.SetPos(575,450);
+    Canvas.SetDrawColor(255,50,15,255);
+    Canvas.DrawText("HIGH HEART RATE!!!!"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+	}
     if(x == true)
     {
     previous_font = Canvas.Font;
