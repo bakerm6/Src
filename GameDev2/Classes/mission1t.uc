@@ -12,8 +12,12 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 {
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+	local rotatinumbrella p;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
- 
+	ForEach AllActors(class'rotatinumbrella',p) 
+	{
+	p.Go = true;
+	}
     if (Pawn(Other) != none)
     {
     Player_Location_Actor = GetALocalPlayerController().Pawn;
