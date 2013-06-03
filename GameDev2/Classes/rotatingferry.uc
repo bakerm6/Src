@@ -8,29 +8,34 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 */
 var int RotatingSpeed;
 var int SpeedFade;
-var rotator final_rot;
 var bool spawnb;
+var int x;
 event Tick( float DeltaTime ) 
 {
-    //local Rotator final_rot;
+    local Rotator final_rot;
     super.Tick(DeltaTime);
-    if(spawnb == true)
-    {
-    final_rot = Rotation;
-    spawnb = false;
-    }
-    //final_rot = Rotation;
-    if(final_rot.pitch > 3000 || final_rot.pitch < -3000 );
-    final_rot.pitch = 0;
-    //RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
-	//final_rot.pitch = final_rot.pitch - RotatingSpeed*DeltaTime;
-    
-    if(final_rot.pitch < -3000)
-    final_rot.pitch +=1;
-    if(final_rot.pitch > 3000)
-    final_rot.pitch -=1;
-    //final_rot.pitch = final_rot.pitch - RotatingSpeed*DeltaTime-100;
+	final_rot = Rotation;
+	if(x<12)
+    final_rot.pitch = final_rot.pitch + RotatingSpeed*DeltaTime+100;
+	//final_rot.roll = final_rot.roll - RotatingSpeed*DeltaTime-100;
 	SetRotation(final_rot);
+	x+=1;
+	if(x>=12 && x<36)
+	{
+    final_rot.pitch = final_rot.pitch - RotatingSpeed*DeltaTime-100;
+	//final_rot.roll = final_rot.roll + RotatingSpeed*DeltaTime+100;
+	SetRotation(final_rot);
+	x+=1;
+	}
+	if(x<=36&&x<300)
+	{
+	x += 1;
+	}
+	if(x==300)
+	{
+	x = 0;
+	}
+	
 }
 defaultproperties
 {
@@ -40,8 +45,9 @@ defaultproperties
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-       RotatingSpeed = 2000
-    SpeedFade = 1
+       RotatingSpeed = 1;
+    SpeedFade = 10
     bHidden = false
     spawnb = true
+	x = 0;
 }
