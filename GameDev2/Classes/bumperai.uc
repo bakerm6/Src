@@ -31,12 +31,17 @@ simulated function PathFind()
 state Pathfinding 
 {
 Begin:
+	
 
-    if(bumpercar(Pawn).Waypoints[_PathNode] != None)
+    if(bumpercar(Pawn).Waypoints[_PathNode] != None&& bumpercar(pawn).b == true)
     {
     Path_Count = 0;
     MoveToward(bumpercar(Pawn).Waypoints[_PathNode], bumpercar(Pawn).Waypoints[_PathNode], 128);
-    }   
+    }  
+	else
+	{
+	Sleep(1);
+	}
     Sleep(0);
 }
 DefaultProperties

@@ -7,6 +7,7 @@ Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */  
 var() array<Pathnode> Waypoints;
+var bool b;
 DefaultProperties
 {
  Begin Object Name=CollisionCylinder
@@ -31,4 +32,5 @@ DefaultProperties
    bStatic = false
    bPostRenderIfNotVisible=true
    GroundSpeed=300.0
+   b = true
    }

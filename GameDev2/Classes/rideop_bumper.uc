@@ -1,14 +1,15 @@
-class rideop extends trigger;
+class rideop_bumper extends trigger;
 /*
 Interactable ride booths for the rides in map 2
 of Lanfall
 DangerZone Games: James Ross (rossj511@gmail.com)
-Date : 04/24/2013
+Date : 05/30/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
 var bool IsInInteractionRange;
 var SoundCue squeek;
 var(Rendertext) Font lf;
+var int check;
 //Debug Print
 simulated private function DebugPrint(string sMessage)
 {
@@ -58,15 +59,36 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
 
 
 }
-// Plays a sound and destroys the duct tape when initialized
+//When used the ride will screech to a halt or start moving
 function bool UsedBy(Pawn User)
 {
     //DebugPrint("f");
 	local bool used;
+	local bumpercar bu;
     used = super.UsedBy(User);
-    if (IsInInteractionRange)
+    if (IsInInteractionRange && check == 0)
     {
-
+	DebugPrint("working");
+		
+		ForEach AllActors(class'bumpercar',bu)
+		{
+		//b.TurnOff();
+		bu.b= false;
+		check = 1;
+		}
+        PlaySound(squeek);
+        return true;
+    }
+	else if (IsInInteractionRange && check == 1)
+    {
+	DebugPrint("workingagain");
+		
+		ForEach AllActors(class'bumpercar',bu)
+		{
+		//b.TurnOff();
+		bu.b= True;
+		check = 0;
+		}
         PlaySound(squeek);
         return true;
     }
@@ -84,16 +106,17 @@ DefaultProperties
     CylinderComponent=CollisionCylinder
     //may need .mesh when textured
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'Operating_stand_pckg.operating_stand'  //change
+       StaticMesh=StaticMesh'NodeBuddies.3D_Icons.NodeBuddy__BASE_SHORT'  //change
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
     squeek = SoundCue'Sounds.squeek' //change
-    bBlockActors=true
+    bBlockActors=True
     bCollideActors=true
-    bHidden=false
+    bHidden=True
     bNoDelete = false
     bStatic = false
+	check = 0;
     bPostRenderIfNotVisible=true
     lf = Font'EngineFonts.lffont'
 }

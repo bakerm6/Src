@@ -212,7 +212,7 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
-			if (rideop(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+			if (rideop_bumper(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
@@ -400,7 +400,7 @@ Distance = VSize(Player_location_actor.Location - ai.Location);
 dot1 =v dot (Player_location_actor.Location - ai.Location);
 if(Distance<0)
     Distance*=-1;
-if(Distance<700 && Distance<175 &&dot1 < 0)
+if(Distance<700 && Distance<350 &&dot1 < 0)
 {
 blockingtime();
 }
@@ -415,7 +415,7 @@ dot12 =v dot (Player_location_actor.Location - aidle.Location);
 //DebugPrint(dot1);
 if(Distance<0)
     Distance*=-1;
-if(Distance1<700 && Distance1<175 &&dot12 < 0)
+if(Distance1<700 && Distance1<350 &&dot12 < 0)
 {
 blockingtime();
 }
