@@ -9,7 +9,7 @@ var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
-var bool playa;
+var bool play_sequence;
 var SoundCue duc;
 var SoundCue linesdead;
 var SoundCue hello;
@@ -30,7 +30,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
  
     if (Pawn(Other) != none)
     {
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
+        
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
         //idle();
@@ -46,10 +46,7 @@ event UnTouch(Actor Other)
     {
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
-        /*if(search == 1)
-        {
-           search = 2;
-        }*/
+       
     }
 }
 
@@ -68,7 +65,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Press E to Investigate"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Press E to Investigate");
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     //a.mission2b = true;
@@ -79,7 +76,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Press E to Repair"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Press E to Repair");
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
@@ -108,7 +105,7 @@ function bool UsedBy(Pawn User)
     if (IsInInteractionRange&&search!=2&&a.mission2a==true)
     {
         //DebugPrint("F");
-        //If it matters, you might want to double check here that the user is a player-controlled pawn.
+     
         search = 1;
         if(play== false)
         {
@@ -116,13 +113,13 @@ function bool UsedBy(Pawn User)
         play = true;
         a.mission2b = true;
         }
-        if(a.duct == 1 && a.wire == 1 && a.strip == 1&& playa == false)
+        if(a.duct == 1 && a.wire == 1 && a.strip == 1&& play_sequence == false)
         {
         PlaySound(duc);
         PlaySound(dial);
         search = 2;
         a.GroundSpeed = 0;
-        playa = true;
+        play_sequence = true;
         PlaySound(hello);
         PlaySound(us);
         PlaySound(island);
@@ -165,6 +162,6 @@ DefaultProperties
     search = 0
     firsttime = true
     play = false
-    playa = false
+    play_sequence = false
     lf = Font'EngineFonts.lffont'
 }
