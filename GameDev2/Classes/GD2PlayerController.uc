@@ -246,9 +246,28 @@ local actor playerp;
 playerp = GetALocalPlayerController().Pawn;
 p = GD2PlayerPawn(playerp);
 p.GroundSpeed = 300;
+SetTimer(7,false,'stamina');
+SetTimer(1,false,'heart_rate');
 //DebugPrint("sprint");
 }
-
+//stamina function to not allow unlimited sprint
+function stamina()
+{
+local GD2PlayerPawn p;
+local actor playerp;
+playerp = GetALocalPlayerController().Pawn;
+p = GD2PlayerPawn(playerp);
+p.GroundSpeed = 200;
+}
+//sprinting increases heart rate slightly
+function heart_rate()
+{
+local GD2PlayerPawn p;
+local actor playerp;
+playerp = GetALocalPlayerController().Pawn;
+p = GD2PlayerPawn(playerp);
+p.health -= 50;
+}
 //walk speed reset
 exec function walking()
 {
@@ -257,6 +276,7 @@ local actor playerp;
 playerp = GetALocalPlayerController().Pawn;
 p = GD2PlayerPawn(playerp);
 p.GroundSpeed = 200;
+ClearTimer('stamina');
 //DebugPrint("walk");
 }
 
