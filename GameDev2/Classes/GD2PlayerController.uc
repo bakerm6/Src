@@ -228,6 +228,10 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
             {
                 out_useList[out_useList.Length] = checkTrigger;
             }
+			if (rideop_matine(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
+            {
+                out_useList[out_useList.Length] = checkTrigger;
+            }
         }
     }
 }
@@ -516,7 +520,10 @@ function endgamescene()
 consolecommand("open credits.udk");
 } 
 
-
+function k_mat_test()
+{
+DebugPrint("working");
+}
 defaultproperties
 {
    CameraClass=class'GameDev2.GD2PlayerCamera'
