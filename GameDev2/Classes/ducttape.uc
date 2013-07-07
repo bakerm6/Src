@@ -6,6 +6,8 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var int search;
 var bool IsInInteractionRange;
 var bool firsttime;
@@ -13,11 +15,14 @@ var bool play;
 var bool playa;
 var SoundCue clicky;
 var(Rendertext) Font lf;
+
+
 //Debug Print
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+
 // When touching the trigger it becomes interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -25,12 +30,13 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
  
     if (Pawn(Other) != none)
     {
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
+
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
         //DebugPrint("here");
     }
 }
+
 // An un touch makes the trigger no longer interactable
 event UnTouch(Actor Other)
 {
@@ -46,6 +52,7 @@ event UnTouch(Actor Other)
         }*/
     }
 }
+
 // Prompts user to interact with duct tape when touching it
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
@@ -55,21 +62,21 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
     //Player_Location_Actor = GetALocalPlayerController().Pawn;
     //a = GD2PlayerPawn(Player_Location_Actor);
-    if(search == 0)// && a.mission2b == true)
-    {
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;
-    Canvas.SetPos(400,300);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Press E to Pick Up"); //Prompt is a string variable defined in our new actor's class.
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    //a.mission2b = true;
-    }
-    else if(search == 1)
-    {
-    self.Destroy();
-    }
+		if(search == 0)// && a.mission2b == true)
+		{
+		previous_font = Canvas.Font;
+		Canvas.Font = lf;
+		Canvas.SetPos(400,300);
+		Canvas.SetDrawColor(255,50,15,255);
+		Canvas.DrawText("Press E to Pick Up"); //Prompt is a string variable defined in our new actor's class.
+		Canvas.Font = previous_font; 
+		previous_font = Canvas.Font;
+		//a.mission2b = true;
+		}
+		else if(search == 1)
+		{
+		self.Destroy();
+		}
 
 }
 // Plays a sound and destroys the duct tape when initialized
@@ -103,27 +110,33 @@ DefaultProperties
     Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
+	
     //may need .mesh when textured
     Begin Object Class=StaticMeshComponent Name=MyMesh
        StaticMesh=StaticMesh'duct_tape.duct_tape'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+	
     clicky = SoundCue'Sounds.clickc'
+	
+	search = 0
+		
     bBlockActors=true
     bCollideActors=true
     bHidden=false
     bNoDelete = false
     bStatic = false
     bPostRenderIfNotVisible=true
-    search = 0
     firsttime = true
     play = false
     playa = false
+	
     lf = Font'EngineFonts.lffont'
 }

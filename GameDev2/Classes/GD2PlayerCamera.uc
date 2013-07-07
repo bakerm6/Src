@@ -5,12 +5,14 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var Vector CamOffset;
 var float CameraZOffset;
 var float CameraScale, CurrentCameraScale; /** multiplier to default camera distance */
 var float CameraScaleMin, CameraScaleMax;
 
-// function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
+//function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 // {
    // local vector      HitLocation, HitNormal;
    // local CameraActor   CamActor;

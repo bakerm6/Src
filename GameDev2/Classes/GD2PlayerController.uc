@@ -7,7 +7,7 @@ Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
 
-
+//variable declarations 
 var SoundCue attackh;
 var SoundCue attackm;
 var SoundCue heartb;
@@ -34,29 +34,32 @@ var bool hit;
 //Function to output debug messages
 simulated private function DebugPrint(string sMessage)
 {
-	GetALocalPlayerController().ClientMessage(sMessage);
+		GetALocalPlayerController().ClientMessage(sMessage);
 }
 
 
+	
 //Allocates timers for ambient soundcues and mission objective soundcues
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
-    super.Possess(inPawn, bVehicleTransition);
-    crowp();
-    flash();
-    SetTimer(1.94,true,'play');
-    SetTimer(1.46,true,'playf');
-    SetTimer(87,true,'crowp');
-    SetTimer(2,true,'flash');
-    SetTimer(2,true,'mission2s');
-    SetTimer(2,true,'mission3s');
-    SetTimer(10,true,'quitg');
-    SetTimer(15,true,'endgame');
-    //PlaySound(level);
-    //SetTimer(43,true,'levelp');
+		super.Possess(inPawn, bVehicleTransition);
+		crowp();
+		flash();
+		SetTimer(1.94,true,'play');
+		SetTimer(1.46,true,'playf');
+		SetTimer(87,true,'crowp');
+		SetTimer(2,true,'flash');
+		SetTimer(2,true,'mission2s');
+		SetTimer(2,true,'mission3s');
+		SetTimer(10,true,'quitg');
+		SetTimer(15,true,'endgame');
+		//PlaySound(level);
+		//SetTimer(43,true,'levelp');
 }
 
-
+	
+	
+//function check to see if mission 5 is completed
 function endgame()
 {
 local GD2PlayerPawn p;
@@ -69,6 +72,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 	cleartimer('endgame');
 	}
 }
+
 
 //Plays soundcue for starting mission 3 if player pawn returns mission 3 true
 function mission3s()
@@ -85,6 +89,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 	}
 }
 
+
 //Plays soundcue for starting mission 2 if player pawn returns mission 2 true
 function mission2s()
 {
@@ -100,6 +105,7 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 	}
 
 }
+
 
 //Checks for possesion of the flashlight and clears itself once the player aquires one
 function flash()
@@ -118,24 +124,30 @@ p  = GD2PlayerPawn(Player_Location_Actor);
 	}
 }
 
+
 //Plays ambient crow sound
 function crowp()
 {
 PlaySound(crows);
 }
 
+
 //plays heartbeat
 function play()
 {
-if(GD2PlayerPawn(Pawn).Health > 300 && GD2PlayerPawn(Pawn).Health < 700)
-PlaySound(heartb);
+	if(GD2PlayerPawn(Pawn).Health > 300 && GD2PlayerPawn(Pawn).Health < 700)
+	{
+	PlaySound(heartb);
+	}
 }
 
 //plays fast heartbeat
 function playf()
 {
 if(GD2PlayerPawn(Pawn).Health <= 300&& GD2PlayerPawn(Pawn).Health > 0)
-PlaySound(heartf);
+	{
+	PlaySound(heartf);
+	}
 }
 
 //Gets the triggers that the player uses
@@ -179,7 +191,7 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
 			}
           
  
-            //If it's a usable actor and it hasn't already been added to the list, let's add it. 
+            //add usable actors to the list
             if (searchabletrash(checkTrigger) != None && (out_useList.Length == 0 || out_useList[out_useList.Length-1] != checkTrigger))
             {
                 out_useList[out_useList.Length] = checkTrigger;
@@ -242,36 +254,42 @@ function quit()
 ConsoleCommand("open alphamen1");
 }
 
+
+///////////////////////////////////////////////////////////////////////
 //"sprinting"
 exec function sprinting()
 {
-local GD2PlayerPawn p;
-local actor playerp;
-playerp = GetALocalPlayerController().Pawn;
-p = GD2PlayerPawn(playerp);
-p.GroundSpeed = 300;
-SetTimer(7,false,'stamina');
-SetTimer(1,false,'heart_rate');
-//DebugPrint("sprint");
+	local GD2PlayerPawn p;
+	local actor playerp;
+	playerp = GetALocalPlayerController().Pawn;
+	p = GD2PlayerPawn(playerp);
+	p.GroundSpeed = 300;
+	SetTimer(7,false,'stamina');
+	SetTimer(1,false,'heart_rate');
+	//DebugPrint("sprint");
 }
 //stamina function to not allow unlimited sprint
-function stamina()
-{
-local GD2PlayerPawn p;
-local actor playerp;
-playerp = GetALocalPlayerController().Pawn;
-p = GD2PlayerPawn(playerp);
-p.GroundSpeed = 200;
-}
-//sprinting increases heart rate slightly
-function heart_rate()
-{
-local GD2PlayerPawn p;
-local actor playerp;
-playerp = GetALocalPlayerController().Pawn;
-p = GD2PlayerPawn(playerp);
-p.health -= 50;
-}
+	function stamina()
+	{
+	local GD2PlayerPawn p;
+	local actor playerp;
+	playerp = GetALocalPlayerController().Pawn;
+	p = GD2PlayerPawn(playerp);
+	p.GroundSpeed = 200;
+	}
+	//sprinting increases heart rate slightly
+	function heart_rate()
+	{
+	local GD2PlayerPawn p;
+	local actor playerp;
+	playerp = GetALocalPlayerController().Pawn;
+	p = GD2PlayerPawn(playerp);
+	p.health -= 50;
+	}
+///////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////
 //walk speed reset
 exec function walking()
 {
@@ -283,7 +301,13 @@ p.GroundSpeed = 200;
 ClearTimer('stamina');
 //DebugPrint("walk");
 }
+///////////////////////////////////////////////////////////////////////
 
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 //combat function that exectues when z or left mouse is pressed
 exec function  attackb()
 {
@@ -305,62 +329,66 @@ GD2PlayerPawn(Pawn).blockbb = false;
 {
 p.destroy();
 }*/
-if (canattack == true)
-{
-checka = true;
-//k.Attack.PlayCustomAnim('FP_attack',1.0);
-	ForEach AllActors(class'monster',ai)
+	if (canattack == true)
 	{
-	Distance = VSize(Player_location_actor.Location - ai.Location);
-	dot1 =v dot (Player_location_actor.Location - ai.Location);
-	//DebugPrint(dot1);
-	if(Distance<0)
-		Distance*=-1;
-	if(Distance>175&&Distance<350&&dot1 < 0)
-	{
-	//PlaySound(attackh);
-	ai.monster_health-=10;
-	hit = true;
-	SetTimer(1.25,false,'grunter');
-	ai.dead();
-	}
-	if(Distance < 175&&dot1 < 0)
-	{
-	ai.monster_health-=10;
-	hit = true;
-	SetTimer(1.25,false,'grunter');
-	p.health -= 25;
-	ai.dead();
-	}
-	}
+	checka = true;
+	//k.Attack.PlayCustomAnim('FP_attack',1.0);
+		ForEach AllActors(class'monster',ai)
+		{
+		Distance = VSize(Player_location_actor.Location - ai.Location);
+		dot1 =v dot (Player_location_actor.Location - ai.Location);
+		//DebugPrint(dot1);
+			if(Distance<0)
+				Distance*=-1;
+			if(Distance>175&&Distance<350&&dot1 < 0)
+			{
+			//PlaySound(attackh);
+			ai.monster_health-=10;
+			hit = true;
+			SetTimer(1.25,false,'grunter');
+			ai.dead();
+			}
+				if(Distance < 175&&dot1 < 0)
+				{
+				ai.monster_health-=10;
+				hit = true;
+				SetTimer(1.25,false,'grunter');
+				p.health -= 25;
+				ai.dead();
+				}
+		}
 
-	ForEach AllActors(class'monsteridle',aidle)
-	{
-	Distance1 = VSize(Player_location_actor.Location - aidle.Location);
-	dot12 =v dot (Player_location_actor.Location - aidle.Location);
-	//DebugPrint(dot1);
-	if(Distance<0)
-		Distance*=-1;
-	if(Distance1>175&&Distance1<350&&dot12 < 0)
-	{
-	//PlaySound(attackh);
-	aidle.monster_health-=10;
-	SetTimer(1.25,false,'grunter');
-	aidle.dead();
+		ForEach AllActors(class'monsteridle',aidle)
+		{
+		Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+		dot12 =v dot (Player_location_actor.Location - aidle.Location);
+		//DebugPrint(dot1);
+			if(Distance<0)
+				Distance*=-1;
+				if(Distance1>175&&Distance1<350&&dot12 < 0)
+				{
+				//PlaySound(attackh);
+				aidle.monster_health-=10;
+				SetTimer(1.25,false,'grunter');
+				aidle.dead();
+				}
+			}
+		//PlaySound(attackm);
+		canattack = false;
+		await();
 	}
-	}
-	//PlaySound(attackm);
-	canattack = false;
-	await();
 }
-}
 
 
+
+//plays a grunting sound when hit
 function grunter()
 {
 PlaySound(mgrunt);
 hit = false;
 }
+
+
 
 //function to sync animation with attack
 function await()
@@ -369,24 +397,29 @@ SetTimer(1.25,false,'waiter');
 SetTimer(0.8,false,'noisea');
 }
 
+
+//plays an attack miss sound if you are not hitting an object
 function noisea()
 {
 local GD2PlayerPawn p;
 local actor Player_location_actor;
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
-if(p.flashlightc == 1&&hit == false)
-{
-PlaySound(attackm);
+	if(p.flashlightc == 1&&hit == false)
+	{
+	PlaySound(attackm);
+	}
 }
-}
-
+//resets bools for animation blend
 function waiter()
 {
 
 canattack = true;
 checka = false;
 }
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
 
 //loads a level when the player dies
 function quitg()
@@ -396,24 +429,29 @@ function quitg()
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 //DebugPrint(MyMapName);
-if(p.health <=0)
-{
-//ConsoleCommand("quit");
-if(mapc == 1)
-{
-//DebugPrint("b");
-ConsoleCommand("open base.udk");
-}
-if (mapc == 2)
-{
-ConsoleCommand("open base2.udk");
-//ConsoleCommand("quit");
-}
-//consolecommand("open " $ MyMapName);
-}
+	if(p.health <=0)
+	{
+	//ConsoleCommand("quit");
+		if(mapc == 1)
+		{
+		//DebugPrint("b");
+		ConsoleCommand("open base.udk");
+		}
+		if (mapc == 2)
+		{
+		ConsoleCommand("open base2.udk");
+		//ConsoleCommand("quit");
+		}
+	//consolecommand("open " $ MyMapName);
+	}
 }
 
-//block function that executes when c or right mouse is pressed
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+//block function that executes when c or right mouse is pressed////////
 exec function blockb()
 {
 local float dot1;
@@ -432,46 +470,46 @@ p.destroy();
 Player_location_actor = GetALocalPlayerController().Pawn;
 p  = GD2PlayerPawn(Player_Location_Actor);
 v = Vector(p.Rotation);
-if(p.flashlightc == 1 && p.batteryc == 1&&onepress == true)
-{
-p.TriggerRemoteKismetEvent('flashlight_toggle' );
-onepress = false;
-SetTimer(1.4,false,'flashon');
-}
-if(canblock == true)
-{
-checkb = true;
-ForEach AllActors(class'monster',ai)
-{
-Distance = VSize(Player_location_actor.Location - ai.Location);
-dot1 =v dot (Player_location_actor.Location - ai.Location);
-if(Distance<0)
-    Distance*=-1;
-if(Distance<700 && Distance<350 &&dot1 < 0)
-{
-blockingtime();
-}
-else
-GD2PlayerPawn(Pawn).blockbb = false;
-}
+	if(p.flashlightc == 1 && p.batteryc == 1&&onepress == true)
+	{
+	p.TriggerRemoteKismetEvent('flashlight_toggle' );
+	onepress = false;
+	SetTimer(1.4,false,'flashon');
+	}
+		if(canblock == true)
+		{
+		checkb = true;
+		ForEach AllActors(class'monster',ai)
+		{
+		Distance = VSize(Player_location_actor.Location - ai.Location);
+		dot1 =v dot (Player_location_actor.Location - ai.Location);
+			if(Distance<0)
+				Distance*=-1;
+				if(Distance<700 && Distance<350 &&dot1 < 0)
+				{
+				blockingtime();
+				}
+				else
+				GD2PlayerPawn(Pawn).blockbb = false;
+				}
 
-ForEach AllActors(class'monsteridle',aidle)
-{
-Distance1 = VSize(Player_location_actor.Location - aidle.Location);
-dot12 =v dot (Player_location_actor.Location - aidle.Location);
-//DebugPrint(dot1);
-if(Distance<0)
-    Distance*=-1;
-if(Distance1<700 && Distance1<350 &&dot12 < 0)
-{
-blockingtime();
-}
-else
-GD2PlayerPawn(Pawn).blockbb = false;
-}
-canblock = false;
-bwait();
-}
+	ForEach AllActors(class'monsteridle',aidle)
+	{
+	Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+	dot12 =v dot (Player_location_actor.Location - aidle.Location);
+	//DebugPrint(dot1);
+		if(Distance<0)
+			Distance*=-1;
+			if(Distance1<700 && Distance1<350 &&dot12 < 0)
+			{
+			blockingtime();
+			}
+			else
+			GD2PlayerPawn(Pawn).blockbb = false;
+			}
+	canblock = false;
+	bwait();
+	}
 }
 
 
@@ -488,19 +526,6 @@ canblock = true;
 checkb = false;
 }
 
-
-//turns flashlight on/off
-function flashon()
-{
-local GD2PlayerPawn p;
-local actor Player_location_actor;
-onepress = true;
-Player_location_actor = GetALocalPlayerController().Pawn;
-p  = GD2PlayerPawn(Player_Location_Actor);
-p.TriggerRemoteKismetEvent('flashlight_toggle' );
-}
-
-
 function blockingtime()
 {
 GD2PlayerPawn(Pawn).blockbb = true;
@@ -515,19 +540,40 @@ GD2PlayerPawn(Pawn).blockbb = false;
 }
 
 
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+//turns flashlight on/off
+function flashon()
+{
+local GD2PlayerPawn p;
+local actor Player_location_actor;
+onepress = true;
+Player_location_actor = GetALocalPlayerController().Pawn;
+p  = GD2PlayerPawn(Player_Location_Actor);
+p.TriggerRemoteKismetEvent('flashlight_toggle' );
+}
+
+//opens the credits
 function endgamescene()
 {
 consolecommand("open credits.udk");
 } 
 
+//testing kismet
 function k_mat_test()
 {
 DebugPrint("working");
 }
+
+///////////////////////////////////////////////////////////////////////
 defaultproperties
 {
-   CameraClass=class'GameDev2.GD2PlayerCamera'
-   bCollideActors=true
+   InputClass = class 'GameDev2.LFPlayerInput'
+   CameraClass= class'GameDev2.GD2PlayerCamera'
+   
+
    attackh =  SoundCue'Sounds.attack_hit_cue'
    attackm =  SoundCue'Sounds.attack_miss_cue'
    heartb =  SoundCue'Sounds.heart_beatfixc'
@@ -539,11 +585,13 @@ defaultproperties
    gotopier = Soundcue 'Sounds.ineedtogetoutc'
    //level = SoundCue'Sounds.windc'
    mgrunt = SoundCue'Sounds.mgruntc'
+   
+   
    done = false;
    flashb = false;
    bIsPlayer = true
    mission2start = false;
-   mapc = 1;
+   bCollideActors=true
    canattack = true
    canblock = true
    checka = false
@@ -552,4 +600,6 @@ defaultproperties
    hit = false
    // bBehindView=false
    // bForceBehindView=false
+   
+   mapc = 1;
 }

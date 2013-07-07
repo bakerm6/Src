@@ -8,19 +8,25 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
 var(Rendertext) Font lf;
+
+
 //Debug function
 simulated private function DebugPrint(int sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+
+/////////////////////////////////////////////////////
 //prompts an are you sure message 
 exec function  mainmen()
 {
-x = true;
+	x = true;
 }
 //goes to main menu if pressed while prompt is displayed
 exec function yes()
@@ -28,16 +34,19 @@ exec function yes()
 
  local GD2PlayerController c;
  c = GD2PlayerController(GetALocalPlayerController());
-if(x==true)
-{
-c.quit();
-}
+	if(x==true)
+	{
+	c.quit();
+	}
 }
 //deletes prompt and continues game
 exec function no()
 {
-x = false;
+	x = false;
 }
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
 //Rebinds escape to show the pause menu
 exec function ShowMenu()
 {
@@ -78,6 +87,8 @@ function TogglePauseMenu()
         PlayerOwner.SetPause(True);
     }
 }
+/////////////////////////////////////////////////////
+
 //Renders all mission based prompts
 // Gives dynamic actors rendering ability... e.g. monsters...
 function PostRender()
@@ -93,33 +104,37 @@ function PostRender()
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     //a.mission1 = true;
+	
+	//renders text for high heart rate
 	if(a.health < 150)
 	{
 	previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(575,450);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("HIGH HEART RATE!!!!"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("HIGH HEART RATE!!!!"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 	}
+	//prompts user to return to main menu
     if(x == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(575,450);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Return to Main Menu Y/N"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Return to Main Menu Y/N"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	//mission 1 text
     if(a.mission1 == true && a.mission2a == false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.waterbottlec); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.waterbottlec); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -130,7 +145,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,75);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.foodc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.foodc); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -141,7 +156,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,100);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.batteryc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.batteryc); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -152,7 +167,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,125);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.flashlightc); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.flashlightc); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -160,6 +175,7 @@ function PostRender()
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Flashlight");
     }
+	//mission 2 a text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
     {
     //DebugPrint("F");
@@ -167,17 +183,18 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Find a telephone"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Find a telephone"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	//mission 2 b text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3==false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.duct); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.duct); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;;
@@ -188,7 +205,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,75);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.wire); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.wire); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -199,7 +216,7 @@ function PostRender()
     Canvas.Font = lf;; 
     Canvas.SetPos(900,100);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.strip); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText(a.strip); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
@@ -208,36 +225,47 @@ function PostRender()
     Canvas.DrawText(" X    Wire Stripper");
     previous_font = Canvas.Font;
     }
+	// mission 3 text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Find a power source"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Find a power source"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	//puzzle prompt
      if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == true)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Get the main switch working"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Get the main switch working"); 
+    Canvas.Font = previous_font; 
+    previous_font = Canvas.Font;
+    Canvas.Font = lf;; 
+    Canvas.SetPos(0,0);
+    Canvas.SetDrawColor(255,50,15,255);
+	//make a crosshair for user
+    Canvas.DrawText("+"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	// mission 4 text
     if(a.mission4 == true&&a.mission5 == false)
     {
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
     Canvas.SetPos(900,50);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Defeat all the monsters and escape"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Defeat all the monsters and escape"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	//mission 5 text
     if(a.mission4 == true&&a.mission5 == true)
     {
     previous_font = Canvas.Font;
@@ -248,25 +276,28 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
-	ForEach DynamicActors(class'monster', DebugPawn)
-	{
-		AddPostRenderedActor(DebugPawn);
-	}
-    ForEach DynamicActors(class'monsteridle', Deb)
-	{
-		AddPostRenderedActor(Deb);
-	}
-
-	if (PlayerOwner != None)
-	{
-		PlayerOwner.GetPlayerViewpoint(CameraLocation, CameraRotation);
-		DrawActorOverlays(CameraLocation, CameraRotation);
-	}
+		//adds rendering ability to monsters
+		ForEach DynamicActors(class'monster', DebugPawn)
+		{
+			AddPostRenderedActor(DebugPawn);
+		}
+		ForEach DynamicActors(class'monsteridle', Deb)
+		{
+			AddPostRenderedActor(Deb);
+		}
+			//draws 
+			if (PlayerOwner != None)
+			{
+				PlayerOwner.GetPlayerViewpoint(CameraLocation, CameraRotation);
+				DrawActorOverlays(CameraLocation, CameraRotation);
+			}
 }
 
 defaultproperties
 {
+
 y = false;
 x = false;
+
 lf = Font'EngineFonts.lffont'
 }

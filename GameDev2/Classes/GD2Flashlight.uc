@@ -1,11 +1,20 @@
 class GD2Flashlight extends UTWeap_ShockRifle;
-
+/*
+Flashlight
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+//initialize variables
 var float LightAttachInterval;
 var float LightOnInterval;
 var bool IsLightOn;
 var SpotLightComponent LightAttachment;
 var name LightSocket;
 
+
+//////////////////////////////////////////////////////
+//checks for usage
 exec function Fire() 
 {
 	if (IsLightOn) 
@@ -37,7 +46,7 @@ function LightIsOff()
 	SkeletalMeshComponent(Mesh).DetachComponent(LightAttachment);
 	setTimer(LightAttachInterval,false,'inactive');
 }
-
+//////////////////////////////////////////////////////
 defaultproperties
 {
 	AttachmentClass=class'GD2FlashlightAttachment'

@@ -5,10 +5,14 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var Soundcue laugh;
 var bool IsInInteractionRange;
 var(Rendertext) Font lf;
 var bool blaugh;
+
+
 //if the player touches the trigger they can interact with the game
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -16,12 +20,13 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
  
     if (Pawn(Other) != none)
     {
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
         PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
         IsInInteractionRange = true;
         blaugh = true;
     }
 }
+
+
 // untouching the trigger stops the postrender
 event UnTouch(Actor Other)
 {
@@ -43,7 +48,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Press E to interact"); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Press E to interact"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 }
@@ -56,10 +61,10 @@ function bool UsedBy(Pawn User)
  
     if (IsInInteractionRange)
     {
-        //If it matters, you might want to double check here that the user is a player-controlled pawn.
+
     PlaySound(laugh);
     blaugh = false;
-        //Put your own sound cue here. And ideally, don't directly reference assets in code.
+
         return true;
     }
     return used;

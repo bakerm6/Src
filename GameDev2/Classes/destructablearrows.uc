@@ -6,6 +6,8 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+
 //if the touching actor is the player the arrow destroys itself
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -14,9 +16,10 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
      Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
+	//destroy the arrows when touched
     if (Pawn(Other) == a)
     {
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
+	
         self.Destroy();
         //DebugPrint("here");
     }
@@ -45,3 +48,4 @@ defaultproperties
     bStatic = false
     bPostRenderIfNotVisible=true
     }
+	

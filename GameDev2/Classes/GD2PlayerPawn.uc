@@ -6,12 +6,16 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var SpotLightMovable Flashlight;
+
 var Rotator newRot;
+
 var Vector newLoc;
-var bool blockbb;
+
 var SoundCue heartb;
-var bool bCanDodge;
+
 var int waterbottlec;
 var int foodc;
 var int flashlightc;
@@ -20,6 +24,7 @@ var int duct;
 var int wire;
 var int strip;
 var int killcount;
+
 var bool mission1;
 var bool mission2a;
 var bool mission2b;
@@ -27,17 +32,25 @@ var bool mission3;
 var bool mission3p;
 var bool mission4;
 var bool mission5;
+var bool bCanDodge;
+var bool blockbb;
 var bool done;
 var bool twocall;
 var bool stopdoingthings;
+
+
 //disables dodge
 function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
-if(bCanDodge)
-return super.Dodge(DoubleClickMove);
+	if(bCanDodge)
+	{
+	return super.Dodge(DoubleClickMove);
+	}
 
-return false;
+	return false;
 }
+
+//////////////////////////////////////////
 //initiates for dialog sequence
 function wait()
 {
@@ -54,6 +67,8 @@ function mission3start()
 {
 mission3 = true;
 }
+//////////////////////////////////////////
+
 //sets health and speed for health regeneration
 simulated function PostBeginPlay()
 {
@@ -76,6 +91,8 @@ function regen()
     //Health += 700;
     }
 }
+
+//////////////////////////////////////////
 //checks every frame for certain events such as dying,completing missions, and activiating kismet sequences
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
@@ -83,31 +100,32 @@ event Tick( float DeltaTime ) {
     super.Tick(DeltaTime);
     g= GD2PlayerController(self.controller);
     //DebugPrint1(killcount);
-    if(Health <= 0)
-    {
-    self.Destroy();
-    }
-    if(done==false && batteryc == 1 && flashlightc == 1)
-    {
-    TriggerRemoteKismetEvent('flashlight_toggle' );
-    done = true;
-    }
-    if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
-    {
-    //DebugPrint1(1);
-    mission2a = true;
-    twocall = true;
-    }
-    if(mission4 == true)
-    {
-    g.mapc = 2;
-    }
-    if(killcount > 5)
-    {
-    mission5 = true;
-    }
+		if(Health <= 0)
+		{
+		self.Destroy();
+		}
+		if(done==false && batteryc == 1 && flashlightc == 1)
+		{
+		TriggerRemoteKismetEvent('flashlight_toggle' );
+		done = true;
+		}
+		if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
+		{
+		//DebugPrint1(1);
+		mission2a = true;
+		twocall = true;
+		}
+		if(mission4 == true)
+		{
+		g.mapc = 2;
+		}
+		if(killcount > 5)
+		{
+		mission5 = true;
+		}
     
 }
+
 //allows for kismet events to be called through unreal script
 function TriggerRemoteKismetEvent( name EventName )
 {
@@ -128,10 +146,14 @@ function TriggerRemoteKismetEvent( name EventName )
 		for (i = 0; i < AllSeqEvents.Length; i++)
 		{
 			if(SeqEvent_RemoteEvent(AllSeqEvents[i]).EventName == EventName)
+			{
 				SeqEvent_RemoteEvent(AllSeqEvents[i]).CheckActivate(WorldInfo, None);
+			}
 		}
 	}
 }
+//////////////////////////////////////////
+
 //adds default inventory
 //function AddDefaultInventory()
 //{
@@ -139,6 +161,7 @@ function TriggerRemoteKismetEvent( name EventName )
 //}
 
 defaultproperties 
+{
 	Begin Object Class=SpotLightMovable Name=MyFlashlight
 	  bEnabled=true
 	  Radius=10240.000000
@@ -147,9 +170,10 @@ defaultproperties
 	End Object
 	Components.Add(MyFlashlight)
 	Flashlight=MyFlashlight
+	
     InventoryManagerClass=class'GameDev2.testmanager'
-	blockbb = false
-    bStatic = false
+	
+
     HealthMax = 700;
     Health = 0;
     GroundSpeed = 100
@@ -161,6 +185,8 @@ defaultproperties
     duct = 0;
     wire = 0;
     strip = 0;
+	killcount = 0
+		
     bPostRenderIfNotVisible=true
     mission1= true
     mission2a = false
@@ -171,8 +197,12 @@ defaultproperties
     mission5 = false
     twocall = false
     done = false
-    killcount = 0
+	blockbb = false
+    bStatic = false
+	stopdoingthings = false
+	
     SpawnSound=none
     RespawnSound=none
-	stopdoingthings = false
+
 	// weapon=GD2Flashlight
+}

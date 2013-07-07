@@ -1,1 +1,0 @@
-class rideop extends trigger;
