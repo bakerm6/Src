@@ -8,10 +8,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     if (Pawn(Other) != none&&played == false)
     {
         PlaySound(what);
-        //played = true;
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
-        //PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
-        //IsInInteractionRange = true;
+        
     }
 }
 event UnTouch(Actor Other)
