@@ -20,6 +20,7 @@ event UnTouch(Actor Other)
     played = true;
     }
 }
+
 DefaultProperties
 {
 Begin Object Name=Sprite
@@ -37,4 +38,4 @@ Begin Object Name=Sprite
     bHidden=true
     played = false
     bPostRenderIfNotVisible=true
-    }
+}

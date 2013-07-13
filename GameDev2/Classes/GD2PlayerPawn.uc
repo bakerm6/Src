@@ -162,14 +162,14 @@ function TriggerRemoteKismetEvent( name EventName )
 
 defaultproperties 
 {
-	Begin Object Class=SpotLightMovable Name=MyFlashlight
+	/*Begin Object Class=SpotLightMovable Name=MyFlashlight
 	  bEnabled=true
 	  Radius=10240.000000
 	  Brightness=1000000.90000
 	  bForceDynamicLight=true
 	End Object
 	Components.Add(MyFlashlight)
-	Flashlight=MyFlashlight
+	Flashlight=MyFlashlight*/
 	
     InventoryManagerClass=class'GameDev2.testmanager'
 	
@@ -188,7 +188,7 @@ defaultproperties
 	killcount = 0
 		
     bPostRenderIfNotVisible=true
-    mission1= true
+    mission1= false
     mission2a = false
     mission2b = false
     mission3 = false
@@ -202,7 +202,7 @@ defaultproperties
 	stopdoingthings = false
 	
     SpawnSound=none
-    RespawnSound=none
+    //RespawnSound=none
 
 	// weapon=GD2Flashlight
 }

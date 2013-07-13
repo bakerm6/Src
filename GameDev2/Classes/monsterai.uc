@@ -1,4 +1,6 @@
 class monsterai extends AIController;
+
+
 /*
 Monster ai controller class
 The monster pathfinds among an array of pathnodes
@@ -7,6 +9,8 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variable
 var int CloseEnough;
 var int _PathNode;
 var Actor Target;
@@ -17,6 +21,8 @@ var bool Sound_Bool;
 var bool seebool;
 var float Path_Count;
 var GD2PlayerPawn p;
+
+
 //Puts movement and a soundcue on the monster
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
@@ -26,22 +32,27 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
     pathfind();
     SetTimer(4,true,'pathfind');
 }
+
+
 //checks if the player is seen 
 event SeePlayer(pawn seen)
 {
 Super.SeePlayer(seen);
 seebool = true;
 }
+
 //Prints debug client messages
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+
 //allows for idle animation to play
 function idle()
 {
 monster(Pawn).Idle.PlayCustomAnim('Idle',1.0);
 }
+
 //Updates each frame
 simulated function Tick(float DeltaTime)
 {
@@ -52,6 +63,7 @@ simulated function Tick(float DeltaTime)
     //SetDestinationPosition(Location);
     }
 }
+
 //Main function for pathfinding among an aray of pathnodes in order
 //The order is set in the monster properties
 simulated function PathFind()
@@ -88,9 +100,11 @@ Begin:
         {
             PlaySound( scream );
         }
+		
         Sound_Bool = false;
         Path_Count+=1;
         MoveToward(Target, Target, 128);
+		
         if(p.health > 5)
         {
         pathfind();
@@ -104,8 +118,11 @@ Begin:
     MoveToward(monster(Pawn).Waypoints[_PathNode], monster(Pawn).Waypoints[_PathNode], 128);
     idle();
     }   
+	
     Sleep(0);
 }
+
+
 //if the monster hits a wall it will go back to pathfinding instead of getting stuck
 state backup
 {
@@ -117,8 +134,10 @@ GoToState('pathfinding');
 DefaultProperties
 {
     scream = SoundCue'Sounds.mstwoc'
+	
     CloseEnough = 200
     Path_Count = 0;
+	
     seebool = false
     bPreciseDestination = True
 }
