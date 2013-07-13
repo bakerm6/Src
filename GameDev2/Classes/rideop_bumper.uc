@@ -6,15 +6,19 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 05/30/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var bool IsInInteractionRange;
 var SoundCue squeek;
 var(Rendertext) Font lf;
 var int check;
+
 //Debug Print
 simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
+
 // When touching the trigger it becomes interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -28,6 +32,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         //DebugPrint("here");
     }
 }
+
 // An un touch makes the trigger no longer interactable
 event UnTouch(Actor Other)
 {
@@ -39,15 +44,14 @@ event UnTouch(Actor Other)
         IsInInteractionRange = false;
     }
 }
+
 // Prompts user to interact with duct tape when touching it
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
-    //local actor Player_Location_Actor;
-    //local GD2PlayerPawn a;
+
     super.PostRenderFor(PC, Canvas, CameraPosition, CameraDir);
-    //Player_Location_Actor = GetALocalPlayerController().Pawn;
-    //a = GD2PlayerPawn(Player_Location_Actor);
+
     previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
@@ -56,19 +60,20 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 
-
-
 }
+
 //When used the ride will screech to a halt or start moving
 function bool UsedBy(Pawn User)
 {
     //DebugPrint("f");
 	local bool used;
 	local bumpercar bu;
+	
     used = super.UsedBy(User);
+	
     if (IsInInteractionRange && check == 0)
     {
-	DebugPrint("working");
+	//DebugPrint("working");
 		
 		ForEach AllActors(class'bumpercar',bu)
 		{
@@ -76,12 +81,14 @@ function bool UsedBy(Pawn User)
 		bu.b= false;
 		check = 1;
 		}
+		
         PlaySound(squeek);
         return true;
     }
+	
 	else if (IsInInteractionRange && check == 1)
     {
-	DebugPrint("workingagain");
+	//DebugPrint("workingagain");
 		
 		ForEach AllActors(class'bumpercar',bu)
 		{
@@ -89,28 +96,34 @@ function bool UsedBy(Pawn User)
 		bu.b= True;
 		check = 0;
 		}
+		
         PlaySound(squeek);
         return true;
     }
     return used;
 } 
+
 DefaultProperties
 {
     Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
+	
     //may need .mesh when textured
     Begin Object Class=StaticMeshComponent Name=MyMesh
        StaticMesh=StaticMesh'NodeBuddies.3D_Icons.NodeBuddy__BASE_SHORT'  //change
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+	
     squeek = SoundCue'Sounds.squeek' //change
+	
     bBlockActors=True
     bCollideActors=true
     bHidden=True
@@ -118,5 +131,6 @@ DefaultProperties
     bStatic = false
 	check = 0;
     bPostRenderIfNotVisible=true
+	
     lf = Font'EngineFonts.lffont'
 }

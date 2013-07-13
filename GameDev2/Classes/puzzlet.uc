@@ -1,5 +1,15 @@
 Class puzzlet extends Trigger;
+ /*
+Trigger for the power puzzle in Landfall
+ DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+ */
+ 
+//initialize variable
 var bool IsInInteractionRange;
+
+//on touch becames interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -11,7 +21,8 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         IsInInteractionRange = true;
     }
 }
- 
+
+//On untouch lose interaction ability
 event UnTouch(Actor Other)
 {
     super.UnTouch(Other);
@@ -23,6 +34,7 @@ event UnTouch(Actor Other)
     }
 }
 
+//allows for use
 function bool UsedBy(Pawn User)
 {
     local bool used;
@@ -35,16 +47,19 @@ function bool UsedBy(Pawn User)
     }
     return used;
 } 
+
 DefaultProperties
 {
     Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
+	
     bBlockActors=true
     bCollideActors=true
     bHidden=false

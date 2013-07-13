@@ -5,7 +5,10 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialize variables
 var Soundcue pball;
+
 //plays soundcue when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -17,6 +20,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 
     }
 }
+
 //checks for untouch
 event UnTouch(Actor Other)
 {
@@ -35,17 +39,21 @@ DefaultProperties
     Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
+	
     Begin Object Class=StaticMeshComponent Name=MyMesh
        StaticMesh=StaticMesh'Arcade_packg.arcade_pinball'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+	
     pball = SoundCue'Sounds.piballc'
+	
     bBlockActors=true
     bCollideActors=true
     bHidden=false

@@ -5,10 +5,13 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
+//initialze variables
 var Soundcue bell;
 var bool IsInInteractionRange;
 var bool bbell;
 var(Rendertext) Font lf;
+
 //becomes interactable when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
@@ -22,6 +25,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
         bbell=true;
     }
 }
+
  //interactability lost when untouched
 event UnTouch(Actor Other)
 {
@@ -34,10 +38,12 @@ event UnTouch(Actor Other)
         bbell = false;
     }
 }
+
 //Renders propmt if interactable
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
     local Font previous_font;
+	
     previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
@@ -46,6 +52,7 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 }
+
 //plays sound when used
 function bool UsedBy(Pawn User)
 {
@@ -72,22 +79,27 @@ DefaultProperties
     Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
+	
     Begin Object Class=StaticMeshComponent Name=MyMesh
        StaticMesh=StaticMesh'strength_test_pkg.Mesh.strength_test'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+	
     bell = SoundCue'Sounds.bellc'
+	
     bBlockActors=true
     bCollideActors=true
     bHidden=false
     bStatic = true
     bbell = true
     bPostRenderIfNotVisible=true
+	
     lf = Font'EngineFonts.lffont'
 }

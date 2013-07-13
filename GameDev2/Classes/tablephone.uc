@@ -28,7 +28,7 @@ simulated private function DebugPrint(string sMessage)
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
 
-s
+
 //When touched it is interactable
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
