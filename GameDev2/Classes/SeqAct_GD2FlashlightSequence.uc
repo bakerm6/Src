@@ -1,5 +1,13 @@
 class SeqAct_GD2FlashlightSequence extends SequenceAction;
 
+/*
+Sequaence action for the flashlight
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+
+//initialize variables
  var vector rotationVector;
  var vector locationVector;
 
@@ -23,6 +31,7 @@ class SeqAct_GD2FlashlightSequence extends SequenceAction;
  rotationVector.Y = viewRotation.Yaw;
  rotationVector.Z = viewRotation.Roll;
  }
+ 
  }
 
  //================================================== ==
@@ -36,4 +45,5 @@ class SeqAct_GD2FlashlightSequence extends SequenceAction;
  //VariableLinks.Empty
  VariableLinks(1)=(ExpectedType=class'SeqVar_Vector',LinkDesc="Rotation Vector",bWriteable=true,PropertyName=rotationVector)
  VariableLinks(2)=(ExpectedType=class'SeqVar_Vector',LinkDesc="Location Vector",bWriteable=true,PropertyName=locationVector)
+ 
  }
