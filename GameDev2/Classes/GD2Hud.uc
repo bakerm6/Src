@@ -33,6 +33,7 @@ exec function yes()
 {
 
  local GD2PlayerController c;
+ 
  c = GD2PlayerController(GetALocalPlayerController());
 	if(x==true)
 	{
@@ -54,6 +55,7 @@ exec function ShowMenu()
     PauseMenu.AddFocusIgnoreKey('E');
 	TogglePauseMenu();
 }
+
 // Displays the pause menu defined in LF_PauseMenu
 function TogglePauseMenu()
 {
@@ -66,9 +68,6 @@ function TogglePauseMenu()
 	}
     else
     {
-
-
-
 
         if (PauseMenu == None)
         {
@@ -100,7 +99,9 @@ function PostRender()
     local Font previous_font;
     local actor Player_Location_Actor;
     local GD2PlayerPawn a;
+	
 	Super.PostRender();
+	
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     //a.mission1 = true;
@@ -116,6 +117,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 	}
+	
 	//prompts user to return to main menu
     if(x == true)
     {
@@ -127,6 +129,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	
 	//mission 1 text
     if(a.mission1 == true && a.mission2a == false)
     {
@@ -175,6 +178,7 @@ function PostRender()
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Flashlight");
     }
+	
 	//mission 2 a text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
     {
@@ -187,6 +191,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	
 	//mission 2 b text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3==false)
     {
@@ -225,6 +230,7 @@ function PostRender()
     Canvas.DrawText(" X    Wire Stripper");
     previous_font = Canvas.Font;
     }
+	
 	// mission 3 text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == false)
     {
@@ -236,6 +242,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	
 	//puzzle prompt
      if(a.mission1 == true && a.mission2a == true && a.mission2b == true&&a.mission3 == true&&a.mission3p == true)
     {
@@ -254,6 +261,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	
 	// mission 4 text
     if(a.mission4 == true&&a.mission5 == false)
     {
@@ -265,6 +273,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     }
+	
 	//mission 5 text
     if(a.mission4 == true&&a.mission5 == true)
     {
@@ -300,4 +309,5 @@ y = false;
 x = false;
 
 lf = Font'EngineFonts.lffont'
+
 }

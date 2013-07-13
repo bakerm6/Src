@@ -19,6 +19,7 @@ var SoundCue us;
 var SoundCue island;
 var SoundCue relax;
 var SoundCue dial;
+var SoundCue staticc;
 var(Rendertext) Font lf;
 
 
@@ -94,13 +95,13 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
 	
     if(search == 2)
     {
-    /*previous_font = Canvas.Font;
+	previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(); //Prompt is a string variable defined in our new actor's class.
+    Canvas.DrawText("Press E to Interact");
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;*/
+    previous_font = Canvas.Font;
     }
     
 }
@@ -145,11 +146,17 @@ function bool UsedBy(Pawn User)
         PlaySound(relax);
         a.wait();
         }
-        //Put your own sound cue here. And ideally, don't directly reference assets in code.
+		
+		if(search == 2)
+		{
+		PlaySound(staticc);
+        }
+		
         return true;
     }
     return used;
 } 
+
 DefaultProperties
 {
     Begin Object Name=Sprite
@@ -176,6 +183,7 @@ DefaultProperties
     island = SoundCue'Sounds.imonanisladnc'
     relax = SoundCue'Sounds.relaxlocationc'
     dial = SoundCue'Sounds.dialc'
+	staticc = SoundCue'Sounds.staticc'
 	
     bBlockActors=true
     bCollideActors=true
