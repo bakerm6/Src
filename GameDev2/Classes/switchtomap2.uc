@@ -1,4 +1,10 @@
 class switchtomap2 extends trigger;
+ /*
+Trigger to load next stage in Landfall
+ DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -6,10 +12,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
     if (Pawn(Other) != none)
     {
         Consolecommand("open base.udk");
-        //played = true;
-        //Ideally, we should also check that the touching pawn is a player-controlled one.
-        //PlayerController(Pawn(Other).Controller).myHUD.AddPostRenderedActor(self);
-        //IsInInteractionRange = true;
+
     }
 }
 
@@ -25,9 +28,11 @@ Begin Object Name=Sprite
  
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
+	
     //what = SoundCue'Sounds.whatwasthatc'
     bBlockActors=false
     bHidden=true
     //played = false
     bPostRenderIfNotVisible=true
-    }
+	
+}
