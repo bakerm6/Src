@@ -1,33 +1,28 @@
-class GameDev2 extends FrameworkGame;
+class LF_menu_game extends SimpleGame;
 /*
-Game Class for Landfall
+Menu Game Class for Landfall
 DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
-
-//initialized variables
-var SoundCue level;
 var LF_Main_Menu main;
 
-
 ///////////////////////////////////////////////
-//event after player is loaded into game
+
 event PostLogin( PlayerController NewPlayer )
 {
  super.PostLogin( NewPlayer );
- PlaySound(level);
- SetTimer(43,true,'levelp');
  //main = new class'LF_Main_Menu';
  //main.Init();
  }
- function levelp()
-{
-PlaySound(level);
-}
-///////////////////////////////////////////////
-
-
+ simulated function StartMatch()
+ {
+	super.StartMatch();
+	main = new class'LF_Main_Menu';
+	//main.SetTimingMode(TM_Real);
+	main.Init();
+ 
+ }
 static event class<GameInfo> SetGameType(string MapName, string Options, string Portal)
 {
 return Default.class;
@@ -35,10 +30,8 @@ return Default.class;
 
 defaultproperties
 {
-   PlayerControllerClass=class'GameDev2.GD2PlayerController'
-   DefaultPawnClass=class'GameDev2.GD2PlayerPawn'
-   HUDType=class'GameDev2.GD2Hud'
-   level = SoundCue'Sounds.windc'
+	PlayerControllerClass=class'GameDev2.LF_PC_Menu'
+   DefaultPawnClass=class'GameDev2.LF_Pawn_Menu'
+  // HUDType=class'GameDev2.LF_Menu_HUD'
    bDelayedStart=false
 }
-

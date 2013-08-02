@@ -35,10 +35,10 @@ event Tick( float DeltaTime )
     super.Tick(DeltaTime);
 	if(status == 1)
 	{
-    final_rot = Rotation;
-	RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
-	final_rot.Pitch = final_rot.Pitch + RotatingSpeed*DeltaTime;
-	SetRotation(final_rot);
+		final_rot = Rotation;
+		RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
+		final_rot.Pitch = final_rot.Pitch + RotatingSpeed*DeltaTime;
+		SetRotation(final_rot);
 	}
 	if(status == 2)
 	{
