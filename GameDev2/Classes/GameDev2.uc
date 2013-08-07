@@ -15,7 +15,10 @@ var LF_Main_Menu main;
 //event after player is loaded into game
 event PostLogin( PlayerController NewPlayer )
 {
+ //local GD2Hud hud;
  super.PostLogin( NewPlayer );
+ //hud = GD2Hud();
+ //hud.CheckViewPortAspectRatio();
  PlaySound(level);
  SetTimer(43,true,'levelp');
  //main = new class'LF_Main_Menu';

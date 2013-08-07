@@ -1,4 +1,4 @@
-class GD2Hud extends MobileHUD;
+class GD2Hud extends HUD;
 /*
 HUD class for Landfall
 contains exec functions for returning to main menu
@@ -14,7 +14,9 @@ var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
 var(Rendertext) Font lf;
-
+var LF_Menu_Prompt menu_prompt;
+var LF_Main_Menu main_menu;
+var LF_Mission1_Description mission1_mov;
 
 //Debug function
 simulated private function DebugPrint(int sMessage)
@@ -26,24 +28,39 @@ simulated private function DebugPrint(int sMessage)
 //prompts an are you sure message 
 exec function  mainmen()
 {
+
 	x = true;
+	//menu_prompt.Init();
+	if (menu_prompt == None)
+        {
+            menu_prompt = new class'LF_Menu_Prompt';            
+		}
+	menu_prompt.Init();
+	//PlayerOwner.SetPause(True);
 }
 //goes to main menu if pressed while prompt is displayed
 exec function yes()
 {
 
- local GD2PlayerController c;
- 
- c = GD2PlayerController(GetALocalPlayerController());
-	if(x==true)
+ local bool check;
+ check = menu_prompt.open_check();
+	if(check == true)
 	{
-	c.quit();
+	menu_prompt.End();
+	consolecommand("open alphamen1");
+		if (main_menu == None)
+		{
+			main_menu = new class'LF_Main_Menu';
+			main_menu.Init();
+		}
 	}
 }
 //deletes prompt and continues game
 exec function no()
 {
+	menu_prompt.End();
 	x = false;
+	//menu_prompt.End();
 }
 /////////////////////////////////////////////////////
 
@@ -72,7 +89,7 @@ function TogglePauseMenu()
         if (PauseMenu == None)
         {
             PauseMenu = new class'LF_PauseMenu';
-            PauseMenu.MovieInfo = SwfMovie'pausemen.pausemen';
+            PauseMenu.MovieInfo = SwfMovie'beta_pause_menu.beta_pause';
             PauseMenu.bEnableGammaCorrection = FALSE;
             PauseMenu.LocalPlayerOwnerIndex = class'Engine'.static.GetEngine().GamePlayers.Find(LocalPlayer(PlayerOwner.Player));
             PauseMenu.SetTimingMode(TM_Real);
@@ -85,6 +102,22 @@ function TogglePauseMenu()
         PauseMenu.AddFocusIgnoreKey('E');
         PlayerOwner.SetPause(True);
     }
+}
+function mission1_movie()
+{
+	if (mission1_mov == None)
+    {
+        mission1_mov = new class'LF_Mission1_Description';            
+	}
+	
+	mission1_mov.Init();
+	SetTimer(7,false,'close_mission1');
+	
+}
+
+function close_mission1()
+{
+	mission1_mov.End();
 }
 /////////////////////////////////////////////////////
 
@@ -101,7 +134,7 @@ function PostRender()
     local GD2PlayerPawn a;
 	
 	Super.PostRender();
-	
+	CheckViewPortAspectRatio();
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     //a.mission1 = true;
@@ -111,37 +144,35 @@ function PostRender()
 	{
 	previous_font = Canvas.Font;
     Canvas.Font = lf;; 
-    Canvas.SetPos(575,450);
+    Canvas.SetPos(575,455);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("HIGH HEART RATE!!!!"); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
 	}
 	
-	//prompts user to return to main menu
-    if(x == true)
-    {
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(575,450);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Return to Main Menu Y/N"); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    }
-	
+	//Top Right
+	// Canvas.SetPos(SizeX - 300,SizeY - 650);
+	if(a.mission1 == true && a.mission2a == false)
+	{
+		a.mission1 = false;
+		mission1_movie();  
+	}
 	//mission 1 text
     if(a.mission1 == true && a.mission2a == false)
     {
+	//a.mission1 = false;
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
-    Canvas.SetPos(900,50);
+    //Canvas.SetPos(900,50);
+	Canvas.SetPos(SizeX - 300,SizeY - 650);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(a.waterbottlec); 
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
-    Canvas.SetPos(915,50);
+    //Canvas.SetPos(915,50);
+	Canvas.SetPos(SizeX - 280,SizeY -650);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText(" X    Watterbottles");
     previous_font = Canvas.Font;
@@ -254,7 +285,7 @@ function PostRender()
     Canvas.Font = previous_font; 
     previous_font = Canvas.Font;
     Canvas.Font = lf;; 
-    Canvas.SetPos(0,0);
+    Canvas.SetPos(CenterX,CenterY);
     Canvas.SetDrawColor(255,50,15,255);
 	//make a crosshair for user
     Canvas.DrawText("+"); 
@@ -302,6 +333,28 @@ function PostRender()
 			}
 }
 
+function CheckViewPortAspectRatio()
+{
+        local vector2D ViewportSize;
+		local bool bIsWideScreen;
+        local GD2PlayerController PC;
+
+        ForEach AllActors(class'GD2PlayerController', PC)
+	{
+		LocalPlayer(PC.Player).ViewportClient.GetViewportSize(ViewportSize);
+		SizeX = ViewPortSize.X;
+		SizeY = ViewPortSize.Y;
+		break;
+	}
+        
+        bIsWideScreen = (ViewportSize.Y > 0.f) && (ViewportSize.X/ViewportSize.Y > 1.7);
+
+        if ( bIsWideScreen )
+	{
+			RatioX = SizeX / 1280.f;
+	        RatioY = SizeY / 720.f;
+	}
+}
 defaultproperties
 {
 

@@ -9,14 +9,14 @@ var array<UTUIDataProvider_KeyBinding> Binded, Blank;
 //var int SelectedIndex;
 var name CapturedBind;
 var string DuplicateBindName;
-var int DuplicateBindIndex;
 var bool bDublicateBindDetected;
-//var GFxClikWidget ListMC;
+var GFxClikWidget M_Volume_Slider, res_men, bright_level;
 var GFxObject BindingMovie, BindKeyTF, DuplicateMovieTF, DuplicateTitleTF;
 var GFxObject at_bind, bl_bind, menu_bind;
 var bool bConfirmChoice, bPendingUnbind;
 var string bind_at, bind_bl, bind_menu;
 var string current_bind_cmd;
+var LF_options_save_info options_save_info;
 //==================================================
 
 
@@ -26,64 +26,89 @@ function Init(optional LocalPlayer LocPlay)
 	Advance(0.f);
 	SetViewScaleMode(SM_ExactFit);
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
-	at_bind = GetVariableObject("_root.attack_bind");
-	bl_bind = GetVariableObject("_root.block_bind");
-	menu_bind = GetVariableObject("_root.menu_bind");
+	
+}
+function load_options_save_info()
+{
+	options_save_info = class'LF_options_save_info'.static.load_options();
+	if(options_save_info == none)
+	{
+		options_save_info = new class'LF_options_save_info';
+	}
 }
 
-/*event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
+event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 {
+`log(WidgetName);
 	switch(WidgetName)
 	{
-		case ('bindList'):
-			LFInput = LFPlayerInput(GetPC().PlayerInput);
-			ListMC = GFxClikWidget(GetVariableObject("_root.bindings.bindList"));
-			UpdateDataProvider();
-			ListMC.AddEventListener('CLIK_itemPress', OnListItemPressed);
+		case ('master_v'):
+			M_Volume_Slider = GFxClikWidget(Widget);
+			M_Volume_Slider.AddEventListener('CLIK_valueChange', volume_change);
+			M_Volume_Slider.SetFloat("value", options_save_info.MasterVolume);
+			break;
+		case ('bright_lvl'):
+			bright_level = GFxClikWidget(Widget);
+			bright_level.AddEventListener('CLIK_buttonClick', lf_change_bright);
+			//bright_Level.SetFloat("value", options_save_info.Brightness);
 			break;
 		default:
 			break;
 	}
 	return True;
-}*/
+}
+function lf_change_bright(GFxClikWidget.EventData ev)
+{
+	`log("b_called");
+}
+function volume_change(GFxClikWidget.EventData ev)
+{
+	GetPC().SetAudioGroupVolume('Master',M_Volume_Slider.GetFloat("value"));
+	options_save_info.MasterVolume = M_Volume_Slider.GetFloat("value");
+	options_save_info.save_options();
+	//`log(options_save_info.MasterVolume);
+}
 
 function ControlOptionsOpened()
 {
-	`log("stuff happend");
+	//`log("stuff happend");
 	BindingMovie = GetVariableObject("_root.dupeMC");
+	UpdateDataProvider();
+	at_bind = GetVariableObject("_root.attack_bind");
+	bl_bind = GetVariableObject("_root.block_bind");
+	menu_bind = GetVariableObject("_root.menu_bind");
+	LFInput = LFPlayerInput(GetPC().PlayerInput);
+	load_options_save_info();
 }
+
 //updates list in flash with binding info
 function UpdateDataProvider()
 {
 	local int i, BindingIdx;
-	//local GFxObject TempObj;
-	//local GFxObject GFxProvider;
-	//local String GBA_BindValue;
+	local String GBA_BindValue;
 	//contains key-bind information
 	local array<UDKUIResourceDataProvider> ProviderList;
+	at_bind = GetVariableObject("_root.attack_bind");
+	//`log(at_bind);
+	bl_bind = GetVariableObject("_root.block_bind");
+	menu_bind = GetVariableObject("_root.menu_bind");
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
-	`log(LFInput);
 	if(LFInput==none)
 		return;
 	//blank is an empty object thing
 	Binded=Blank;
 	//loads keybinds into a list(array)
 	class'UDKUIDataStore_MenuItems'.static.GetAllResourceDataProviders(class'UTUIDataProvider_KeyBinding', ProviderList);
-	`log(ProviderList.Length);
 	for(i=0; i<ProviderList.Length; i++)
 	{  
 		//binded is a array of LFUIProvideer objects
 		Binded.InsertItem(0, UTUIDataProvider_KeyBinding(ProviderList[i]));
 	}
-	//a GFxObject array with each object having a value
-	//GFXARRAY
-	//GFxProvider = CreateArray();
+
 
 	for(i=0; i<Binded.Length; i++)
 	{
-		//GBA_BindValue = "";
-		//TempObj = CreateObject("Object");
-		`log(Binded[i].Command);
+		//`log(Binded[i].Command);
 		if(Binded[i].Command == "GBA_attack" || Binded[i].Command == "GBA_block" || Binded[i].Command == "GBA_mainmenu" )
 		{
 		//loops through the binded list and finds the bind value associated to the name
@@ -91,16 +116,131 @@ function UpdateDataProvider()
 		{
 			if(LFInput.Bindings[BindingIdx].Command == Binded[i].Command)
 			{
-					//GBA_BindValue = String(LFInput.Bindings[BindingIdx].Name);
-					//TempObj.SetString("label", GBA_BindValue);
-				
+					//Still need block and menu
+					GBA_BindValue = String(LFInput.Bindings[BindingIdx].Name);
+					//`log(GBA_BindValue);
+					if(Binded[i].Command == "GBA_attack")
+					{
+						if(GBA_BindValue == "F1")
+						{
+							at_bind.SetText("F One");
+						}
+						else if(GBA_BindValue == "F2")
+						{
+							at_bind.SetText("F Two");
+						}
+						else if(GBA_BindValue == "F3")
+						{
+							at_bind.SetText("F Three");
+						}
+						else if(GBA_BindValue == "F4")
+						{
+							at_bind.SetText("F Four");
+						}
+						else if(GBA_BindValue == "F5")
+						{
+							at_bind.SetText("F Five");
+						}
+						else if(GBA_BindValue == "F6")
+						{
+							at_bind.SetText("F Six");
+						}
+						else if(GBA_BindValue == "F7")
+						{
+							at_bind.SetText("F Seven");
+						}
+						else if(GBA_BindValue == "F8")
+						{
+							at_bind.SetText("F Eight");
+						}
+						else if(GBA_BindValue == "F9")
+						{
+							at_bind.SetText("F Nine");
+						}
+						else if(GBA_BindValue == "F10")
+						{
+							at_bind.SetText("F Ten");
+						}
+						else if(GBA_BindValue == "F12")
+						{
+							at_bind.SetText("F Twelve");
+						}
+						else if(GBA_BindValue == "one")
+						{
+							at_bind.SetText("One");
+						}
+						else if(GBA_BindValue == "two")
+						{
+							at_bind.SetText("Two");
+						}
+						else if(GBA_BindValue == "three")
+						{
+							at_bind.SetText("Three");
+						}
+						else if(GBA_BindValue == "four")
+						{
+							at_bind.SetText("Four");
+						}
+						else if(GBA_BindValue == "five")
+						{
+							at_bind.SetText("Five");
+						}
+						else if(GBA_BindValue == "six")
+						{
+							at_bind.SetText("Six");
+						}
+						else if(GBA_BindValue == "seven")
+						{
+							at_bind.SetText("Seven");
+						}
+						else if(GBA_BindValue == "eight")
+						{
+							at_bind.SetText("Eight");
+						}
+						else if(GBA_BindValue == "nine")
+						{
+							at_bind.SetText("Nine");
+						}
+						else if(GBA_BindValue == "zero")
+						{
+							at_bind.SetText("Zero");
+						}
+						else if(GBA_BindValue == "LeftMouseButton")
+						{
+							at_bind.SetText("Left\nMouse");
+						}
+						else if(GBA_BindValue == "RightMouseButton")
+						{
+							at_bind.SetText("Right\nMouse");
+						}
+						else
+						{
+						at_bind.SetText(GBA_BindValue);
+						}
+					}
+					if(Binded[i].Command == "GBA_block")
+					{
+						if(GBA_BindValue == "F3")
+						{
+							bl_bind.SetText("F Three");
+						}
+						else
+						bl_bind.SetText(GBA_BindValue);
+					}
+					if(Binded[i].Command == "GBA_mainmenu")
+					{
+						if(GBA_BindValue == "F3")
+						{
+							menu_bind.SetText("F Three");
+						}
+						else
+						menu_bind.SetText(GBA_BindValue);
+					}
+					
 			}
 		}
 		}
-		//GFxProvider.SetElementObject(i, TempObj);
 	}
-	//ListMC.SetObject("dataProvider", GFxProvider);
-	//ListDataProvider=ListMC.GetObject("dataProvider");
 }
 //click item in flash list
 /*function OnListItemPressed(GFxClikWidget.EventData ev)
@@ -110,10 +250,9 @@ function UpdateDataProvider()
 
 function OpenBindKeyMovie(string bind_name)
 {
-	//SelectedIndex = Index;
-	//ListMC.SetBool("disabled", true);
+
 	current_bind_cmd = bind_name;
-	BindingMovie.GotoAndPlayI(2);
+	BindingMovie.GotoAndStopI(2);
 	BindKeyTF = GetVariableObject("_root.dupeMC.dupeTF");
 	if(bind_name == "GBA_attack")
 	{
@@ -127,6 +266,8 @@ function OpenBindKeyMovie(string bind_name)
 	{
 		bind_name = "Main Menu";
 	}
+	
+
 	BindKeyTF.SetText("Press The Key\n you want to use for\n" $ bind_name);
 	bCaptureForBind=true;
 }
@@ -171,16 +312,7 @@ event bool FilterButtonInput(int ControllerId, name ButtonName, EInputEvent Inpu
 	if(bConfirmChoice && InputEvent == IE_Pressed)
 	{
 		bDublicateBindDetected=false;
-		if(ButtonName=='Enter' || ButtonName=='XboxTypeS_A')
-		{
-			bConfirmChoice=false;
-			DuplicateMovieYes();
-		}
-		else if(ButtonName=='Escape' || ButtonName=='XboxTypeS_B')
-		{
-			bConfirmChoice=false;
-			DuplicateMovieNo();
-		}
+		ReturnToList();
 	}
 	return false;
 }
@@ -188,7 +320,6 @@ event bool FilterButtonInput(int ControllerId, name ButtonName, EInputEvent Inpu
 function ReturnToList()
 {
 	BindingMovie.GotoAndStopI(1);
-	//ListMC.SetBool("disabled", false);
 }
 
 function bool CheckForDuplicateKey()
@@ -204,24 +335,26 @@ function bool CheckForDuplicateKey()
 	for(BindingIdx=0; BindingIdx<LFInput.Bindings.Length; BindingIdx++)
 	{
 		BindingName = LFInput.Bindings[BindingIdx].Name;
+		//`log(CapturedKey@BindingName);
 		if(CapturedKey==BindingName)
 		{
+			//`log("Found");
 			Command=LFInput.Bindings[BindingIdx].Command;
 			if(Command!=current_bind_cmd)
 			{
+			//`log("Found Again");
 				for(i=0; i<Binded.Length; i++)
 				{
+				`log(LFInput.Bindings[BindingIdx].Command@Binded[i].Command);
 					if(LFInput.Bindings[BindingIdx].Command == Binded[i].Command)
 					{
-						DuplicateBindName = Binded[i].FriendlyName;
-						DuplicateBindIndex = BindingIdx;
+						DuplicateBindName = String(Binded[i].Name);
 						return true;
 					}
 				}
 			}
 			if(LFInput.Bindings[BindingIdx].Command == current_bind_cmd)
 			{
-				DuplicateBindIndex = BindingIdx;
 				DuplicateBindName = String(LFInput.Bindings[BindingIdx].Name);
 				return true;
 			}
@@ -232,42 +365,20 @@ function bool CheckForDuplicateKey()
 
 function OpenDuplicateBindMovie(name BindKeyName, string BindFriendlyName)
 {
-	BindingMovie.GotoAndPlayI(3);
+	BindingMovie.GotoAndStopI(2);
 	bConfirmChoice=true;
-	DuplicateTitleTF = GetVariableObject("_root.dupeMC.dupetitle");
-	DuplicateMovieTF = GetVariableObject("_root.dupeMC.dupeTF");
+	//DuplicateTitleTF = GetVariableObject("_root.dupeMC.dupetitle");
+	//DuplicateMovieTF = GetVariableObject("_root.dupeMC.dupeTF");
+	
 	if(string(BindKeyName) != BindFriendlyName)
 	{
-		DuplicateTitleTF.SetText("Duplicate Keybind");
-		DuplicateMovieTF.SetText(BindKeyName$" Is Already Bound To "$BindFriendlyName$". Are You Sure You Wish To Continue?");
+		//`log("Enetered"@BindKeyTF);
+		//DuplicateTitleTF.SetText("Duplicate Keybind");
+		BindKeyTF.SetText(BindKeyName$" Is Already\n Bound To\n "$BindFriendlyName$" Press any \n Key to \nContinue");
 	}
-	else
-	{
-		DuplicateTitleTF.SetText("Unbind Key");
-		DuplicateMovieTF.SetText("Do YOu Wish To Unbind "$BindFriendlyName$"?");
-		bPendingUnbind=true;
-	}
+	
 }
 
-function DuplicateMovieYes()
-{
-	ReturnToList();
-	if(bPendingUnbind)
-	{
-		bPendingUnbind=false;
-		RemoveBind(DuplicateBindIndex);
-	}
-	else
-	{
-		RemoveBind(DuplicateBindIndex);
-		SetNewBind(CapturedBind, current_bind_cmd);
-	}
-}
-
-function DuplicateMovieNo()
-{
-	ReturnToList();
-}
 //deletes any existing bind to the target key and sets the new target key
 function CheckBind()
 {
@@ -288,6 +399,10 @@ function CheckBind()
 			{
 				RemoveBind(BindingIdx);
 				return;
+			}
+			else
+			{
+				ReturnToList();
 			}
 		}
 	}
@@ -344,7 +459,6 @@ function SetNewBind(name Key, string Command)
 }
 function BindFieldClick(string clicked_item)
 {
-`log("Method called");
 if(clicked_item == "attack_bind")
 {
 OpenBindKeyMovie("GBA_attack");
@@ -361,20 +475,20 @@ OpenBindKeyMovie("GBA_mainmenu");
 
 function AttackClik()
 {
-`log("Method called");
+
 OpenBindKeyMovie("GBA_attack");
 UpdateDataProvider();
 }
 
 function BlockClik()
 {
-`log("Method called");
+
 OpenBindKeyMovie("GBA_block");
 }
 
 function MenuClik()
 {
-`log("Method called");
+
 OpenBindKeyMovie("GBA_mainmenu");
 }
 
@@ -393,7 +507,8 @@ DefaultProperties
 	MovieInfo=SwfMovie'betamenu.betamenu'
 	bEnableGammaCorrection = true;
 	bCaptureInput=true;
-
-	//WidgetBindings(0)={(WidgetName="bindList",WidgetClass=class'GFxClikWidget')}
-	}
+	WidgetBindings(0) ={(WidgetName="master_v",WidgetClass = class'GFxClikWidget')}
+	WidgetBindings(1) ={(WidgetName="res",WidgetClass = class'GFxClikWidget')}
+	WidgetBindings(2) ={(WidgetName="bright_lvl",WidgetClass = class'GFxClikWidget')}
+}
 	

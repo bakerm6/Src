@@ -13,7 +13,6 @@ function bool Start(optional bool StartPaused = false)
 {
         super.Start();
         Advance(0);
-       
         RootMC = GetVariableObject("_root");
         return true;
 } 

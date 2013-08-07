@@ -1,4 +1,4 @@
-class GD2PlayerController extends UTPlayerController;
+class GD2PlayerController extends PlayerController;
 
 /*
 Player controller class for Landfall

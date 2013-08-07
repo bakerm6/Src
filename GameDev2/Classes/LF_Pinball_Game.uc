@@ -1,4 +1,4 @@
-class pinballgame extends trigger;
+class LF_Pinball_Game extends trigger;
 /*
 Simple trigger that plays sound when touched in LandFall
 DangerZone Games: James Ross (rossj511@gmail.com)
@@ -7,7 +7,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 */
 
 //initialize variables
-var Soundcue pball;
+var Soundcue pin_ball;
 
 //plays soundcue when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
@@ -16,7 +16,7 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
  
     if (Pawn(Other) != none)
     {
-        PlaySound(pball);
+        PlaySound(pin_ball);
 
     }
 }
@@ -52,7 +52,7 @@ DefaultProperties
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
 	
-    pball = SoundCue'Sounds.piballc'
+    pin_ball = SoundCue'Sounds.piballc'
 	
     bBlockActors=true
     bCollideActors=true
