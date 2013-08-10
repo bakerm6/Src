@@ -49,7 +49,6 @@ function LoadGame()
     local GD2PlayerPawn LF_pawn;
 	Player_Location_Actor = GetPC().Pawn;
     LF_pawn = GD2PlayerPawn(Player_Location_Actor);
-	//bLoaded = true;
 	save_info = class'LF_save_info'.static.load_options();
 	if(save_info == none)
 	{
@@ -61,9 +60,7 @@ function LoadGame()
 	LF_Pawn.mission4 = save_info.mission_4;
 	LF_Pawn.mission5 = save_info.mission_5;
 	LF_Pawn.flashlightc = save_info.flashlight_state;
-	ConsoleCommand("open"@save_info.map_name);
-	
-	
+	GetPC().ConsoleCommand("open"@save_info.map_name$"?lf_load=x");	
 }
 event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 {
@@ -2553,7 +2550,7 @@ UpdateDataProvider();
 }
 function Play_game()
 {
-ConsoleCommand("open base?blah=turd");
+ConsoleCommand("open base");
 }
 function Quit_game()
 {

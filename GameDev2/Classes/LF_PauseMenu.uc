@@ -43,6 +43,7 @@ function save_game_info()
 	`log(save_ob.mission_3);
 	`log(save_ob.mission_4);
 	`log(save_ob.mission_5);
+	`log(save_ob.flashlight_state);
 	`log(save_ob.loc_x);
 	`log(save_ob.loc_y);
 	`log(save_ob.loc_z);

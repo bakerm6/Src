@@ -73,11 +73,36 @@ mission3 = true;
 //sets health and speed for health regeneration
 simulated function PostBeginPlay()
 {
-	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
-	Super.PostBeginPlay();
-	`log(WorldInfo.GetLocalURL());
-    Health = 700;
+local string url;
+	local LF_save_info save_info;
+	local vector vec;
+ super.PostBeginPlay();
+   Health = 700;
     SetTimer(1,true,'regen');
+
+
+ url = WorldInfo.GetLocalURL();
+ `log(url);
+ if(Instr(url,"?lf_load",,true)!=-1)
+ {
+	save_info = class'LF_save_info'.static.load_options();
+	if(save_info == none)
+	{
+		save_info = new class'LF_save_info';
+	}
+	mission1 = save_info.mission_1;
+	mission2a = save_info.mission_2;
+	mission3 = save_info.mission_3;
+	mission4 = save_info.mission_4;
+	mission5 = save_info.mission_5;
+	flashlightc = save_info.flashlight_state;
+	vec.x = save_info.loc_x;
+	vec.y = save_info.loc_y;
+	vec.z = save_info.loc_z;
+	`log(vec.z@vec.y@vec.z);
+	SetLocation(vec);
+ 	`log(mission1);
+ }
 }
 //debug function
 simulated private function DebugPrint1(int sMessage)
@@ -126,7 +151,7 @@ event Tick( float DeltaTime ) {
 		{
 		mission5 = true;
 		}
-		if(mission1 == true && m1_check == false)
+		if(flashlightc == 1 && m1_check == false)
 		{
 		fp_arms = Spawn(class'testweapon');
 		InvManager.AddInventory(fp_arms);
