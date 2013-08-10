@@ -9,7 +9,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 //initialized variables
 var SoundCue level;
 var LF_Main_Menu main;
-
+var bool bLoaded;
 
 ///////////////////////////////////////////////
 //event after player is loaded into game
@@ -17,6 +17,9 @@ event PostLogin( PlayerController NewPlayer )
 {
  //local GD2Hud hud;
  super.PostLogin( NewPlayer );
+ `log(GetURLMap());
+ //`log(GetAddressURL());
+ //`log(GetLocalURL());
  //hud = GD2Hud();
  //hud.CheckViewPortAspectRatio();
  PlaySound(level);

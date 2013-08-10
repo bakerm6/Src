@@ -57,8 +57,6 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 
 }
 
-	
-	
 //function check to see if mission 5 is completed
 function endgame()
 {

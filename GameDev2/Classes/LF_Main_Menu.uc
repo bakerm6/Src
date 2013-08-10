@@ -2,7 +2,8 @@ class LF_Main_Menu extends GFxMoviePlayer;
 //z inputs
 var LFPlayerInput LFInput;
 // asset server ip 74.118.24.231
-//
+//password: Landfall!
+//#960417
 //================BINDING STUFF==================
 var bool bCaptureForBind;
 var name CapturedKey;
@@ -11,13 +12,17 @@ var array<UTUIDataProvider_KeyBinding> Binded, Blank;
 var name CapturedBind;
 var string DuplicateBindName;
 var bool bDublicateBindDetected;
-var GFxClikWidget M_Volume_Slider, res_men, bright_level;
+var GFxClikWidget M_Volume_Slider, res_men, bright_level, bloom_b;
 var GFxObject BindingMovie, BindKeyTF, DuplicateMovieTF, DuplicateTitleTF;
 var GFxObject at_bind, bl_bind, menu_bind;
+var GFxObject fwd_bind, bwd_bind, lft_bind, rght_bind;
+var GFxObject jmp_bind, spnt_bind, use_bind;
 var bool bConfirmChoice, bPendingUnbind;
+var bool bloom_bool;
 var string bind_at, bind_bl, bind_menu;
 var string current_bind_cmd;
 var LF_options_save_info options_save_info;
+var LF_save_info save_info;
 //==================================================
 
 
@@ -38,32 +43,142 @@ function load_options_save_info()
 	}
 }
 
+function LoadGame()
+{
+	local actor Player_Location_Actor;
+    local GD2PlayerPawn LF_pawn;
+	Player_Location_Actor = GetPC().Pawn;
+    LF_pawn = GD2PlayerPawn(Player_Location_Actor);
+	//bLoaded = true;
+	save_info = class'LF_save_info'.static.load_options();
+	if(save_info == none)
+	{
+		save_info = new class'LF_save_info';
+	}
+	LF_Pawn.mission1 = save_info.mission_1;
+	LF_Pawn.mission2a = save_info.mission_2;
+	LF_Pawn.mission3 = save_info.mission_3;
+	LF_Pawn.mission4 = save_info.mission_4;
+	LF_Pawn.mission5 = save_info.mission_5;
+	LF_Pawn.flashlightc = save_info.flashlight_state;
+	ConsoleCommand("open"@save_info.map_name);
+	
+	
+}
 event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 {
 `log(WidgetName);
+
 	switch(WidgetName)
 	{
+		//slider
 		case ('master_v'):
 			M_Volume_Slider = GFxClikWidget(Widget);
 			M_Volume_Slider.AddEventListener('CLIK_valueChange', volume_change);
 			M_Volume_Slider.SetFloat("value", options_save_info.MasterVolume);
 			break;
+		//list
 		case ('bright_lvl'):
 			bright_level = GFxClikWidget(Widget);
 			bright_level.AddEventListener('CLIK_buttonClick', lf_change_bright);
-			bright_Level.SetInt("selectedIndex", options_save_info.Brightness);
-			`log(options_save_info.Brightness);
+			load_provider_array_brightness();
+			bright_Level.SetInt("selectedIndex", options_save_info.Brightness-1);
 			break;
+		//dropdown
+		case ('res'):
+			res_men = GFxClikWidget(Widget);
+			lf_change_res();
+			res_men.SetFloat("selectedIndex", FindRes(options_save_info.Resolution));
+			break;
+		//check box
+		case ('Bloom'):
+			bloom_b = GFxClikWidget(Widget);
+			bloom_b.SetBool("selected",bloom_bool);
+			SetMyCheckBox(bloom_b.GetBool("selected"));
 		default:
 			break;
 	}
 	return True;
 }
+function apply()
+{
+	GetPC().ConsoleCommand("SetRes"@lf_check_res(res_men.GetFloat("selectedIndex")));
+	GetPC().ConsoleCommand("Scale Set Bloom "$bloom_b.GetBool("selected"));
+	options_save_info.save_options();
+	refresh_video();
+}
+function refresh_video()
+{	
+	bloom_b.GetBool("selected");
+	//`log(bloom_bool);
+}
+function SetMyCheckBox(bool b)
+{
+ ActionScriptVoid("SetMyCheckBox");
+}
+function load_provider_array_brightness()
+{
+	local array<String> bright_levels;
+	local int i;
+	
+	for(i = 0; i <10; i++)
+	{
+		bright_levels.AddItem(string(i+1));
+	}
+	SetVariableStringArray("_root.bright_lvl.dataProvider",0,bright_levels);
+}
+function int FindRes(string reso)
+{
+	local array<string> resol;
+	getVariableStringArray("_root.res.dataProvider",0,resol);
+	return resol.Find(reso);
+}
+//going to read dataprovider and return string of resolution
+function string lf_check_res(int index)
+{
+	local array<string> res_c;
+	
+	getVariableStringArray("_root.res.dataProvider",0,res_c);
+	if(index < res_c.length)
+	{
+		return res_c[index];
+	}
+	else
+	{
+		if(res_c.length > 0)
+		{
+			return res_c[0];
+		}
+		//failsafe
+		else
+		{
+			return "1280x720";
+		}
+	}
+}
+function lf_change_res()
+{
+	local array<String> res_levels;
+	local string res_string;
+	local int i;
+	
+	res_string = GetPC().ConsoleCommand("DUMPAVAILABLERESOLUTIONS", false);
+	ParseStringIntoArray(res_string,res_levels, "\n", true);
+	
+	for(i = res_levels.Length - 1; i>0; i--)
+	{
+		if (res_levels[i] == res_levels[i-1])
+		{
+			res_levels.Remove(i,1);
+		}
+	
+	}
+	SetVariableStringArray("_root.res.dataProvider",0,res_levels);
+}
 function lf_change_bright(GFxClikWidget.EventData ev)
 {
-	`log("b_called");
+
 	options_save_info.Brightness = bright_level.GetFloat("selectedIndex");
-	`log(options_save_info.Brightness);
 	GetPC().ConsoleCommand("gamma "$options_save_info.Brightness$"\n");
 	options_save_info.save_options();
 }
@@ -83,6 +198,13 @@ function ControlOptionsOpened()
 	at_bind = GetVariableObject("_root.attack_bind");
 	bl_bind = GetVariableObject("_root.block_bind");
 	menu_bind = GetVariableObject("_root.menu_bind");
+	fwd_bind = GetVariableObject("_root.fwdd_bind");
+	bwd_bind = GetVariableObject("_root.bwdd_bind");
+	lft_bind = GetVariableObject("_root.lftt_bind");
+	rght_bind = GetVariableObject("_root.rghtt_bind");
+	spnt_bind = GetVariableObject("_root.spntt_bind");
+	jmp_bind = GetVariableObject("_root.jmrp_bind");
+	use_bind = GetVariableObject("_root.usee_bind");
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
 	load_options_save_info();
 }
@@ -95,9 +217,15 @@ function UpdateDataProvider()
 	//contains key-bind information
 	local array<UDKUIResourceDataProvider> ProviderList;
 	at_bind = GetVariableObject("_root.attack_bind");
-	//`log(at_bind);
 	bl_bind = GetVariableObject("_root.block_bind");
 	menu_bind = GetVariableObject("_root.menu_bind");
+	fwd_bind = GetVariableObject("_root.fwdd_bind");
+	bwd_bind = GetVariableObject("_root.bwdd_bind");
+	lft_bind = GetVariableObject("_root.lftt_bind");
+	rght_bind = GetVariableObject("_root.rghtt_bind");
+	spnt_bind = GetVariableObject("_root.spntt_bind");
+	jmp_bind = GetVariableObject("_root.jmpp_bind");
+	use_bind = GetVariableObject("_root.usee_bind");
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
 	if(LFInput==none)
 		return;
@@ -115,445 +243,1413 @@ function UpdateDataProvider()
 	for(i=0; i<Binded.Length; i++)
 	{
 		//`log(Binded[i].Command);
-		if(Binded[i].Command == "GBA_attack" || Binded[i].Command == "GBA_block" || Binded[i].Command == "GBA_mainmenu" )
+		if(Binded[i].Command == "GBA_attack" || Binded[i].Command == "GBA_block" || Binded[i].Command == "GBA_mainmenu" 
+		|| Binded[i].Command == "GBA_MoveForward" || Binded[i].Command == "GBA_Backward" || Binded[i].Command == "GBA_StrafeLeft" 
+		|| Binded[i].Command == "GBA_StrafeRight" || Binded[i].Command == "GBA_sprinting" || Binded[i].Command == "GBA_Jump" 
+		|| Binded[i].Command == "GBA_Use" )
 		{
 		//loops through the binded list and finds the bind value associated to the name
-		for(BindingIdx=0; BindingIdx<LFInput.Bindings.Length; BindingIdx++)
-		{
-			if(LFInput.Bindings[BindingIdx].Command == Binded[i].Command)
+			for(BindingIdx=0; BindingIdx<LFInput.Bindings.Length; BindingIdx++)
 			{
-					//Still need block and menu
-					GBA_BindValue = String(LFInput.Bindings[BindingIdx].Name);
-					//`log(GBA_BindValue);
-					if(Binded[i].Command == "GBA_attack")
-					{
-						if(GBA_BindValue == "F1")
+				if(LFInput.Bindings[BindingIdx].Command == Binded[i].Command)
+				{
+						GBA_BindValue = String(LFInput.Bindings[BindingIdx].Name);
+						if(Binded[i].Command == "GBA_attack")
 						{
-							at_bind.SetText("F One");
-						}
-						else if(GBA_BindValue == "F2")
-						{
-							at_bind.SetText("F Two");
-						}
-						else if(GBA_BindValue == "F3")
-						{
-							at_bind.SetText("F Three");
-						}
-						else if(GBA_BindValue == "F4")
-						{
-							at_bind.SetText("F Four");
-						}
-						else if(GBA_BindValue == "F5")
-						{
-							at_bind.SetText("F Five");
-						}
-						else if(GBA_BindValue == "F6")
-						{
-							at_bind.SetText("F Six");
-						}
-						else if(GBA_BindValue == "F7")
-						{
-							at_bind.SetText("F Seven");
-						}
-						else if(GBA_BindValue == "F8")
-						{
-							at_bind.SetText("F Eight");
-						}
-						else if(GBA_BindValue == "F9")
-						{
-							at_bind.SetText("F Nine");
-						}
-						else if(GBA_BindValue == "F10")
-						{
-							at_bind.SetText("F Ten");
-						}
-						else if(GBA_BindValue == "F12")
-						{
-							at_bind.SetText("F Twelve");
-						}
-						else if(GBA_BindValue == "one")
-						{
-							at_bind.SetText("One");
-						}
-						else if(GBA_BindValue == "two")
-						{
-							at_bind.SetText("Two");
-						}
-						else if(GBA_BindValue == "three")
-						{
-							at_bind.SetText("Three");
-						}
-						else if(GBA_BindValue == "four")
-						{
-							at_bind.SetText("Four");
-						}
-						else if(GBA_BindValue == "five")
-						{
-							at_bind.SetText("Five");
-						}
-						else if(GBA_BindValue == "six")
-						{
-							at_bind.SetText("Six");
-						}
-						else if(GBA_BindValue == "seven")
-						{
-							at_bind.SetText("Seven");
-						}
-						else if(GBA_BindValue == "eight")
-						{
-							at_bind.SetText("Eight");
-						}
-						else if(GBA_BindValue == "nine")
-						{
-							at_bind.SetText("Nine");
-						}
-						else if(GBA_BindValue == "zero")
-						{
-							at_bind.SetText("Zero");
-						}
-						else if(GBA_BindValue == "LeftMouseButton")
-						{
-							at_bind.SetText("Left Mouse");
-						}
-						else if(GBA_BindValue == "RightMouseButton")
-						{
-							at_bind.SetText("Right Mouse");
-						}
-						else if(GBA_BindValue == "SpaceBar")
-						{
-							at_bind.SetText("Space Bar");
-						}
-						else if(GBA_BindValue == "LeftControl")
-						{
-							at_bind.SetText("Left Control");
-						}
-						else if(GBA_BindValue == "RightControl")
-						{
-							at_bind.SetText("Right Control");
-						}
-						else if(GBA_BindValue == "LeftBracket")
-						{
-							at_bind.SetText("Left Bracket");
-						}
-						else if(GBA_BindValue == "RightBracket")
-						{
-							at_bind.SetText("Right Bracket");
-						}
-						else if(GBA_BindValue == "CapsLock")
-						{
-							at_bind.SetText("Caps Lock");
-						}
-						else if(GBA_BindValue == "LeftShift")
-						{
-							at_bind.SetText("Left Shift");
-						}
-						else if(GBA_BindValue == "RightShift")
-						{
-							at_bind.SetText("Right Shift");
-						}
-						else if(GBA_BindValue == "LeftAlt")
-						{
-							at_bind.SetText("Left Alt");
-						}
-						else if(GBA_BindValue == "RightAlt")
-						{
-							at_bind.SetText("Right Alt");
-						}
-						else
-						{
-						at_bind.SetText(GBA_BindValue);
-						}
-					}
-					if(Binded[i].Command == "GBA_block")
-					{
 							if(GBA_BindValue == "F1")
-						{
-							bl_bind.SetText("F One");
+							{
+								at_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								at_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								at_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								at_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								at_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								at_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								at_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								at_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								at_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								at_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								at_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								at_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								at_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								at_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								at_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								at_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								at_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								at_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								at_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								at_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								at_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								at_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								at_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								at_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								at_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								at_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								at_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								at_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								at_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								at_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								at_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								at_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								at_bind.SetText("Right Alt");
+							}
+							else
+							{
+							at_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F2")
+						if(Binded[i].Command == "GBA_block")
 						{
-							bl_bind.SetText("F Two");
+								if(GBA_BindValue == "F1")
+							{
+								bl_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								bl_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								bl_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								bl_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								bl_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								bl_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								bl_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								bl_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								bl_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								bl_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								bl_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								bl_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								bl_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								bl_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								bl_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								bl_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								bl_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								bl_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								bl_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								bl_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								bl_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								bl_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								bl_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								bl_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								bl_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								bl_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								bl_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								bl_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								bl_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								bl_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								bl_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								bl_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								bl_bind.SetText("Right Alt");
+							}
+							else
+							{
+							bl_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F3")
+						if(Binded[i].Command == "GBA_mainmenu")
 						{
-							bl_bind.SetText("F Three");
+								if(GBA_BindValue == "F1")
+							{
+								menu_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								menu_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								menu_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								menu_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								menu_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								menu_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								menu_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								menu_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								menu_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								menu_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								menu_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								menu_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								menu_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								menu_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								menu_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								menu_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								menu_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								menu_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								menu_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								menu_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								menu_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								menu_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								menu_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								menu_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								menu_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								menu_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								menu_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								menu_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								menu_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								menu_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								menu_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								menu_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								menu_bind.SetText("Right Alt");
+							}				
+							else
+							{
+							menu_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F4")
+						if(Binded[i].Command == "GBA_MoveForward")
 						{
-							bl_bind.SetText("F Four");
-						}
-						else if(GBA_BindValue == "F5")
-						{
-							bl_bind.SetText("F Five");
-						}
-						else if(GBA_BindValue == "F6")
-						{
-							bl_bind.SetText("F Six");
-						}
-						else if(GBA_BindValue == "F7")
-						{
-							bl_bind.SetText("F Seven");
-						}
-						else if(GBA_BindValue == "F8")
-						{
-							bl_bind.SetText("F Eight");
-						}
-						else if(GBA_BindValue == "F9")
-						{
-							bl_bind.SetText("F Nine");
-						}
-						else if(GBA_BindValue == "F10")
-						{
-							bl_bind.SetText("F Ten");
-						}
-						else if(GBA_BindValue == "F12")
-						{
-							bl_bind.SetText("F Twelve");
-						}
-						else if(GBA_BindValue == "one")
-						{
-							bl_bind.SetText("One");
-						}
-						else if(GBA_BindValue == "two")
-						{
-							bl_bind.SetText("Two");
-						}
-						else if(GBA_BindValue == "three")
-						{
-							bl_bind.SetText("Three");
-						}
-						else if(GBA_BindValue == "four")
-						{
-							bl_bind.SetText("Four");
-						}
-						else if(GBA_BindValue == "five")
-						{
-							bl_bind.SetText("Five");
-						}
-						else if(GBA_BindValue == "six")
-						{
-							bl_bind.SetText("Six");
-						}
-						else if(GBA_BindValue == "seven")
-						{
-							bl_bind.SetText("Seven");
-						}
-						else if(GBA_BindValue == "eight")
-						{
-							bl_bind.SetText("Eight");
-						}
-						else if(GBA_BindValue == "nine")
-						{
-							bl_bind.SetText("Nine");
-						}
-						else if(GBA_BindValue == "zero")
-						{
-							bl_bind.SetText("Zero");
-						}
-						else if(GBA_BindValue == "LeftMouseButton")
-						{
-							bl_bind.SetText("Left Mouse");
-						}
-						else if(GBA_BindValue == "RightMouseButton")
-						{
-							bl_bind.SetText("Right Mouse");
-						}
-						else if(GBA_BindValue == "SpaceBar")
-						{
-							bl_bind.SetText("Space Bar");
-						}
-						else if(GBA_BindValue == "LeftControl")
-						{
-							bl_bind.SetText("Left Control");
-						}
-						else if(GBA_BindValue == "RightControl")
-						{
-							bl_bind.SetText("Right Control");
-						}
-						else if(GBA_BindValue == "LeftBracket")
-						{
-							bl_bind.SetText("Left Bracket");
-						}
-						else if(GBA_BindValue == "RightBracket")
-						{
-							bl_bind.SetText("Right Bracket");
-						}
-						else if(GBA_BindValue == "CapsLock")
-						{
-							bl_bind.SetText("Caps Lock");
-						}
-						else if(GBA_BindValue == "LeftShift")
-						{
-							bl_bind.SetText("Left Shift");
-						}
-						else if(GBA_BindValue == "RightShift")
-						{
-							bl_bind.SetText("Right Shift");
-						}
-						else if(GBA_BindValue == "LeftAlt")
-						{
-							bl_bind.SetText("Left Alt");
-						}
-						else if(GBA_BindValue == "RightAlt")
-						{
-							bl_bind.SetText("Right Alt");
-						}
-						else
-						{
-						bl_bind.SetText(GBA_BindValue);
-						}
-					}
-					if(Binded[i].Command == "GBA_mainmenu")
-					{
 							if(GBA_BindValue == "F1")
-						{
-							menu_bind.SetText("F One");
+							{
+								fwd_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								fwd_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								fwd_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								fwd_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								fwd_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								fwd_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								fwd_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								fwd_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								fwd_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								fwd_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								fwd_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								fwd_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								fwd_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								fwd_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								fwd_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								fwd_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								fwd_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								fwd_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								fwd_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								fwd_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								fwd_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								fwd_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								fwd_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								fwd_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								fwd_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								fwd_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								fwd_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								fwd_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								fwd_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								fwd_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								fwd_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								fwd_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								fwd_bind.SetText("Right Alt");
+							}
+							else
+							{
+							fwd_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F2")
+						if(Binded[i].Command == "GBA_Backward")
 						{
-							menu_bind.SetText("F Two");
+							if(GBA_BindValue == "F1")
+							{
+								bwd_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								bwd_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								bwd_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								bwd_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								bwd_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								bwd_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								bwd_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								bwd_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								bwd_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								bwd_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								bwd_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								bwd_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								bwd_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								bwd_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								bwd_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								bwd_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								bwd_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								bwd_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								bwd_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								bwd_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								bwd_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								bwd_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								bwd_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								bwd_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								bwd_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								bwd_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								bwd_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								bwd_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								bwd_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								bwd_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								bwd_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								bwd_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								bwd_bind.SetText("Right Alt");
+							}
+							else
+							{
+							bwd_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F3")
+						if(Binded[i].Command == "GBA_StrafeLeft")
 						{
-							menu_bind.SetText("F Three");
+							if(GBA_BindValue == "F1")
+							{
+								lft_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								lft_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								lft_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								lft_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								lft_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								lft_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								lft_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								lft_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								lft_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								lft_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								lft_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								lft_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								lft_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								lft_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								lft_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								lft_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								lft_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								lft_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								lft_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								lft_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								lft_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								lft_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								lft_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								lft_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								lft_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								lft_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								lft_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								lft_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								lft_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								lft_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								lft_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								lft_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								lft_bind.SetText("Right Alt");
+							}
+							else
+							{
+							lft_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F4")
+						if(Binded[i].Command == "GBA_StrafeRight")
 						{
-							menu_bind.SetText("F Four");
+							if(GBA_BindValue == "F1")
+							{
+								rght_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								rght_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								rght_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								rght_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								rght_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								rght_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								rght_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								rght_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								rght_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								rght_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								rght_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								rght_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								rght_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								rght_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								rght_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								rght_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								rght_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								rght_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								rght_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								rght_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								rght_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								rght_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								rght_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								rght_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								rght_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								rght_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								rght_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								rght_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								rght_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								rght_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								rght_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								rght_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								rght_bind.SetText("Right Alt");
+							}
+							else
+							{
+								rght_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F5")
+						if(Binded[i].Command == "GBA_sprinting")
 						{
-							menu_bind.SetText("F Five");
+							if(GBA_BindValue == "F1")
+							{
+								spnt_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								spnt_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								spnt_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								spnt_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								spnt_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								spnt_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								spnt_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								spnt_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								spnt_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								spnt_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								spnt_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								spnt_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								spnt_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								spnt_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								spnt_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								spnt_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								spnt_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								spnt_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								spnt_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								spnt_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								spnt_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								spnt_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								spnt_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								spnt_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								spnt_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								spnt_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								spnt_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								spnt_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								spnt_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								spnt_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								spnt_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								spnt_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								spnt_bind.SetText("Right Alt");
+							}
+							else
+							{
+							spnt_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F6")
+						
+						if(Binded[i].Command == "GBA_Jump")
 						{
-							menu_bind.SetText("F Six");
+							if(GBA_BindValue == "F1")
+							{
+								jmp_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								jmp_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								jmp_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								jmp_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								jmp_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								jmp_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								jmp_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								jmp_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								jmp_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								jmp_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								jmp_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								jmp_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								jmp_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								jmp_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								jmp_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								jmp_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								jmp_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								jmp_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								jmp_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								jmp_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								jmp_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								jmp_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								jmp_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								jmp_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								jmp_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								jmp_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								jmp_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								jmp_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								jmp_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								jmp_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								jmp_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								jmp_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								jmp_bind.SetText("Right Alt");
+							}
+							else
+							{
+								jmp_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F7")
+						if(Binded[i].Command == "GBA_Use")
 						{
-							menu_bind.SetText("F Seven");
+							if(GBA_BindValue == "F1")
+							{
+								use_bind.SetText("F One");
+							}
+							else if(GBA_BindValue == "F2")
+							{
+								use_bind.SetText("F Two");
+							}
+							else if(GBA_BindValue == "F3")
+							{
+								use_bind.SetText("F Three");
+							}
+							else if(GBA_BindValue == "F4")
+							{
+								use_bind.SetText("F Four");
+							}
+							else if(GBA_BindValue == "F5")
+							{
+								use_bind.SetText("F Five");
+							}
+							else if(GBA_BindValue == "F6")
+							{
+								use_bind.SetText("F Six");
+							}
+							else if(GBA_BindValue == "F7")
+							{
+								use_bind.SetText("F Seven");
+							}
+							else if(GBA_BindValue == "F8")
+							{
+								use_bind.SetText("F Eight");
+							}
+							else if(GBA_BindValue == "F9")
+							{
+								use_bind.SetText("F Nine");
+							}
+							else if(GBA_BindValue == "F10")
+							{
+								use_bind.SetText("F Ten");
+							}
+							else if(GBA_BindValue == "F12")
+							{
+								use_bind.SetText("F Twelve");
+							}
+							else if(GBA_BindValue == "one")
+							{
+								use_bind.SetText("One");
+							}
+							else if(GBA_BindValue == "two")
+							{
+								use_bind.SetText("Two");
+							}
+							else if(GBA_BindValue == "three")
+							{
+								use_bind.SetText("Three");
+							}
+							else if(GBA_BindValue == "four")
+							{
+								use_bind.SetText("Four");
+							}
+							else if(GBA_BindValue == "five")
+							{
+								use_bind.SetText("Five");
+							}
+							else if(GBA_BindValue == "six")
+							{
+								use_bind.SetText("Six");
+							}
+							else if(GBA_BindValue == "seven")
+							{
+								use_bind.SetText("Seven");
+							}
+							else if(GBA_BindValue == "eight")
+							{
+								use_bind.SetText("Eight");
+							}
+							else if(GBA_BindValue == "nine")
+							{
+								use_bind.SetText("Nine");
+							}
+							else if(GBA_BindValue == "zero")
+							{
+								use_bind.SetText("Zero");
+							}
+							else if(GBA_BindValue == "LeftMouseButton")
+							{
+								use_bind.SetText("Left Mouse");
+							}
+							else if(GBA_BindValue == "RightMouseButton")
+							{
+								use_bind.SetText("Right Mouse");
+							}
+							else if(GBA_BindValue == "SpaceBar")
+							{
+								use_bind.SetText("Space Bar");
+							}
+							else if(GBA_BindValue == "LeftControl")
+							{
+								use_bind.SetText("Left Control");
+							}
+							else if(GBA_BindValue == "RightControl")
+							{
+								use_bind.SetText("Right Control");
+							}
+							else if(GBA_BindValue == "LeftBracket")
+							{
+								use_bind.SetText("Left Bracket");
+							}
+							else if(GBA_BindValue == "RightBracket")
+							{
+								use_bind.SetText("Right Bracket");
+							}
+							else if(GBA_BindValue == "CapsLock")
+							{
+								use_bind.SetText("Caps Lock");
+							}
+							else if(GBA_BindValue == "LeftShift")
+							{
+								use_bind.SetText("Left Shift");
+							}
+							else if(GBA_BindValue == "RightShift")
+							{
+								use_bind.SetText("Right Shift");
+							}
+							else if(GBA_BindValue == "LeftAlt")
+							{
+								use_bind.SetText("Left Alt");
+							}
+							else if(GBA_BindValue == "RightAlt")
+							{
+								use_bind.SetText("Right Alt");
+							}
+							else
+							{
+								use_bind.SetText(GBA_BindValue);
+							}
 						}
-						else if(GBA_BindValue == "F8")
-						{
-							menu_bind.SetText("F Eight");
-						}
-						else if(GBA_BindValue == "F9")
-						{
-							menu_bind.SetText("F Nine");
-						}
-						else if(GBA_BindValue == "F10")
-						{
-							menu_bind.SetText("F Ten");
-						}
-						else if(GBA_BindValue == "F12")
-						{
-							menu_bind.SetText("F Twelve");
-						}
-						else if(GBA_BindValue == "one")
-						{
-							menu_bind.SetText("One");
-						}
-						else if(GBA_BindValue == "two")
-						{
-							menu_bind.SetText("Two");
-						}
-						else if(GBA_BindValue == "three")
-						{
-							menu_bind.SetText("Three");
-						}
-						else if(GBA_BindValue == "four")
-						{
-							menu_bind.SetText("Four");
-						}
-						else if(GBA_BindValue == "five")
-						{
-							menu_bind.SetText("Five");
-						}
-						else if(GBA_BindValue == "six")
-						{
-							menu_bind.SetText("Six");
-						}
-						else if(GBA_BindValue == "seven")
-						{
-							menu_bind.SetText("Seven");
-						}
-						else if(GBA_BindValue == "eight")
-						{
-							menu_bind.SetText("Eight");
-						}
-						else if(GBA_BindValue == "nine")
-						{
-							menu_bind.SetText("Nine");
-						}
-						else if(GBA_BindValue == "zero")
-						{
-							menu_bind.SetText("Zero");
-						}
-						else if(GBA_BindValue == "LeftMouseButton")
-						{
-							menu_bind.SetText("Left Mouse");
-						}
-						else if(GBA_BindValue == "RightMouseButton")
-						{
-							menu_bind.SetText("Right Mouse");
-						}
-						else if(GBA_BindValue == "SpaceBar")
-						{
-							menu_bind.SetText("Space Bar");
-						}
-						else if(GBA_BindValue == "LeftControl")
-						{
-							menu_bind.SetText("Left Control");
-						}
-						else if(GBA_BindValue == "RightControl")
-						{
-							menu_bind.SetText("Right Control");
-						}
-						else if(GBA_BindValue == "LeftBracket")
-						{
-							menu_bind.SetText("Left Bracket");
-						}
-						else if(GBA_BindValue == "RightBracket")
-						{
-							menu_bind.SetText("Right Bracket");
-						}
-						else if(GBA_BindValue == "CapsLock")
-						{
-							menu_bind.SetText("Caps Lock");
-						}
-						else if(GBA_BindValue == "LeftShift")
-						{
-							menu_bind.SetText("Left Shift");
-						}
-						else if(GBA_BindValue == "RightShift")
-						{
-							menu_bind.SetText("Right Shift");
-						}
-						else if(GBA_BindValue == "LeftAlt")
-						{
-							menu_bind.SetText("Left Alt");
-						}
-						else if(GBA_BindValue == "RightAlt")
-						{
-							menu_bind.SetText("Right Alt");
-						}				
-						else
-						{
-						menu_bind.SetText(GBA_BindValue);
-						}
-					}
-					
+				}
 			}
-		}
 		}
 	}
 }
-//click item in flash list
-/*function OnListItemPressed(GFxClikWidget.EventData ev)
-{
-	OpenBindKeyMovie(ev.index);
-}*/
-
 function OpenBindKeyMovie(string bind_name)
 {
 
@@ -564,16 +1660,42 @@ function OpenBindKeyMovie(string bind_name)
 	{
 		bind_name = "Attack";
 	}
-		if(bind_name == "GBA_block")
+	else if(bind_name == "GBA_block")
 	{
 		bind_name = "Block";
 	}
-		if(bind_name == "GBA_mainmenu")
+	else if(bind_name == "GBA_mainmenu")
 	{
 		bind_name = "Main Menu";
 	}
-	
-
+	else if(bind_name == "GBA_MoveForward")
+	{
+		bind_name = "Move Forward";
+	}
+	else if(bind_name == "GBA_Backward")
+	{
+		bind_name = "Move Backward";
+	}
+	else if(bind_name == "GBA_StrafeLeft")
+	{
+		bind_name = "Move Left";
+	}
+	else if(bind_name == "GBA_StrafeRight")
+	{
+		bind_name = "Move Right";
+	}
+	else if(bind_name == "GBA_sprinting")
+	{
+		bind_name = "Sprint";
+	}
+	else if(bind_name == "GBA_Jump")
+	{
+		bind_name = "Jump";
+	}
+	else if(bind_name == "GBA_Use")
+	{
+		bind_name = "Use";
+	}
 	BindKeyTF.SetText("Press The Key\n you want to use for\n" $ bind_name);
 	bCaptureForBind=true;
 }
@@ -646,7 +1768,7 @@ function bool CheckForDuplicateKey()
 			//`log("Found Again");
 				for(i=0; i<Binded.Length; i++)
 				{
-				`log(LFInput.Bindings[BindingIdx].Command@Binded[i].Command);
+				//`log(LFInput.Bindings[BindingIdx].Command@Binded[i].Command);
 					if(LFInput.Bindings[BindingIdx].Command == Binded[i].Command)
 					{
 						DuplicateBindName = String(Binded[i].Name);
@@ -1335,27 +2457,53 @@ function SetNewBind(name Key, string Command)
 }
 function BindFieldClick(string clicked_item)
 {
-if(clicked_item == "attack_bind")
-{
-OpenBindKeyMovie("GBA_attack");
-}
-else if(clicked_item == "block_bind")
-{
-OpenBindKeyMovie("GBA_block");
-}
-else if(clicked_item == "menu_bind")
-{
-OpenBindKeyMovie("GBA_mainmenu");
-}
+	if(clicked_item == "attack_bind")
+	{
+	OpenBindKeyMovie("GBA_attack");
+	}
+	else if(clicked_item == "block_bind")
+	{
+	OpenBindKeyMovie("GBA_block");
+	}
+	else if(clicked_item == "menu_bind")
+	{
+	OpenBindKeyMovie("GBA_mainmenu");
+	}
+	else if(clicked_item == "fwdd_bind")
+	{
+	OpenBindKeyMovie("GBA_MoveForward");
+	}
+	else if(clicked_item == "bwdd_bind")
+	{
+	OpenBindKeyMovie("GBA_Backward");
+	}
+	else if(clicked_item == "lftt_bind")
+	{
+	OpenBindKeyMovie("GBA_StrafeLeft");
+	}
+	else if(clicked_item == "rghtt_bind")
+	{
+	OpenBindKeyMovie("GBA_StrafeRight");
+	}
+	else if(clicked_item == "spntt_bind")
+	{
+	OpenBindKeyMovie("GBA_sprinting");
+	}
+	else if(clicked_item == "jmpp_bind")
+	{
+	OpenBindKeyMovie("GBA_Jump");
+	}
+	else if(clicked_item == "usee_bind")
+	{
+	OpenBindKeyMovie("GBA_Use");
+	}
 }
 
 function AttackClik()
 {
-
 OpenBindKeyMovie("GBA_attack");
 UpdateDataProvider();
 }
-
 function BlockClik()
 {
 
@@ -1365,14 +2513,47 @@ UpdateDataProvider();
 
 function MenuClik()
 {
-
 OpenBindKeyMovie("GBA_mainmenu");
 UpdateDataProvider();
 }
-
+function ForwardClik()
+{
+OpenBindKeyMovie("GBA_MoveForward");
+UpdateDataProvider();
+}
+function BackwardClik()
+{
+OpenBindKeyMovie("GBA_Backward");
+UpdateDataProvider();
+}
+function LeftClik()
+{
+OpenBindKeyMovie("GBA_StrafeLeft");
+UpdateDataProvider();
+}
+function RightClik()
+{
+OpenBindKeyMovie("GBA_StrafeRight");
+UpdateDataProvider();
+}
+function SprintClik()
+{
+OpenBindKeyMovie("GBA_sprinting");
+UpdateDataProvider();
+}
+function JumpClik()
+{
+OpenBindKeyMovie("GBA_Jump");
+UpdateDataProvider();
+}
+function UseClik()
+{
+OpenBindKeyMovie("GBA_Use");
+UpdateDataProvider();
+}
 function Play_game()
 {
-ConsoleCommand("open base.udk");
+ConsoleCommand("open base?blah=turd");
 }
 function Quit_game()
 {
@@ -1388,5 +2569,6 @@ DefaultProperties
 	WidgetBindings(0) ={(WidgetName="master_v",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(1) ={(WidgetName="res",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(2) ={(WidgetName="bright_lvl",WidgetClass = class'GFxClikWidget')}
+	WidgetBindings(3)={(WidgetName="Bloom",WidgetClass=class'GFxClikWidget')}
 }
 	

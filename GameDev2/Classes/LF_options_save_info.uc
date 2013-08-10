@@ -4,12 +4,12 @@ var float Brightness;
 
 var int TextureLevel, AALevel, FOVLevel;
 var float MasterVolume, MusicVolume, FXVolume, DialogVolume;
-
+var String Resolution;
 var int CursorSensitivity;
-
 function bool save_options()
 {
-	if(class'Engine'.static.BasicSaveObject(self, "C:\Landfall\Options.dat",false,0))
+	`log(Brightness);
+	if(class'Engine'.static.BasicSaveObject(self, "C:/Landfall/Options.dat",false,0))
 	{
 		return true;
 	}
@@ -27,7 +27,7 @@ static function LF_options_save_info load_options()
 	
 	op_save_info = new class'LF_options_save_info';
 	
-	if(!class'Engine'.static.BasicSaveObject(op_save_info, "C:\Landfall\Options.dat",false,0))
+	if(!class'Engine'.static.BasicLoadObject(op_save_info, "C:/Landfall/Options.dat",false,0))
 	{
 		return none;
 	}
@@ -49,4 +49,5 @@ defaultproperties
 	TextureLevel = 2
 	AALevel = 2
 	FOVLevel = 3
+	Resolution = "1280x720"
 }

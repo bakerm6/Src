@@ -26,6 +26,7 @@ var int strip;
 var int killcount;
 
 var bool mission1;
+var bool m1_check;
 var bool mission2a;
 var bool mission2b;
 var bool mission3;
@@ -74,6 +75,7 @@ simulated function PostBeginPlay()
 {
 	//Flashlight = Spawn(class'GameDev2.PlayerFlashlight', self);
 	Super.PostBeginPlay();
+	`log(WorldInfo.GetLocalURL());
     Health = 700;
     SetTimer(1,true,'regen');
 }
@@ -97,6 +99,7 @@ function regen()
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
     local GD2PlayerController g;
+	local testweapon fp_arms;
     super.Tick(DeltaTime);
     g= GD2PlayerController(self.controller);
     //DebugPrint1(killcount);
@@ -122,6 +125,12 @@ event Tick( float DeltaTime ) {
 		if(killcount > 5)
 		{
 		mission5 = true;
+		}
+		if(mission1 == true && m1_check == false)
+		{
+		fp_arms = Spawn(class'testweapon');
+		InvManager.AddInventory(fp_arms);
+		m1_check = true;
 		}
     
 }
@@ -189,6 +198,7 @@ defaultproperties
 		
     bPostRenderIfNotVisible=true
     mission1= false
+	m1_check = false
     mission2a = false
     mission2b = false
     mission3 = false

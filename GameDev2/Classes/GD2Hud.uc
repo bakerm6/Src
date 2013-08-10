@@ -13,6 +13,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
+var bool player_m_1;
 var(Rendertext) Font lf;
 var LF_Menu_Prompt menu_prompt;
 var LF_Main_Menu main_menu;
@@ -109,9 +110,16 @@ function mission1_movie()
     {
         mission1_mov = new class'LF_Mission1_Description';            
 	}
-	
+	if(player_m_1 == false)
+	{
 	mission1_mov.Init();
 	SetTimer(7,false,'close_mission1');
+	player_m_1 = true;
+	}
+	else
+	{
+		return;
+	}
 	
 }
 
@@ -155,7 +163,7 @@ function PostRender()
 	// Canvas.SetPos(SizeX - 300,SizeY - 650);
 	if(a.mission1 == true && a.mission2a == false)
 	{
-		a.mission1 = false;
+		//a.mission1 = false;
 		mission1_movie();  
 	}
 	//mission 1 text
@@ -360,6 +368,7 @@ defaultproperties
 
 y = false;
 x = false;
+player_m_1 = false
 
 lf = Font'EngineFonts.lffont'
 
