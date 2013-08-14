@@ -2,13 +2,13 @@ class LF_options_save_info extends Object;
 
 var float Brightness;
 
-var int TextureLevel, AALevel, FOVLevel;
+var int TextureLevel,FOVLevel;
 var float MasterVolume, MusicVolume, FXVolume, DialogVolume;
-var String Resolution;
+var String Resolution, AALevel;
 var int CursorSensitivity;
+var int AAIndex;
 function bool save_options()
 {
-	`log(Brightness);
 	if(class'Engine'.static.BasicSaveObject(self, "C:/Landfall/Options.dat",false,0))
 	{
 		return true;
@@ -46,8 +46,9 @@ defaultproperties
 	FXVolume = 3
 	DialogVolume = 3
 	CursorSensitivity = 6
-	TextureLevel = 2
-	AALevel = 2
+	TextureLevel = 8
+	AALevel = "off"
 	FOVLevel = 3
 	Resolution = "1280x720"
+	AAIndex = 0;
 }

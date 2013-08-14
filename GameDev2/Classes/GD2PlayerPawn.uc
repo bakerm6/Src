@@ -73,7 +73,7 @@ mission3 = true;
 //sets health and speed for health regeneration
 simulated function PostBeginPlay()
 {
-local string url;
+	local string url;
 	local LF_save_info save_info;
 	local vector vec;
  super.PostBeginPlay();
@@ -103,6 +103,7 @@ local string url;
 	SetLocation(vec);
  	`log(mission1);
  }
+
 }
 //debug function
 simulated private function DebugPrint1(int sMessage)

@@ -12,7 +12,8 @@ var array<UTUIDataProvider_KeyBinding> Binded, Blank;
 var name CapturedBind;
 var string DuplicateBindName;
 var bool bDublicateBindDetected;
-var GFxClikWidget M_Volume_Slider, res_men, bright_level, bloom_b;
+var GFxClikWidget M_Volume_Slider, music_volume_slider,sfx_volume_slider, res_men, bright_level, bloom_b;
+var GFxClikWidget dialog_volume_slider, mouse_sense, text_quality, aa_level;
 var GFxObject BindingMovie, BindKeyTF, DuplicateMovieTF, DuplicateTitleTF;
 var GFxObject at_bind, bl_bind, menu_bind;
 var GFxObject fwd_bind, bwd_bind, lft_bind, rght_bind;
@@ -32,7 +33,6 @@ function Init(optional LocalPlayer LocPlay)
 	Advance(0.f);
 	SetViewScaleMode(SM_ExactFit);
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
-	
 }
 function load_options_save_info()
 {
@@ -74,18 +74,51 @@ event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 			M_Volume_Slider.AddEventListener('CLIK_valueChange', volume_change);
 			M_Volume_Slider.SetFloat("value", options_save_info.MasterVolume);
 			break;
+		case ('music_v'):
+			music_volume_slider = GFxClikWidget(Widget);
+			music_volume_slider.AddEventListener('CLIK_valueChange', music_volume_change);
+			music_volume_slider.SetFloat("value", options_save_info.MusicVolume);
+			break;
+			
+		case ('fx_v'):
+			sfx_volume_slider = GFxClikWidget(Widget);
+			sfx_volume_slider.AddEventListener('CLIK_valueChange', sfx_volume_change);
+			sfx_volume_slider.SetFloat("value", options_save_info.FXVolume);
+			break;
+			
+		case ('dialog_v'):
+			dialog_volume_slider = GFxClikWidget(Widget);
+			dialog_volume_slider.AddEventListener('CLIK_valueChange', dialog_volume_change);
+			dialog_volume_slider.SetFloat("value", options_save_info.DialogVolume);
+			break;
+		case ('mouse_s'):
+			mouse_sense = GFxClikWidget(Widget);
+			mouse_sense.AddEventListener('CLIK_valueChange', sense_change);
+			mouse_sense.SetFloat("value", options_save_info.CursorSensitivity);
+			break;
 		//list
 		case ('bright_lvl'):
 			bright_level = GFxClikWidget(Widget);
-			bright_level.AddEventListener('CLIK_buttonClick', lf_change_bright);
 			load_provider_array_brightness();
-			bright_Level.SetInt("selectedIndex", options_save_info.Brightness-1);
+			bright_level.AddEventListener('CLIK_buttonClick', lf_change_bright);
+			//load_provider_array_brightness();
+			bright_Level.SetInt("selectedIndex", options_save_info.Brightness);
+			break;
+		case ('text_q'):
+			text_quality = GFxClikWidget(Widget);
+			text_quality.AddEventListener('CLIK_valueChange', text_change);
+			text_quality.SetInt("value", options_save_info.TextureLevel);
 			break;
 		//dropdown
 		case ('res'):
 			res_men = GFxClikWidget(Widget);
 			lf_change_res();
 			res_men.SetFloat("selectedIndex", FindRes(options_save_info.Resolution));
+			break;
+		case ('aa_lvl'):
+			aa_level = GFxClikWidget(Widget);
+			lf_set_aa_list();
+			aa_level.SetFloat("selectedIndex",FindAA(options_save_info.AALevel));
 			break;
 		//check box
 		case ('Bloom'):
@@ -99,8 +132,15 @@ event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 }
 function apply()
 {
+	local float x;
+	//local string anti_alias;
+	lf_check_aa(aa_level.GetFloat("selectedIndex"));
+	options_save_info.AAIndex = aa_level.GetFloat("selectedIndex");
+	x = mouse_sense.GetFloat("value");
 	GetPC().ConsoleCommand("SetRes"@lf_check_res(res_men.GetFloat("selectedIndex")));
 	GetPC().ConsoleCommand("Scale Set Bloom "$bloom_b.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set MaxAnisotropy "$options_save_info.TextureLevel);
+	GetPC().ConsoleCommand("setSensitivity"@x);
 	options_save_info.save_options();
 	refresh_video();
 }
@@ -120,7 +160,7 @@ function load_provider_array_brightness()
 	
 	for(i = 0; i <10; i++)
 	{
-		bright_levels.AddItem(string(i+1));
+		bright_levels.AddItem(string(i));
 	}
 	SetVariableStringArray("_root.bright_lvl.dataProvider",0,bright_levels);
 }
@@ -129,6 +169,12 @@ function int FindRes(string reso)
 	local array<string> resol;
 	getVariableStringArray("_root.res.dataProvider",0,resol);
 	return resol.Find(reso);
+}
+function int FindAA(string a_a)
+{	
+	local array<String> aa;
+	getVariableStringArray("_root.aa_lvl.dataProvider",0,aa);
+	return aa.Find(a_a);
 }
 //going to read dataprovider and return string of resolution
 function string lf_check_res(int index)
@@ -153,6 +199,59 @@ function string lf_check_res(int index)
 		}
 	}
 }
+function lf_check_aa(int index)
+{
+   local PostProcessChain Chain;
+   local PostProcessEffect Effect;
+
+   Chain = GetPC().WorldInfo.WorldPostProcessChain;
+	`log(chain);
+    if (Chain != None && index < 6)
+    {
+        foreach Chain.Effects(Effect)
+        {
+            if (UberPostProcessEffect(Effect) != None)
+            {
+                switch(index)
+                {
+                    case 0:
+						//UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = PostProcessAA_Off;
+						 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
+						`log("did it");
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
+                        break;
+                    case 1:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+                        break;
+                    case 2:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+                        break;
+                    case 3:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+                        break;
+                    case 4:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+                        break;
+                    case 5:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+					 `log( UberPostProcessEffect(Effect).PostProcessAAType);
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+                        break;
+                    //case 6:
+					 //UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_MLAA;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_MLAA;
+                        break;
+                }
+               //	UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = type;
+			}
+		}
+	}    
+
+}
 function lf_change_res()
 {
 	local array<String> res_levels;
@@ -172,10 +271,19 @@ function lf_change_res()
 	}
 	SetVariableStringArray("_root.res.dataProvider",0,res_levels);
 }
+function lf_set_aa_list()
+{
+	local array<String> aa_levels;
+	local string aa_string;
+	
+	aa_string = "off\nx0\nx2\nx4\nx8\nx16\n";
+	ParseStringIntoArray(aa_string,aa_levels, "\n", true);
+	SetVariableStringArray("_root.aa_lvl.dataProvider",0,aa_levels);
+}
 function lf_change_bright(GFxClikWidget.EventData ev)
 {
-
 	options_save_info.Brightness = bright_level.GetFloat("selectedIndex");
+	//`log(bright_level.GetFloat("selectedIndex"));
 	GetPC().ConsoleCommand("gamma "$options_save_info.Brightness$"\n");
 	options_save_info.save_options();
 }
@@ -184,9 +292,57 @@ function volume_change(GFxClikWidget.EventData ev)
 	GetPC().SetAudioGroupVolume('Master',M_Volume_Slider.GetFloat("value"));
 	options_save_info.MasterVolume = M_Volume_Slider.GetFloat("value");
 	options_save_info.save_options();
-	//`log(options_save_info.MasterVolume);
 }
+function music_volume_change(GFxClikWidget.EventData ev)
+{
+	GetPC().SetAudioGroupVolume('Music',music_volume_slider.GetFloat("value"));
+	options_save_info.MusicVolume = music_volume_slider.GetFloat("value");
+	options_save_info.save_options();
 
+}
+function sfx_volume_change(GFxClikWidget.EventData ev)
+{
+	GetPC().SetAudioGroupVolume('SFX',sfx_volume_slider.GetFloat("value"));
+	options_save_info.FXVolume = sfx_volume_slider.GetFloat("value");
+	options_save_info.save_options();
+
+}
+function dialog_volume_change(GFxClikWidget.EventData ev)
+{
+	GetPC().SetAudioGroupVolume('Dialog',dialog_volume_slider.GetFloat("value"));
+	options_save_info.DialogVolume = dialog_volume_slider.GetFloat("value");
+	options_save_info.save_options();
+}
+function sense_change(GFxClikWidget.EventData ev)
+{
+	//GetPC().ConsoleCommand("setSensitivity "$mouse_sense.GetFloat("value"));
+	options_save_info.CursorSensitivity = mouse_sense.GetFloat("value");
+	`log(mouse_sense.GetFloat("value"));
+	options_save_info.save_options();
+}
+function text_change(GFxClikWidget.EventData ev)
+{
+	//GetPC().ConsoleCommand("setSensitivity "$mouse_sense.GetFloat("value"));
+	options_save_info.TextureLevel = text_quality.GetInt("value");
+	if(options_save_info.TextureLevel > 8)
+	{
+		options_save_info.TextureLevel = 16;
+	}
+	else if(options_save_info.TextureLevel <= 8 && options_save_info.TextureLevel>4)
+	{
+		options_save_info.TextureLevel = 8;
+	}
+	else if(options_save_info.TextureLevel <= 4 && options_save_info.TextureLevel>2)
+	{
+		options_save_info.TextureLevel = 4;
+	}
+	else if(options_save_info.TextureLevel <= 2 && options_save_info.TextureLevel>0)
+	{
+		options_save_info.TextureLevel = 2;
+	}
+	`log(options_save_info.TextureLevel);
+	options_save_info.save_options();
+}
 function ControlOptionsOpened()
 {
 	//`log("stuff happend");
@@ -205,7 +361,6 @@ function ControlOptionsOpened()
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
 	load_options_save_info();
 }
-
 //updates list in flash with binding info
 function UpdateDataProvider()
 {
@@ -2561,11 +2716,16 @@ DefaultProperties
 {
 	bDisplayWithHudOff=true
 	MovieInfo=SwfMovie'betamenu.betamenu'
-	bEnableGammaCorrection = true;
 	bCaptureInput=true;
 	WidgetBindings(0) ={(WidgetName="master_v",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(1) ={(WidgetName="res",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(2) ={(WidgetName="bright_lvl",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(3)={(WidgetName="Bloom",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(4)={(WidgetName="music_v",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(5)={(WidgetName="fx_v",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(6)={(WidgetName="dialog_v",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(7)={(WidgetName="mouse_s",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(8)={(WidgetName="text_q",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(9)={(WidgetName="aa_lvl",WidgetClass=class'GFxClikWidget')}
 }
 	

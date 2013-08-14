@@ -43,6 +43,10 @@ simulated private function DebugPrint(string sMessage)
 //Allocates timers for ambient soundcues and mission objective soundcues
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
+	local LF_options_save_info options;
+	local PostProcessChain Chain;
+   local PostProcessEffect Effect;
+   local int index;
 	super.Possess(inPawn, bVehicleTransition);
 	crowp();
 	flash();
@@ -54,6 +58,56 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 	SetTimer(2,true,'mission3s');
 	SetTimer(10,true,'quitg');
 	SetTimer(15,true,'endgame');
+	 options = class'LF_options_save_info'.static.load_options();
+	if(options == none)
+	{
+		options = new class'LF_options_save_info';
+	}
+ ConsoleCommand("setSensitivity"@options.CursorSensitivity);
+ index = options.AAIndex;
+ Chain = WorldInfo.WorldPostProcessChain;
+    if (Chain != None)
+    {
+        foreach Chain.Effects(Effect)
+        {
+            if (UberPostProcessEffect(Effect) != None)
+            {
+                switch(index)
+                {
+                    case 0:
+						//UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = PostProcessAA_Off;
+						 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
+						`log("did it");
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
+                        break;
+                    case 1:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+                        break;
+                    case 2:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+                        break;
+                    case 3:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+                        break;
+                    case 4:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+                        break;
+                    case 5:
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+					 `log( UberPostProcessEffect(Effect).PostProcessAAType);
+                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+                        break;
+                }
+               //	UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = type;
+			}
+		}
+	}    
+ //`log(options.CursorSensitivity);
+ 
 
 }
 

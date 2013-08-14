@@ -38,7 +38,7 @@ function save_game_info()
 	save_ob.loc_z = LF_Pawn.location.Z;
 	save_ob.map_name = GetPC().WorldInfo.GetMapName();
 	save_ob.save_game();
-	`log(save_ob.mission_1);
+	/*`log(save_ob.mission_1);
 	`log(save_ob.mission_2);
 	`log(save_ob.mission_3);
 	`log(save_ob.mission_4);
@@ -47,7 +47,7 @@ function save_game_info()
 	`log(save_ob.loc_x);
 	`log(save_ob.loc_y);
 	`log(save_ob.loc_z);
-	`log(save_ob.map_name);
+	`log(save_ob.map_name);*/
 }
 function close_menu()
 {
@@ -55,7 +55,7 @@ function close_menu()
 }
 function open_main_menu()
 {
-	ConsoleCommand("open alphamen1.udk");
+	ConsoleCommand("open betamen_1");
 }
 function save_opt_info()
 {

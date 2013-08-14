@@ -22,11 +22,6 @@ event PostLogin( PlayerController NewPlayer )
 	local LF_save_info save_info;
 	local vector vec;
  super.PostLogin( NewPlayer );
- //`log(GetURLMap());
- //`log(GetAddressURL());
- //`log(GetLocalURL());
- //hud = GD2Hud();
- //hud.CheckViewPortAspectRatio();
  Player_Location_Actor = GetALocalPlayerController().Pawn;
  LF_pawn = GD2PlayerPawn(Player_Location_Actor);
  PlaySound(level);
@@ -53,6 +48,8 @@ event PostLogin( PlayerController NewPlayer )
 	LF_Pawn.SetLocation(vec);
  	`log(LF_Pawn.mission1);
  }
+
+ 
  //main = new class'LF_Main_Menu';
  //main.Init();
  }
