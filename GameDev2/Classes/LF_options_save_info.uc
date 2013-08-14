@@ -1,12 +1,12 @@
 class LF_options_save_info extends Object;
 
 var float Brightness;
-
 var int TextureLevel,FOVLevel;
 var float MasterVolume, MusicVolume, FXVolume, DialogVolume;
 var String Resolution, AALevel;
 var int CursorSensitivity;
 var int AAIndex;
+
 function bool save_options()
 {
 	if(class'Engine'.static.BasicSaveObject(self, "C:/Landfall/Options.dat",false,0))

@@ -10,6 +10,8 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 //initialize variables
 var SpotLightMovable Flashlight;
 
+var testweapon fp_arms;
+
 var Rotator newRot;
 
 var Vector newLoc;
@@ -102,6 +104,18 @@ simulated function PostBeginPlay()
 	`log(vec.z@vec.y@vec.z);
 	SetLocation(vec);
  	`log(mission1);
+	`log(flashlightc);
+	if(flashlightc == 1)
+	{
+		fp_arms = Spawn(class'testweapon');
+		InvManager.addInventory(fp_arms);
+		InvManager.bMustHoldWeapon = true;
+		InvManager.SetCurrentWeapon(fp_arms);
+		//fp_arms.Holder = self;
+		if(fp_arms != None)
+		fp_arms.GiveTo(self);
+		`log(InvManager.InventoryChain);
+	}
  }
 
 }
@@ -125,7 +139,6 @@ function regen()
 event Tick( float DeltaTime ) {
     //DebugPrint1(Health);
     local GD2PlayerController g;
-	local testweapon fp_arms;
     super.Tick(DeltaTime);
     g= GD2PlayerController(self.controller);
     //DebugPrint1(killcount);
@@ -152,15 +165,9 @@ event Tick( float DeltaTime ) {
 		{
 		mission5 = true;
 		}
-		if(flashlightc == 1 && m1_check == false)
-		{
-		fp_arms = Spawn(class'testweapon');
-		InvManager.AddInventory(fp_arms);
-		m1_check = true;
-		}
+
     
 }
-
 //allows for kismet events to be called through unreal script
 function TriggerRemoteKismetEvent( name EventName )
 {
@@ -192,6 +199,7 @@ function TriggerRemoteKismetEvent( name EventName )
 //adds default inventory
 //function AddDefaultInventory()
 //{
+	//InvManager.DiscardInventory();
     //InvManager.CreateInventory(class'GameDev2.testweapon'); //InvManager is the pawn's InventoryManager
 //}
 
@@ -237,7 +245,7 @@ defaultproperties
     bStatic = false
 	stopdoingthings = false
 	
-    SpawnSound=none
+   // SpawnSound=none
     //RespawnSound=none
 
 	// weapon=GD2Flashlight

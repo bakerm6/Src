@@ -13,12 +13,15 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var LF_PauseMenu PauseMenu;
 var bool y;
 var bool x;
-var bool player_m_1;
+var bool player_m_1, player_obj_1, player_m_2;
 var(Rendertext) Font lf;
 var LF_Menu_Prompt menu_prompt;
 var LF_Main_Menu main_menu;
 var LF_Mission1_Description mission1_mov;
-
+var LF_Mission1_Objective_Movie mission1_objc_mov;
+var LF_Mission2_Description mission2_mov;
+var GFxObject obj_movie;
+var bool mission1_objc_mov_end_bool;
 //Debug function
 simulated private function DebugPrint(int sMessage)
 {
@@ -127,6 +130,49 @@ function close_mission1()
 {
 	mission1_mov.End();
 }
+
+function mission1_obj_movie()
+{
+
+	if (mission1_objc_mov == None)
+    {
+        mission1_objc_mov = new class'LF_Mission1_Objective_Movie';            
+	}
+	if(player_obj_1 == false)
+	{
+	mission1_objc_mov.Init();
+	player_obj_1 = true;
+	}
+	else
+	{
+		return;
+	}
+	
+
+}
+function mission2_movie()
+{
+	if (mission2_mov == None)
+    {
+        mission2_mov = new class'LF_Mission2_Description';            
+	}
+	if(player_m_2 == false)
+	{
+	mission2_mov.Init();
+	SetTimer(7,false,'close_mission2');
+	player_m_2 = true;
+	}
+	else
+	{
+		return;
+	}
+	
+}
+
+function close_mission2()
+{
+	mission2_mov.End();
+}
 /////////////////////////////////////////////////////
 
 //Renders all mission based prompts
@@ -169,66 +215,42 @@ function PostRender()
 	//mission 1 text
     if(a.mission1 == true && a.mission2a == false)
     {
-	//a.mission1 = false;
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    //Canvas.SetPos(900,50);
-	Canvas.SetPos(SizeX - 300,SizeY - 650);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.waterbottlec); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    //Canvas.SetPos(915,50);
-	Canvas.SetPos(SizeX - 280,SizeY -650);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(" X    Watterbottles");
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(900,75);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.foodc); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(915,75);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(" X    Food");
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(900,100);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.batteryc); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(915,100);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(" X    Batteries");
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(900,125);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(a.flashlightc); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(915,125);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText(" X    Flashlight");
+		mission1_obj_movie();
+		if(a.foodc == 1 && a.waterbottlec == 0 && a.batteryc == 0)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(2);
+		}
+		else if(a.foodc == 0 && a.waterbottlec == 1 && a.batteryc == 0)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(3);
+		}
+		else if(a.foodc == 0 && a.waterbottlec == 0 && a.batteryc == 1)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(4);
+		}
+		else if(a.foodc == 0 && a.waterbottlec == 1 && a.batteryc == 1)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(5);
+		}
+		else if(a.foodc == 1 && a.waterbottlec == 0 && a.batteryc == 1)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(6);
+		}
+		else if(a.foodc == 1 && a.waterbottlec == 1 && a.batteryc == 0)
+		{
+			mission1_objc_mov.movie.GotoAndStopI(7);
+		}
     }
 	
 	//mission 2 a text
     if(a.mission1 == true && a.mission2a == true && a.mission2b == false)
     {
-    //DebugPrint("F");
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(900,50);
-    Canvas.SetDrawColor(255,50,15,255);
-    Canvas.DrawText("Find a telephone"); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+		if(mission1_objc_mov_end_bool == false)
+		{
+			mission1_objc_mov.End();
+			mission1_objc_mov_end_bool = true;
+		}
+		mission2_movie(); 
     }
 	
 	//mission 2 b text
@@ -369,7 +391,7 @@ defaultproperties
 y = false;
 x = false;
 player_m_1 = false
-
+player_obj_1 = false
 lf = Font'EngineFonts.lffont'
-
+mission1_objc_mov_end_bool = false
 }

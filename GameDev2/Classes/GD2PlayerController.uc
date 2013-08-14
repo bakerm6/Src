@@ -43,11 +43,17 @@ simulated private function DebugPrint(string sMessage)
 //Allocates timers for ambient soundcues and mission objective soundcues
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
-	local LF_options_save_info options;
-	local PostProcessChain Chain;
+   local LF_options_save_info options;
+   local PostProcessChain Chain;
    local PostProcessEffect Effect;
    local int index;
+   local testweapon fp_arms;
+	local GD2PlayerPawn p;
+	local actor Player_location_actor;
+	
 	super.Possess(inPawn, bVehicleTransition);
+		Player_location_actor = GetALocalPlayerController().Pawn;
+	p  = GD2PlayerPawn(Player_Location_Actor);
 	crowp();
 	flash();
 	SetTimer(1.94,true,'play');
@@ -77,27 +83,32 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
                     case 0:
 						//UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = PostProcessAA_Off;
 						 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
-						`log("did it");
+						ConsoleCommand("PostProcessAAType 0");
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
                         break;
                     case 1:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+					 ConsoleCommand("PostProcessAAType 1");
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
                         break;
                     case 2:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+					 ConsoleCommand("PostProcessAAType 2");
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
                         break;
                     case 3:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+					 ConsoleCommand("PostProcessAAType 3");
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
                         break;
                     case 4:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+					 ConsoleCommand("PostProcessAAType 4");
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
                         break;
                     case 5:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+					 ConsoleCommand("PostProcessAAType 5");
 					 `log( UberPostProcessEffect(Effect).PostProcessAAType);
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
                         break;
@@ -106,6 +117,13 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 			}
 		}
 	}    
+	if(p.flashlightc == 1)
+	{
+		fp_arms = Spawn(class'testweapon');
+		p.InvManager.addInventory(fp_arms);
+		p.InvManager.bMustHoldWeapon = true;
+		`log(p.InvManager.InventoryChain);
+	}
  //`log(options.CursorSensitivity);
  
 

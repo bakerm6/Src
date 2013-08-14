@@ -78,11 +78,12 @@ DefaultProperties
     AnimSets(0)=AnimSet'FP_arms_pckg.FP_arms_animset'
     Translation=(Z=0.0)
 	scale=0.4
+	HiddenGame=FALSE
+    HiddenEditor=FALSE
     End Object
     Mesh=MySkeletalMeshComponent
     //bCastShadows = false
     Components.Add(MySkeletalMeshComponent)
-	
     check = false
    //SpawnRotation=(yaw=6000)
 }

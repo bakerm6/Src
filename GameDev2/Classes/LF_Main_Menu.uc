@@ -13,13 +13,17 @@ var name CapturedBind;
 var string DuplicateBindName;
 var bool bDublicateBindDetected;
 var GFxClikWidget M_Volume_Slider, music_volume_slider,sfx_volume_slider, res_men, bright_level, bloom_b;
-var GFxClikWidget dialog_volume_slider, mouse_sense, text_quality, aa_level;
+var GFxClikWidget dialog_volume_slider, mouse_sense, text_quality, aa_level,blur_b;
+var GFxClikWidget dx11, dy_shad, dy_light, s_decal, d_decal;
+var GFxClikWidget ambient_o, distortion, vsync, directional_maps;
 var GFxObject BindingMovie, BindKeyTF, DuplicateMovieTF, DuplicateTitleTF;
 var GFxObject at_bind, bl_bind, menu_bind;
 var GFxObject fwd_bind, bwd_bind, lft_bind, rght_bind;
 var GFxObject jmp_bind, spnt_bind, use_bind;
 var bool bConfirmChoice, bPendingUnbind;
-var bool bloom_bool;
+var bool bloom_bool, blur_bool, dx11_bool, dy_shad_bool, dy_light_bool;
+var bool s_decal_bool, d_decal_bool, ambient_o_bool, distortion_bool;
+var bool vsync_bool, directional_maps_bool;
 var string bind_at, bind_bl, bind_menu;
 var string current_bind_cmd;
 var LF_options_save_info options_save_info;
@@ -64,7 +68,6 @@ function LoadGame()
 }
 event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 {
-`log(WidgetName);
 
 	switch(WidgetName)
 	{
@@ -97,17 +100,15 @@ event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 			mouse_sense.SetFloat("value", options_save_info.CursorSensitivity);
 			break;
 		//list
-		case ('bright_lvl'):
-			bright_level = GFxClikWidget(Widget);
-			load_provider_array_brightness();
-			bright_level.AddEventListener('CLIK_buttonClick', lf_change_bright);
-			//load_provider_array_brightness();
-			bright_Level.SetInt("selectedIndex", options_save_info.Brightness);
-			break;
 		case ('text_q'):
 			text_quality = GFxClikWidget(Widget);
 			text_quality.AddEventListener('CLIK_valueChange', text_change);
 			text_quality.SetInt("value", options_save_info.TextureLevel);
+			break;
+		case ('bright_l'):
+			bright_level = GFxClikWidget(Widget);
+			bright_level.AddEventListener('CLIK_valueChange', lf_change_bright);
+			bright_level.SetFloat("value", options_save_info.Brightness);
 			break;
 		//dropdown
 		case ('res'):
@@ -125,6 +126,57 @@ event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 			bloom_b = GFxClikWidget(Widget);
 			bloom_b.SetBool("selected",bloom_bool);
 			SetMyCheckBox(bloom_b.GetBool("selected"));
+			break;
+		case('blur'):
+			blur_b = GFxClikWidget(Widget);
+			blur_b.SetBool("selected",blur_bool);
+			SetMyCheckBox(blur_b.GetBool("selected"));
+			break;
+		case('dx11'):
+			dx11 = GFxClikWidget(Widget);
+			dx11.SetBool("selected",dx11_bool);
+			SetMyCheckBox(dx11.GetBool("selected"));
+			break;
+		case('d_shad'):
+			dy_shad = GFxClikWidget(Widget);
+			dy_shad.SetBool("selected",dy_shad_bool);
+			SetMyCheckBox(dy_shad.GetBool("selected"));
+			break;
+		case('d_light'):
+			dy_light = GFxClikWidget(Widget);
+			dy_light.SetBool("selected",dy_light_bool);
+			SetMyCheckBox(dy_light.GetBool("selected"));
+			break;
+		case('s_decal'):
+			s_decal = GFxClikWidget(Widget);
+			s_decal.SetBool("selected",s_decal_bool);
+			SetMyCheckBox(s_decal.GetBool("selected"));
+			break;
+		case('d_decal'):
+			d_decal = GFxClikWidget(Widget);
+			d_decal.SetBool("selected",d_decal_bool);
+			SetMyCheckBox(d_decal.GetBool("selected"));
+			break;
+		case('a_occl'):
+			ambient_o = GFxClikWidget(Widget);
+			ambient_o.SetBool("selected",ambient_o_bool);
+			SetMyCheckBox(ambient_o.GetBool("selected"));
+			break;
+		case('dist'):
+			distortion = GFxClikWidget(Widget);
+			distortion.SetBool("selected",distortion_bool);
+			SetMyCheckBox(distortion.GetBool("selected"));
+			break;
+		case('vsync'):
+			vsync = GFxClikWidget(Widget);
+			vsync.SetBool("selected",vsync_bool);
+			SetMyCheckBox(vsync.GetBool("selected"));
+			break;
+		case('d_light_maps'):
+			directional_maps = GFxClikWidget(Widget);
+			directional_maps.SetBool("selected",directional_maps_bool);
+			SetMyCheckBox(directional_maps.GetBool("selected"));
+			break;
 		default:
 			break;
 	}
@@ -139,14 +191,34 @@ function apply()
 	x = mouse_sense.GetFloat("value");
 	GetPC().ConsoleCommand("SetRes"@lf_check_res(res_men.GetFloat("selectedIndex")));
 	GetPC().ConsoleCommand("Scale Set Bloom "$bloom_b.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set MotionBlur "$blur_b.GetBool("selected"));
 	GetPC().ConsoleCommand("Scale Set MaxAnisotropy "$options_save_info.TextureLevel);
 	GetPC().ConsoleCommand("setSensitivity"@x);
+	GetPC().ConsoleCommand("Scale Set AllowD3D11 "$dx11.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set DynamicShadows "$dy_shad.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set DynamicLights "$dy_light.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set StaticDecals "$s_decal.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set DynamicDecals "$d_decal.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set AmbientOcclusion "$ambient_o.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set Distortion "$distortion.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set UseVSync "$vsync.GetBool("selected"));
+	GetPC().ConsoleCommand("Scale Set DirectionalLightMaps "$directional_maps.GetBool("selected"));
 	options_save_info.save_options();
 	refresh_video();
 }
 function refresh_video()
 {	
 	bloom_b.GetBool("selected");
+	blur_b.GetBool("selected");
+	dx11.GetBool("selected");
+	dy_shad.GetBool("selected");
+	dy_light.GetBool("selected");
+	s_decal.GetBool("selected");
+	d_decal.GetBool("selected");
+	ambient_o.GetBool("selected");
+	distortion.GetBool("selected");
+	vsync.GetBool("selected");
+	directional_maps.GetBool("selected");
 	//`log(bloom_bool);
 }
 function SetMyCheckBox(bool b)
@@ -205,7 +277,6 @@ function lf_check_aa(int index)
    local PostProcessEffect Effect;
 
    Chain = GetPC().WorldInfo.WorldPostProcessChain;
-	`log(chain);
     if (Chain != None && index < 6)
     {
         foreach Chain.Effects(Effect)
@@ -214,15 +285,12 @@ function lf_check_aa(int index)
             {
                 switch(index)
                 {
-                    case 0:
-						//UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = PostProcessAA_Off;
+                    case 0:			
 						 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
-						`log("did it");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
-                        break;
+                      break;
                     case 1:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+                 
                         break;
                     case 2:
 					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
@@ -237,16 +305,12 @@ function lf_check_aa(int index)
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
                         break;
                     case 5:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
-					 `log( UberPostProcessEffect(Effect).PostProcessAAType);
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
-                        break;
+					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;           
                     //case 6:
 					 //UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_MLAA;
                        // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_MLAA;
                         break;
                 }
-               //	UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = type;
 			}
 		}
 	}    
@@ -276,13 +340,13 @@ function lf_set_aa_list()
 	local array<String> aa_levels;
 	local string aa_string;
 	
-	aa_string = "off\nx0\nx2\nx4\nx8\nx16\n";
+	aa_string = "Off\nx0\nx2\nx4\nx8\nx16\n";
 	ParseStringIntoArray(aa_string,aa_levels, "\n", true);
 	SetVariableStringArray("_root.aa_lvl.dataProvider",0,aa_levels);
 }
 function lf_change_bright(GFxClikWidget.EventData ev)
 {
-	options_save_info.Brightness = bright_level.GetFloat("selectedIndex");
+	options_save_info.Brightness = bright_level.GetFloat("value");
 	//`log(bright_level.GetFloat("selectedIndex"));
 	GetPC().ConsoleCommand("gamma "$options_save_info.Brightness$"\n");
 	options_save_info.save_options();
@@ -2719,7 +2783,7 @@ DefaultProperties
 	bCaptureInput=true;
 	WidgetBindings(0) ={(WidgetName="master_v",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(1) ={(WidgetName="res",WidgetClass = class'GFxClikWidget')}
-	WidgetBindings(2) ={(WidgetName="bright_lvl",WidgetClass = class'GFxClikWidget')}
+	WidgetBindings(2) ={(WidgetName="bright_l",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(3)={(WidgetName="Bloom",WidgetClass=class'GFxClikWidget')}
 	WidgetBindings(4)={(WidgetName="music_v",WidgetClass=class'GFxClikWidget')}
 	WidgetBindings(5)={(WidgetName="fx_v",WidgetClass=class'GFxClikWidget')}
@@ -2727,5 +2791,15 @@ DefaultProperties
 	WidgetBindings(7)={(WidgetName="mouse_s",WidgetClass=class'GFxClikWidget')}
 	WidgetBindings(8)={(WidgetName="text_q",WidgetClass=class'GFxClikWidget')}
 	WidgetBindings(9)={(WidgetName="aa_lvl",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(10)={(WidgetName="blur",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(11)={(WidgetName="dx11",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(12)={(WidgetName="d_shad",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(13)={(WidgetName="d_light",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(14)={(WidgetName="s_decal",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(15)={(WidgetName="d_decal",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(16)={(WidgetName="a_occl",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(17)={(WidgetName="dist",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(18)={(WidgetName="vsync",WidgetClass=class'GFxClikWidget')}
+	WidgetBindings(19)={(WidgetName="d_light_maps",WidgetClass=class'GFxClikWidget')}
 }
 	

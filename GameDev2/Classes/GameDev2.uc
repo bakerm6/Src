@@ -44,9 +44,7 @@ event PostLogin( PlayerController NewPlayer )
 	vec.x = save_info.loc_x;
 	vec.y = save_info.loc_y;
 	vec.z = save_info.loc_z;
-	`log(vec.z@vec.y@vec.z);
 	LF_Pawn.SetLocation(vec);
- 	`log(LF_Pawn.mission1);
  }
 
  

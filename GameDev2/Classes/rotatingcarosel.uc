@@ -37,4 +37,6 @@ defaultproperties
     SpeedFade = 1
 	
     bHidden = false
+	
+
 }

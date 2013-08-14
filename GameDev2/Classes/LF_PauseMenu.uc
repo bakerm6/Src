@@ -7,13 +7,33 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 */
 //initialize variables
 var GFxObject  RootMC;
+var GFxObject progress, mission, objective;
 var LF_save_info save_ob;
 //Starts the movie
 function bool Start(optional bool StartPaused = false)
 {
+		local actor Player_Location_Actor;
+		local GD2PlayerPawn LF_pawn;
         super.Start();
+		Player_Location_Actor = GetPC().Pawn;
+		LF_pawn = GD2PlayerPawn(Player_Location_Actor);
         Advance(0);
         RootMC = GetVariableObject("_root");
+		progress = GetVariableObject("_root.p_perc");
+		mission = GetVariableObject("_root.c_mis");
+		objective = GetVariableObject("_root.m_obj");
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == false)
+		{
+			progress.SetText("5%");
+			mission.SetText("Gather Supplies");
+			objective.SetText("It looks like I won't be leaving\n anytime soon.\n I better find some food, water,\n and some batteries to get this\n flashlight working.");
+		}
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == True && LF_Pawn.mission2b == false)
+		{
+			progress.SetText("10%");
+			mission.SetText("Find a Telephone");
+			objective.SetText("I need to call for help.\n A phone should work as long\n the line is connected.\n Maybe I should check the\n Fun House");
+		}
         return true;
 } 
 function save_game_info()
@@ -56,10 +76,6 @@ function close_menu()
 function open_main_menu()
 {
 	ConsoleCommand("open betamen_1");
-}
-function save_opt_info()
-{
-	`log("save_opt called");
 }
 defaultproperties
 {
