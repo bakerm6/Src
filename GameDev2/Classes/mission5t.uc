@@ -5,7 +5,7 @@ Activates mission 5/endgame and allows for player controller
 to end game
 DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
-All code (c)2012 DangerZone Games inc. all rights reserved
+All code (LF_Controller)2012 DangerZone Games inc. all rights reserved
 */
 
 //initialize variables
@@ -18,20 +18,20 @@ var SoundCue circus;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-    local GD2PlayerController c;
+    local GD2PlayerPawn LF_Pawn;
+    local GD2PlayerController LF_Controller;
 	
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
  
     if (Pawn(Other) != none)
     {
-    Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
-    c = GD2PlayerController(GetALocalPlayerController());
+		Player_Location_Actor = GetALocalPlayerController().Pawn;
+		LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
+		LF_Controller = GD2PlayerController(GetALocalPlayerController());
 	 
-		if(a.mission5 == true)
+		if(LF_Pawn.mission5 == true)
 		{
-		c.endgamescene();
+			LF_Controller.endgamescene();
 		}
     }
 }

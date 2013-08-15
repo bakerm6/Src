@@ -20,26 +20,26 @@ event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vecto
 {
 
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-    local puzzlekmat k;
+    local GD2PlayerPawn LF_Pawn;
+    local puzzlekmat k_mat;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
     
     if (Pawn(Other) != none)
     {
-    k = Spawn(class'puzzlekmat');
+    k_mat = Spawn(class'puzzlekmat');
     Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
+    LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
 	
-    if(a.mission3 == true)
-    {
-    if(play == false)
-    {
-    a.InvManager.AddInventory(k);
-    PlaySound(player);
-    a.mission3p = true;
-    play = true;
-    }
-    }
+		if(LF_Pawn.mission3 == true)
+		{
+			if(play == false)
+			{
+				LF_Pawn.InvManager.AddInventory(k_mat);
+				PlaySound(player);
+				LF_Pawn.mission3p = true;
+				play = true;
+			}
+		}
     }
 }
 DefaultProperties

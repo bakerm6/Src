@@ -13,6 +13,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 //Initialize variables
 
 //var() SkeletalMeshComponent SkeletalMesh;
+
 var() AnimNodeSlot FullBodyAnimSlot;
 var AnimNodePlayCustomAnim Attack;
 var AnimNodePlayCustomAnim Idle;

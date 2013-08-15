@@ -42,10 +42,10 @@ event Tick( float DeltaTime )
 	}
 	if(status == 2)
 	{
-    final_rot = Rotation;
-	RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
-	final_rot.Pitch = final_rot.Pitch - RotatingSpeed*DeltaTime;
-	SetRotation(final_rot);
+		final_rot = Rotation;
+		RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
+		final_rot.Pitch = final_rot.Pitch - RotatingSpeed*DeltaTime;
+		SetRotation(final_rot);
 	}
 	
 }
@@ -103,22 +103,24 @@ function bool UsedBy(Pawn User)
     //DebugPrint("f");
     used = super.UsedBy(User);
 	if(playing == true)
+	{
 	return used;
+	}
     if (IsInInteractionRange&&status!=1&&status!=3)
     {
-    status = 1;
-	playing = true;
-	PlaySound(door_open);
-	SetTimer(5.5,false,'door_stop');
-    return true;
+		status = 1;
+		playing = true;
+		PlaySound(door_open);
+		SetTimer(5.5,false,'door_stop');
+		return true;
 	
     }
 	 if (IsInInteractionRange&&status==3)
     {
-    status = 2;
-    playing = true;
+		status = 2;
+		playing = true;
 	//PlaySound(door_close);
-	SetTimer(5.5,false,'door_stop');
+		SetTimer(5.5,false,'door_stop');
 
      
         return true;
@@ -130,10 +132,14 @@ function door_stop()
 {
 
 	if(status == 2)
-	status = 0;
+	{
+		status = 0;
+	}
 
 	if(status == 1)
-	status = 3;
+	{
+		status = 3;
+	}
 
 	playing = false;
 

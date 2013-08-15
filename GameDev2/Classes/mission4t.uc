@@ -6,7 +6,7 @@ Activates mission 4 and allows for player controller
 to know to respawn player on new map
 DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
-All code (c)2012 DangerZone Games inc. all rights reserved
+All code (LF_Controller)2012 DangerZone Games inc. all rights reserved
 */
 
 //Initialize variables
@@ -21,37 +21,37 @@ var int count;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-    local GD2PlayerController c;
-    local testweapon k;
+    local GD2PlayerPawn LF_Pawn;
+    local GD2PlayerController LF_Controller;
+    local testweapon arms;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
   
     if (Pawn(Other) != none)
     {
-    Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
-    c = GD2PlayerController(GetALocalPlayerController());
-    a.mission4 = true;
-    c.mapc = 2;   
-    k = Spawn(class'testweapon');  
-    a.InvManager.AddInventory(k);
+		Player_Location_Actor = GetALocalPlayerController().Pawn;
+		LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
+		LF_Controller = GD2PlayerController(GetALocalPlayerController());
+		LF_Pawn.mission4 = true;
+		LF_Controller.mapc = 2;   
+		arms = Spawn(class'testweapon');  
+		LF_Pawn.InvManager.AddInventory(arms);
 	
 		if(play == false)
 		{
-		PlaySound(player);
-		circusong();
-		play = true;
-		c.flashb = true;
-		a.flashlightc = 1;
-		a.batteryc = 1;
-		a.InvManager.AddInventory(k);
+			PlaySound(player);
+			circusong();
+			play = true;
+			LF_Controller.flashb = true;
+			LF_Pawn.flashlightc = 1;
+			LF_Pawn.batteryc = 1;
+			LF_Pawn.InvManager.AddInventory(arms);
 		}
 	}
 }
 // plays ambient theme park music
 function circusong()
 {
-PlaySound(carosel);
+	PlaySound(carosel);
 //SetTimer(155,false,'caroselsong');
 }
 

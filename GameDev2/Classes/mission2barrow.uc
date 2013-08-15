@@ -15,8 +15,8 @@ var int SpeedFade;
 event Tick( float DeltaTime ) 
 {
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-     local Rotator final_rot;
+    local GD2PlayerPawn LF_Pawn;
+    local Rotator final_rot;
     super.Tick(DeltaTime);
 	
     final_rot = Rotation;
@@ -24,12 +24,16 @@ event Tick( float DeltaTime )
 	final_rot.Yaw = final_rot.Yaw + RotatingSpeed*DeltaTime;
 	SetRotation(final_rot);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
+    LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
 	
-		if(a.mission1 == true && a.mission2a == true && a.mission2b == true)
-		SetHidden(false);// = false;
-		 else
-		SetHidden(true);
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == true && LF_Pawn.mission2b == true)
+		{
+			SetHidden(false);// = false;
+		}
+		else
+		{
+			SetHidden(true);
+		}
 }
 
 defaultproperties
