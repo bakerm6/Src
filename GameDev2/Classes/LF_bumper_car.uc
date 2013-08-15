@@ -1,4 +1,4 @@
-class bumpercar extends GamePawn
+class LF_bumper_car extends GamePawn
     placeable;
 /*
 bumper car class for Landfall

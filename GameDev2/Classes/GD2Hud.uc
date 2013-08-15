@@ -20,8 +20,10 @@ var LF_Main_Menu main_menu;
 var LF_Mission1_Description mission1_mov;
 var LF_Mission1_Objective_Movie mission1_objc_mov;
 var LF_Mission2_Description mission2_mov;
+var LF_Heart_HUD h_HUD;
 var GFxObject obj_movie;
 var bool mission1_objc_mov_end_bool;
+var bool start;
 //Debug function
 simulated private function DebugPrint(int sMessage)
 {
@@ -78,34 +80,39 @@ exec function ShowMenu()
 }
 
 // Displays the pause menu defined in LF_PauseMenu
-function TogglePauseMenu()
+function int TogglePauseMenu()
 {
-    if ( PauseMenu != none && PauseMenu.bMovieIsOpen )
+	if (PauseMenu.bIsOpen == true )
 	{
-    PauseMenu.AddFocusIgnoreKey('E');
-    PlayerOwner.SetPause(False);
-    PauseMenu.Close(False);   
-    x = false;
+		PauseMenu.AddFocusIgnoreKey('E');
+		PlayerOwner.SetPause(False);
+		PauseMenu.End();
+		 PauseMenu.bIsOpen = false;
+		x = false;
+		return 1;
 	}
-    else
-    {
-
-        if (PauseMenu == None)
-        {
-            PauseMenu = new class'LF_PauseMenu';
+	else
+	{
+			PauseMenu = new class'LF_PauseMenu';
             PauseMenu.MovieInfo = SwfMovie'beta_pause_menu.beta_pause';
             PauseMenu.bEnableGammaCorrection = FALSE;
             PauseMenu.LocalPlayerOwnerIndex = class'Engine'.static.GetEngine().GamePlayers.Find(LocalPlayer(PlayerOwner.Player));
-            PauseMenu.SetTimingMode(TM_Real);
-            PlayerOwner.SetPause(True);
-            PauseMenu.AddFocusIgnoreKey('E');
-        }
+            PauseMenu.SetTimingMode(TM_Real); 
+			PauseMenu.Start();
+			PlayerOwner.SetPause(True);
+			PauseMenu.AddFocusIgnoreKey('E');
+			return 0;
+	}
 
-        //SetVisible(false);
-        PauseMenu.Start();
-        PauseMenu.AddFocusIgnoreKey('E');
-        PlayerOwner.SetPause(True);
-    }
+}
+function heart_rate_movie()
+{
+	if (h_HUD == None)
+    {
+        h_HUD = new class'LF_Heart_HUD';            
+	}
+	h_HUD.Init();
+
 }
 function mission1_movie()
 {
@@ -192,6 +199,13 @@ function PostRender()
     Player_Location_Actor = GetALocalPlayerController().Pawn;
     a = GD2PlayerPawn(Player_Location_Actor);
     //a.mission1 = true;
+	if(start == false)
+	{
+		heart_rate_movie();
+		start = true;
+	}
+
+		h_HUD.text.SetText(string((a.health/7)));
 	
 	//renders text for high heart rate
 	if(a.health < 150)
@@ -394,4 +408,5 @@ player_m_1 = false
 player_obj_1 = false
 lf = Font'EngineFonts.lffont'
 mission1_objc_mov_end_bool = false
+start = false
 }

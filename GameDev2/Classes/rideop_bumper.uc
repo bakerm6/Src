@@ -67,7 +67,7 @@ function bool UsedBy(Pawn User)
 {
     //DebugPrint("f");
 	local bool used;
-	local bumpercar bu;
+	local LF_bumper_car bu;
 	
     used = super.UsedBy(User);
 	
@@ -75,7 +75,7 @@ function bool UsedBy(Pawn User)
     {
 	//DebugPrint("working");
 		
-		ForEach AllActors(class'bumpercar',bu)
+		ForEach AllActors(class'LF_bumper_car',bu)
 		{
 		//b.TurnOff();
 		bu.b= false;
@@ -90,7 +90,7 @@ function bool UsedBy(Pawn User)
     {
 	//DebugPrint("workingagain");
 		
-		ForEach AllActors(class'bumpercar',bu)
+		ForEach AllActors(class'LF_bumper_car',bu)
 		{
 		//b.TurnOff();
 		bu.b= True;

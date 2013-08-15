@@ -9,12 +9,14 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var GFxObject  RootMC;
 var GFxObject progress, mission, objective;
 var LF_save_info save_ob;
+var bool bIsOpen;
 //Starts the movie
 function bool Start(optional bool StartPaused = false)
 {
 		local actor Player_Location_Actor;
 		local GD2PlayerPawn LF_pawn;
         super.Start();
+		bIsOpen = true;
 		Player_Location_Actor = GetPC().Pawn;
 		LF_pawn = GD2PlayerPawn(Player_Location_Actor);
         Advance(0);
@@ -32,7 +34,13 @@ function bool Start(optional bool StartPaused = false)
 		{
 			progress.SetText("10%");
 			mission.SetText("Find a Telephone");
-			objective.SetText("I need to call for help.\n A phone should work as long\n the line is connected.\n Maybe I should check the\n Fun House");
+			objective.SetText("I need to call for help.\n A phone should work as long\n the line is connected.\n Maybe I should check the\n Fun House.");
+		}
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == True && LF_Pawn.mission2b == True && LF_Pawn.mission3 == false)
+		{
+			progress.SetText("15%");
+			mission.SetText("Repair the Telephone");
+			objective.SetText("This phone seems fixable..\n I'm going to need\n Wire Strippers\n Duct Tape\n and some Copper Wire.");
 		}
         return true;
 } 
@@ -69,9 +77,10 @@ function save_game_info()
 	`log(save_ob.loc_z);
 	`log(save_ob.map_name);*/
 }
-function close_menu()
+function End()
 {
-	self.close(true);
+	bIsOpen = false;
+	Close();
 }
 function open_main_menu()
 {
@@ -83,4 +92,5 @@ defaultproperties
 	bPauseGameWhileActive=True
 	bIgnoreMouseInput = false
 	bCaptureInput=False
+	bIsOpen = false
 }

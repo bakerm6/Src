@@ -64,7 +64,7 @@ function LoadGame()
 	LF_Pawn.mission4 = save_info.mission_4;
 	LF_Pawn.mission5 = save_info.mission_5;
 	LF_Pawn.flashlightc = save_info.flashlight_state;
-	GetPC().ConsoleCommand("open"@save_info.map_name$"?lf_load=x");	
+	GetPC().ConsoleCommand("open"@save_info.map_name$"?lf_load=x");
 }
 event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 {

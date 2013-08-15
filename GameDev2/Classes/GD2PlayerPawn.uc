@@ -125,13 +125,15 @@ simulated private function DebugPrint1(int sMessage)
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
 //Regenerates health
-function regen()
+function bool regen()
 {
     if(Health < 700&& Health > 0)
     {
-    Health += 12;
-    //Health += 700;
+    Health += 5;
+	return true; //Health += 700;
     }
+	else 
+	return false;
 }
 
 //////////////////////////////////////////
@@ -150,6 +152,11 @@ event Tick( float DeltaTime ) {
 		{
 		TriggerRemoteKismetEvent('flashlight_toggle' );
 		done = true;
+		}
+		if(done == false && mission2a == true)
+		{
+			TriggerRemoteKismetEvent('flashlight_toggle' );
+			done = true;
 		}
 		if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
 		{

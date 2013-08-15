@@ -25,7 +25,7 @@ simulated function PathFind()
 					
          
         
-        if (_PathNode >= bumpercar(Pawn).Waypoints.Length)
+        if (_PathNode >= LF_bumper_car(Pawn).Waypoints.Length)
 		{
 			_PathNode = 0;
 		}
@@ -41,10 +41,10 @@ state Pathfinding
 Begin:
 	
 
-    if(bumpercar(Pawn).Waypoints[_PathNode] != None&& bumpercar(pawn).b == true)
+    if(LF_bumper_car(Pawn).Waypoints[_PathNode] != None&& LF_bumper_car(pawn).b == true)
     {
     Path_Count = 0;
-    MoveToward(bumpercar(Pawn).Waypoints[_PathNode], bumpercar(Pawn).Waypoints[_PathNode], 128);
+    MoveToward(LF_bumper_car(Pawn).Waypoints[_PathNode], LF_bumper_car(Pawn).Waypoints[_PathNode], 128);
     }  
 	else
 	{
