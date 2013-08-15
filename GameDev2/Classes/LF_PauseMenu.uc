@@ -49,6 +49,25 @@ function bool Start(optional bool StartPaused = false)
 			objective.SetText("This phone seems fixable..\n I'm going to need\n Wire Strippers\n Duct Tape\n and some Copper Wire.");
 		}
 
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == True && LF_Pawn.mission2b == True && LF_Pawn.mission3 == true && LF_Pawn.mission3p == false)
+		{
+			progress.SetText("20%");
+			mission.SetText("Find a Power Source");
+			objective.SetText("I wonder if this park\nstill has power.\nMaybe i can find a\ngenerator of some sort.");
+		}
+		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == True && LF_Pawn.mission2b == True && LF_Pawn.mission3 == true && LF_Pawn.mission3p == true && LF_Pawn.mission4 == false)
+		{
+			progress.SetText("25%");
+			mission.SetText("Get the Generator\n Working");
+			objective.SetText("It seems that I\nneed all of the\nswitches to turn green.");
+		}
+		if(LF_Pawn.mission4 == true && LF_Pawn.mission5 == false)
+		{
+			progress.SetText("30%");
+			mission.SetText("Get the Generator\n Working");
+			objective.SetText("It seems that I\nneed all of the\nswitches to turn green.");
+		}
+
         return true;
 } 
 function save_game_info()
