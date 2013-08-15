@@ -1,56 +1,62 @@
-class destructablearrows extends trigger;
+class pinballgame extends trigger;
 /*
-Non colliding destructable triggers that allow for illuminating
-Paths for the player in the thick fog
+Simple trigger that plays sound when touched in LandFall
 DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
 
+//initialize variables
+var Soundcue pin_ball;
 
-//if the touching actor is the player the arrow destroys itself
+//plays soundcue when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
-    local actor Player_Location_Actor;
-    local GD2PlayerPawn LF_Pawn;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
+ 
+    if (Pawn(Other) != none)
+    {
+        PlaySound(pin_ball);
 
-    Player_Location_Actor = GetALocalPlayerController().Pawn;
-    LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
-
-	//destroy the arrows when touched
-		if (Pawn(Other) == LF_Pawn)
-		{
-	
-			self.Destroy();
-			//DebugPrint("here");
-		}
+    }
 }
 
-defaultproperties
+//checks for untouch
+event UnTouch(Actor Other)
 {
-  Begin Object Name=Sprite
+    super.UnTouch(Other);
+ 
+    if (Pawn(Other) != none)
+    {
+    }
+}
+
+
+
+
+DefaultProperties
+{
+    Begin Object Name=Sprite
         HiddenGame=true HiddenEditor=true
     End Object
-
+	
     Begin Object Name=CollisionCylinder
        CollisionHeight =40.000000
        CollisionRadius=20.00000
     End Object
     CylinderComponent=CollisionCylinder
-
-    //may need .mesh when textured
+	
     Begin Object Class=StaticMeshComponent Name=MyMesh
-       StaticMesh=StaticMesh'WayPoint.waypoint_mesh'
+       StaticMesh=StaticMesh'Arcade_packg.arcade_pinball'
     End Object
     CollisionComponent=MyMesh 
     Components.Add(MyMesh)
-
+	
+    pin_ball = SoundCue'Sounds.piballc'
+	
     bBlockActors=true
     bCollideActors=true
     bHidden=false
-    bNoDelete = false
-    bStatic = false
+    bStatic = true
     bPostRenderIfNotVisible=true
 }
-	

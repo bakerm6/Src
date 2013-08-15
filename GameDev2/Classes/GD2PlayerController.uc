@@ -43,17 +43,18 @@ simulated private function DebugPrint(string sMessage)
 //Allocates timers for ambient soundcues and mission objective soundcues
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
-   local LF_options_save_info options;
-   local PostProcessChain Chain;
-   local PostProcessEffect Effect;
-   local int index;
-   local testweapon fp_arms;
-	local GD2PlayerPawn p;
+    local LF_options_save_info options;
+    local PostProcessChain Chain;
+    local PostProcessEffect Effect;
+    local int index;
+    local testweapon fp_arms;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	super.Possess(inPawn, bVehicleTransition);
-		Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+
+	Player_location_actor = GetALocalPlayerController().Pawn;
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 	crowp();
 	flash();
 	SetTimer(1.94,true,'play');
@@ -64,84 +65,84 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 	SetTimer(2,true,'mission3s');
 	SetTimer(10,true,'quitg');
 	SetTimer(15,true,'endgame');
-	 options = class'LF_options_save_info'.static.load_options();
-	if(options == none)
-	{
-		options = new class'LF_options_save_info';
-	}
- ConsoleCommand("setSensitivity"@options.CursorSensitivity);
- index = options.AAIndex;
- Chain = WorldInfo.WorldPostProcessChain;
-    if (Chain != None)
-    {
-        foreach Chain.Effects(Effect)
-        {
-            if (UberPostProcessEffect(Effect) != None)
-            {
-                switch(index)
-                {
-                    case 0:
-						//UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = PostProcessAA_Off;
-						 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
-						ConsoleCommand("PostProcessAAType 0");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
-                        break;
-                    case 1:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
-					 ConsoleCommand("PostProcessAAType 1");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
-                        break;
-                    case 2:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
-					 ConsoleCommand("PostProcessAAType 2");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
-                        break;
-                    case 3:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
-					 ConsoleCommand("PostProcessAAType 3");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
-                        break;
-                    case 4:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
-					 ConsoleCommand("PostProcessAAType 4");
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
-                        break;
-                    case 5:
-					 UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
-					 ConsoleCommand("PostProcessAAType 5");
-					 `log( UberPostProcessEffect(Effect).PostProcessAAType);
-                       // UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
-                        break;
-                }
-               //	UberPostProcessEffect(LocalPlayer(GetPC().Player).PlayerPostProcess.FindPostProcessEffect('uberPostProcess')).PostProcessAAType = type;
+	options = class'LF_options_save_info'.static.load_options();
+
+		if(options == none)
+		{
+			options = new class'LF_options_save_info';
+		}
+
+	ConsoleCommand("setSensitivity"@options.CursorSensitivity);
+	index = options.AAIndex;
+	Chain = WorldInfo.WorldPostProcessChain;
+
+		if (Chain != None)
+		{
+			foreach Chain.Effects(Effect)
+			{
+				if (UberPostProcessEffect(Effect) != None)
+				{
+					switch(index)
+					{
+						case 0:
+							
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_Off;
+							ConsoleCommand("PostProcessAAType 0");
+							break;
+						case 1:
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA1;
+							ConsoleCommand("PostProcessAAType 1");
+						   
+							break;
+						case 2:
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA2;
+							ConsoleCommand("PostProcessAAType 2");
+						  
+							break;
+						case 3:
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA3;
+							ConsoleCommand("PostProcessAAType 3");
+						
+							break;
+						case 4:
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA4;
+							ConsoleCommand("PostProcessAAType 4");
+						   
+							break;
+						case 5:
+							UberPostProcessEffect(Effect).PostProcessAAType = PostProcessAA_FXAA5;
+							ConsoleCommand("PostProcessAAType 5");
+						 //`log( UberPostProcessEffect(Effect).PostProcessAAType);
+						
+							break;
+					}
+             
+				}
 			}
 		}
-	}    
-	if(p.flashlightc == 1)
-	{
-		fp_arms = Spawn(class'testweapon');
-		p.InvManager.addInventory(fp_arms);
-		p.InvManager.bMustHoldWeapon = true;
-		`log(p.InvManager.InventoryChain);
-	}
- //`log(options.CursorSensitivity);
- 
 
+		if(LF_Pawn.flashlightc == 1)
+		{
+			fp_arms = Spawn(class'testweapon');
+			LF_Pawn.InvManager.addInventory(fp_arms);
+			LF_Pawn.InvManager.bMustHoldWeapon = true;
+			//`log(p.InvManager.InventoryChain);
+		}
 }
 
 //function check to see if mission 5 is completed
 function endgame()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 	
-	if(p.mission5 == true)
+	if(LF_Pawn.mission5 == true)
 	{
-	PlaySound(gotopier);
-	cleartimer('endgame');
+		PlaySound(gotopier);
+		cleartimer('endgame');
 	}
 }
 
@@ -149,17 +150,17 @@ function endgame()
 //Plays soundcue for starting mission 3 if player pawn returns mission 3 true
 function mission3s()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 
 
-	if(p.mission3 == true && mission3start == false)
+	if(LF_Pawn.mission3 == true && mission3start == false)
 	{
-	PlaySound(power);
-	mission3start = true;
+		PlaySound(power);
+		mission3start = true;
 	}
 }
 
@@ -167,16 +168,16 @@ function mission3s()
 //Plays soundcue for starting mission 2 if player pawn returns mission 2 true
 function mission2s()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 
-	if(p.mission2a == true && mission2start == false)
+	if(LF_Pawn.mission2a == true && mission2start == false)
 	{
-	PlaySound(findphone);
-	mission2start = true;
+		PlaySound(findphone);
+		mission2start = true;
 	}
 
 }
@@ -185,18 +186,18 @@ function mission2s()
 //Checks for possesion of the flashlight and clears itself once the player aquires one
 function flash()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 
-	if(p.flashlightc == 1 && flashb == false)
+	if(LF_Pawn.flashlightc == 1 && flashb == false && LF_Pawn.mission2a == false)
 	{
 	//DebugPrint(1);
-	PlaySound(flashlights);
-	flashb = true;
-	ClearTimer('flash');
+		PlaySound(flashlights);
+		flashb = true;
+		ClearTimer('flash');
 	}
 }
 
@@ -204,7 +205,7 @@ function flash()
 //Plays ambient crow sound
 function crowp()
 {
-PlaySound(crows);
+	PlaySound(crows);
 }
 
 
@@ -213,7 +214,7 @@ function play()
 {
 	if(GD2PlayerPawn(Pawn).Health > 300 && GD2PlayerPawn(Pawn).Health < 700)
 	{
-	PlaySound(heartb);
+		PlaySound(heartb);
 	}
 }
 
@@ -222,7 +223,7 @@ function playf()
 {
 	if(GD2PlayerPawn(Pawn).Health <= 300&& GD2PlayerPawn(Pawn).Health > 0)
 	{
-	PlaySound(heartf);
+		PlaySound(heartf);
 	}
 }
 
@@ -334,7 +335,7 @@ function GetTriggerUseList(float interactDistanceToCheck, float crosshairDist, f
 //Exits to main menu
 function quit()
 {
-ConsoleCommand("open alphamen1");
+	ConsoleCommand("open betamen_1");
 }
 
 
@@ -342,64 +343,60 @@ ConsoleCommand("open alphamen1");
 //"sprinting"
 exec function sprinting()
 {
-	local GD2PlayerPawn p;
-	local actor playerp;
+	local GD2PlayerPawn LF_Pawn;
+	local actor playerpawn;
 	
-	playerp = GetALocalPlayerController().Pawn;
-	p = GD2PlayerPawn(playerp);
+	playerpawn = GetALocalPlayerController().Pawn;
+	LF_Pawn = GD2PlayerPawn(playerpawn);
 	
-	p.GroundSpeed = 300;
+	LF_Pawn.GroundSpeed = 300;
 	SetTimer(7,false,'stamina');
 	SetTimer(1,false,'heart_rate');
 	//DebugPrint("sprint");
 }
 
 //stamina function to not allow unlimited sprint
-	function stamina()
-	{
-	local GD2PlayerPawn p;
-	local actor playerp;
+function stamina()
+{
+	local GD2PlayerPawn LF_Pawn;
+	local actor playerpawn;
 	
-	playerp = GetALocalPlayerController().Pawn;
-	p = GD2PlayerPawn(playerp);
+	playerpawn = GetALocalPlayerController().Pawn;
+	LF_Pawn = GD2PlayerPawn(playerpawn);
 	
-	p.GroundSpeed = 200;
-	}
+	LF_Pawn.GroundSpeed = 100;
+}
 	
 	//sprinting increases heart rate slightly
-	function heart_rate()
-	{
-	local GD2PlayerPawn p;
-	local actor playerp;
+function heart_rate()
+{
+	local GD2PlayerPawn LF_Pawn;
+	local actor playerpawn;
 	
-	playerp = GetALocalPlayerController().Pawn;
-	p = GD2PlayerPawn(playerp);
+	playerpawn = GetALocalPlayerController().Pawn;
+	LF_Pawn = GD2PlayerPawn(playerpawn);
 	
-	p.health -= 50;
-	}
-///////////////////////////////////////////////////////////////////////
+	LF_Pawn.health -= 50;
+}
 
 
-///////////////////////////////////////////////////////////////////////
+
 //walk speed reset
 exec function walking()
 {
-	local GD2PlayerPawn p;
-	local actor playerp;
+	local GD2PlayerPawn LF_Pawn;
+	local actor playerpawn;
 	
-	playerp = GetALocalPlayerController().Pawn;
-	p = GD2PlayerPawn(playerp);
+	playerpawn = GetALocalPlayerController().Pawn;
+	LF_Pawn = GD2PlayerPawn(playerpawn);
 	
-	p.GroundSpeed = 200;
+	LF_Pawn.GroundSpeed = 100;
 	ClearTimer('stamina');
 	//DebugPrint("walk");
 }
-///////////////////////////////////////////////////////////////////////
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 //combat function that exectues when z or left mouse is pressed
 exec function  attackb()
@@ -407,16 +404,16 @@ exec function  attackb()
 	local monster ai;
 	local monsteridle aidle;
 	local float dot1;
-	local float dot12;
+	local float dot2;
 	local vector v;
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	local int Distance;
 	local int Distance1;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
-	v = Vector(p.Rotation);
+	LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
+	v = Vector(LF_Pawn.Rotation);
 	//k =testweapon(owner);
 	GD2PlayerPawn(Pawn).blockbb = false;
 
@@ -426,8 +423,8 @@ exec function  attackb()
 	//k.Attack.PlayCustomAnim('FP_attack',1.0);
 		ForEach AllActors(class'monster',ai)
 		{
-		Distance = VSize(Player_location_actor.Location - ai.Location);
-		dot1 =v dot (Player_location_actor.Location - ai.Location);
+			Distance = VSize(Player_location_actor.Location - ai.Location);
+			dot1 =v dot (Player_location_actor.Location - ai.Location);
 		//DebugPrint(dot1);
 			if(Distance<0)
 			{
@@ -437,26 +434,26 @@ exec function  attackb()
 			if(Distance>175&&Distance<350&&dot1 < 0)
 			{
 			//PlaySound(attackh);
-			ai.monster_health-=10;
-			hit = true;
-			SetTimer(1.25,false,'grunter');
-			ai.dead();
+				ai.monster_health-=10;
+				hit = true;
+				SetTimer(1.25,false,'grunter');
+				ai.dead();
 			}
 			
 			if(Distance < 175&&dot1 < 0)
 			{
-			ai.monster_health-=10;
-			hit = true;
-			SetTimer(1.25,false,'grunter');
-			p.health -= 25;
-			ai.dead();
+				ai.monster_health-=10;
+				hit = true;
+				SetTimer(1.25,false,'grunter');
+				LF_Pawn.health -= 25;
+				ai.dead();
 			}
 		}
 
 		ForEach AllActors(class'monsteridle',aidle)
 		{
-		Distance1 = VSize(Player_location_actor.Location - aidle.Location);
-		dot12 =v dot (Player_location_actor.Location - aidle.Location);
+			Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+			dot2 =v dot (Player_location_actor.Location - aidle.Location);
 		//DebugPrint(dot1);
 		
 			if(Distance<0)
@@ -464,12 +461,12 @@ exec function  attackb()
 				Distance*=-1;
 			}
 				
-			if(Distance1>175&&Distance1<350&&dot12 < 0)
+			if(Distance1>175&&Distance1<350&&dot2 < 0)
 			{
 			//PlaySound(attackh);
-			aidle.monster_health-=10;
-			SetTimer(1.25,false,'grunter');
-			aidle.dead();
+				aidle.monster_health-=10;
+				SetTimer(1.25,false,'grunter');
+				aidle.dead();
 			}
 		}
 		
@@ -501,13 +498,13 @@ function await()
 //plays an attack miss sound if you are not hitting an object
 function noisea()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 	
-	if(p.flashlightc == 1&&hit == false)
+	if(LF_PAwn.flashlightc == 1&&hit == false)
 	{
 	PlaySound(attackm);
 	}
@@ -525,14 +522,14 @@ function waiter()
 //loads a level when the player dies
 function quitg()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 	
 //DebugPrint(MyMapName);
-	if(p.health <=0)
+	if(LF_Pawn.health <=0)
 	{
 	//ConsoleCommand("quit");
 		if(mapc == 1)
@@ -558,9 +555,9 @@ function quitg()
 exec function blockb()
 {
 	local float dot1;
-	local float dot12;
+	local float dot2;
 	local vector v;
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local monster ai;
 	local monsteridle aidle;
 	local actor Player_location_actor;
@@ -568,58 +565,58 @@ exec function blockb()
 	local int Distance1;
 
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
-	v = Vector(p.Rotation);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
+	v = Vector(LF_Pawn.Rotation);
 	
-	if(p.flashlightc == 1 && p.batteryc == 1&&onepress == true)
+	if(LF_Pawn.flashlightc == 1 && LF_Pawn.batteryc == 1&&onepress == true)
 	{
-	p.TriggerRemoteKismetEvent('flashlight_toggle' );
-	onepress = false;
-	SetTimer(1.4,false,'flashon');
+		LF_Pawn.TriggerRemoteKismetEvent('flashlight_toggle' );
+		onepress = false;
+		SetTimer(1.4,false,'flashon');
 	}
 	
 	if(canblock == true)
 	{
-	checkb = true;
+		checkb = true;
 		ForEach AllActors(class'monster',ai)
 		{
-		Distance = VSize(Player_location_actor.Location - ai.Location);
-		dot1 =v dot (Player_location_actor.Location - ai.Location);
+			Distance = VSize(Player_location_actor.Location - ai.Location);
+			dot1 =v dot (Player_location_actor.Location - ai.Location);
 		
 			if(Distance<0)
 			{
-			Distance*=-1;
+				Distance*=-1;
 			}
 			
 			if(Distance<700 && Distance<350 &&dot1 < 0)
 			{
-			blockingtime();
+				blockingtime();
 			}
 			
 			else
 			{
-			GD2PlayerPawn(Pawn).blockbb = false;
+				GD2PlayerPawn(Pawn).blockbb = false;
 			}
 		}
 
 		ForEach AllActors(class'monsteridle',aidle)
 		{
-		Distance1 = VSize(Player_location_actor.Location - aidle.Location);
-		dot12 =v dot (Player_location_actor.Location - aidle.Location);
+			Distance1 = VSize(Player_location_actor.Location - aidle.Location);
+			dot2 =v dot (Player_location_actor.Location - aidle.Location);
 		//DebugPrint(dot1);
 			if(Distance<0)
 			{
-			Distance*=-1;
+				Distance*=-1;
 			}
 			
-			if(Distance1<700 && Distance1<350 &&dot12 < 0)
+			if(Distance1<700 && Distance1<350 &&dot2 < 0)
 			{
-			blockingtime();
+				blockingtime();
 			}
 			
 			else
 			{
-			GD2PlayerPawn(Pawn).blockbb = false;
+				GD2PlayerPawn(Pawn).blockbb = false;
 			}
 		}
 		
@@ -662,14 +659,14 @@ function resetblock()
 //turns flashlight on/off
 function flashon()
 {
-	local GD2PlayerPawn p;
+	local GD2PlayerPawn LF_Pawn;
 	local actor Player_location_actor;
 	
 	onepress = true;
 	Player_location_actor = GetALocalPlayerController().Pawn;
-	p  = GD2PlayerPawn(Player_Location_Actor);
+	LF_Pawn  = GD2PlayerPawn(Player_Location_Actor);
 	
-	p.TriggerRemoteKismetEvent('flashlight_toggle' );
+	LF_Pawn.TriggerRemoteKismetEvent('flashlight_toggle' );
 }
 
 //opens the credits
@@ -687,7 +684,7 @@ function k_mat_test()
 ///////////////////////////////////////////////////////////////////////
 defaultproperties
 {
-   InputClass = class 'GameDev2.LFPlayerInput'
+   InputClass = class'GameDev2.LFPlayerInput'
    CameraClass= class'GameDev2.GD2PlayerCamera'
    
 

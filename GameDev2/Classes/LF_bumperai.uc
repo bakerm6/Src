@@ -1,19 +1,16 @@
-class bumperai extends aicontroller;
-
+class LF_bumperai extends aicontroller;
 /*
 bumper car ai class for Landfall
 DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */  
-
 //initialize variables
 var int CloseEnough;
 var int _PathNode;
 var Actor Target;
 var float Path_Count;
-
-
+////////////////////////////////////////////////////////////////
 //possesion event to give ai properties
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
@@ -28,15 +25,12 @@ simulated function PathFind()
 					
          
         
-        if (_PathNode >= bumpercar(Pawn).Waypoints.Length)
+        if (_PathNode >= LF_bumper_car(Pawn).Waypoints.Length)
 		{
 			_PathNode = 0;
 		}
         else
-        {
            _PathNode=_PathNode++;
-        }
-
         GoToState('Pathfinding');
 }
 
@@ -47,18 +41,18 @@ state Pathfinding
 Begin:
 	
 
-    if(LF_bumper_car(Pawn).Waypoints[_PathNode] != None && bumpercar(pawn).b == true)
+    if(LF_bumper_car(Pawn).Waypoints[_PathNode] != None&& LF_bumper_car(pawn).b == true)
     {
-		Path_Count = 0;
-		MoveToward(bumpercar(Pawn).Waypoints[_PathNode], bumpercar(Pawn).Waypoints[_PathNode], 128);
+    Path_Count = 0;
+    MoveToward(LF_bumper_car(Pawn).Waypoints[_PathNode], LF_bumper_car(Pawn).Waypoints[_PathNode], 128);
     }  
 	else
 	{
-		Sleep(1);
+	Sleep(1);
 	}
-
     Sleep(0);
 }
+////////////////////////////////////////////////////////////////
 
 DefaultProperties
 {

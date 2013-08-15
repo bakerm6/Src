@@ -33,20 +33,21 @@ event Tick( float DeltaTime )
 {
     local Rotator final_rot;
     super.Tick(DeltaTime);
-	if(status == 1)
-	{
-    final_rot = Rotation;
-	RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
-	final_rot.Yaw = final_rot.Yaw + RotatingSpeed*DeltaTime;
-	SetRotation(final_rot);
-	}
-	if(status == 2)
-	{
-    final_rot = Rotation;
-	RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
-	final_rot.Yaw = final_rot.Yaw - RotatingSpeed*DeltaTime;
-	SetRotation(final_rot);
-	}
+
+		if(status == 1)
+		{
+			final_rot = Rotation;
+			RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
+			final_rot.Yaw = final_rot.Yaw + RotatingSpeed*DeltaTime;
+			SetRotation(final_rot);
+		}
+		if(status == 2)
+		{
+			final_rot = Rotation;
+			RotatingSpeed = FMax(RotatingSpeed - SpeedFade* DeltaTime,0);
+			final_rot.Yaw = final_rot.Yaw - RotatingSpeed*DeltaTime;
+			SetRotation(final_rot);
+		}
 	
 }
 
@@ -102,27 +103,32 @@ function bool UsedBy(Pawn User)
     local bool used;
     //DebugPrint("f");
     used = super.UsedBy(User);
-	if(playing == true)
-	return used;
-    if (IsInInteractionRange&&status!=1&&status!=3)
-    {
-    status = 1;
-	playing = true;
-	PlaySound(door_open);
-	SetTimer(5.5,false,'door_stop');
-      
-        return true;
-    }
-	 if (IsInInteractionRange&&status==3)
-    {
-    status = 2;
-    playing = true;
-	PlaySound(door_close);
-	SetTimer(5.5,false,'door_stop');
 
-     
-        return true;
-    }
+		if(playing == true)
+		{
+			return used;
+		}
+		
+		if (IsInInteractionRange&&status!=1&&status!=3)
+		{
+			status = 1;
+			playing = true;
+			PlaySound(door_open);
+			SetTimer(5.5,false,'door_stop');
+      
+			return true;
+		}
+
+		if (IsInInteractionRange&&status==3)
+		{
+			status = 2;
+			playing = true;
+			PlaySound(door_close);
+			SetTimer(5.5,false,'door_stop');
+
+			return true;
+		}
+
     return used;
 } 
 
@@ -130,11 +136,14 @@ function door_stop()
 {
 
 	if(status == 2)
-	status = 0;
+	{
+		status = 0;
+	}
 
 	if(status == 1)
-	status = 3;
-
+	{
+		status = 3;
+	}
 	playing = false;
 
 }

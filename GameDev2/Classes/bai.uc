@@ -11,7 +11,8 @@ simulated private function DebugPrint(string sMessage)
 {
 	GetALocalPlayerController().ClientMessage(sMessage);
 }
-////////////////////
+
+
 //debug posses event
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
@@ -21,9 +22,9 @@ event Possess(Pawn inPawn, bool bVehicleTransition)
 //debuging
 function here()
 {
-DebugPrint("here");
+	DebugPrint("here");
 }
-////////////////////
+
 DefaultProperties
 {
 

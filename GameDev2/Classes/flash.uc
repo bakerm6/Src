@@ -1,4 +1,5 @@
 class flash extends trigger;
+
 /*
 The flashlight used for Landfall
 it is a spotlight attached to the player
@@ -6,6 +7,7 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
 //initialize variables
 var int search;
 var bool IsInInteractionRange;
@@ -59,18 +61,18 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     //a = GD2PlayerPawn(Player_Location_Actor);
 		if(search == 0)
 		{
-		previous_font = Canvas.Font;
-		Canvas.Font = lf;
-		Canvas.SetPos(400,300);
-		Canvas.SetDrawColor(255,50,15,255);
-		Canvas.DrawText("Press E to Pick Up"); 
-		Canvas.Font = previous_font; 
-		previous_font = Canvas.Font;
-		//a.mission2b = true;
+			previous_font = Canvas.Font;
+			Canvas.Font = lf;
+			Canvas.SetPos(400,300);
+			Canvas.SetDrawColor(255,50,15,255);
+			Canvas.DrawText("Press E to Pick Up"); 
+			Canvas.Font = previous_font; 
+			previous_font = Canvas.Font;
+			//a.mission2b = true;
 		}
 		else if(search == 1)
 		{
-		self.Destroy();
+			self.Destroy();
 		}
 
 }
@@ -79,12 +81,12 @@ function bool UsedBy(Pawn User)
 {
     local bool used;
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-    local testweapon k;
+    local GD2PlayerPawn LF_Pawn;
+    local testweapon arms;
     //DebugPrint("f");
     used = super.UsedBy(User);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
+    LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
     if (IsInInteractionRange&&search!=1)
     {
         //DebugPrint("F");
@@ -92,14 +94,14 @@ function bool UsedBy(Pawn User)
 		search = 1;
 		if(play== false)
 		{
-			k = Spawn(class'testweapon');
+			arms = Spawn(class'testweapon');
 
 			if(play == false)
 			{
-				a.InvManager.AddInventory(k);
+				LF_Pawn.InvManager.AddInventory(arms);
 				PlaySound(clicky);
 				play = true;
-				a.flashlightc+=1;
+				LF_Pawn.flashlightc+=1;
 			}
 			
 			return true;

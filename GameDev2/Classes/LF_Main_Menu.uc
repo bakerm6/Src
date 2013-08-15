@@ -1,6 +1,14 @@
 class LF_Main_Menu extends GFxMoviePlayer;
-//z inputs
+
+/*
+GFxMoviePlayer for the main menu in Landfall
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+
 var LFPlayerInput LFInput;
+
 // asset server ip 74.118.24.231
 //password: Landfall!
 //#960417
@@ -8,24 +16,28 @@ var LFPlayerInput LFInput;
 var bool bCaptureForBind;
 var name CapturedKey;
 var array<UTUIDataProvider_KeyBinding> Binded, Blank;
-//var int SelectedIndex;
 var name CapturedBind;
 var string DuplicateBindName;
 var bool bDublicateBindDetected;
+
 var GFxClikWidget M_Volume_Slider, music_volume_slider,sfx_volume_slider, res_men, bright_level, bloom_b;
 var GFxClikWidget dialog_volume_slider, mouse_sense, text_quality, aa_level,blur_b;
 var GFxClikWidget dx11, dy_shad, dy_light, s_decal, d_decal;
 var GFxClikWidget ambient_o, distortion, vsync, directional_maps;
+
 var GFxObject BindingMovie, BindKeyTF, DuplicateMovieTF, DuplicateTitleTF;
 var GFxObject at_bind, bl_bind, menu_bind;
 var GFxObject fwd_bind, bwd_bind, lft_bind, rght_bind;
 var GFxObject jmp_bind, spnt_bind, use_bind;
+
 var bool bConfirmChoice, bPendingUnbind;
 var bool bloom_bool, blur_bool, dx11_bool, dy_shad_bool, dy_light_bool;
 var bool s_decal_bool, d_decal_bool, ambient_o_bool, distortion_bool;
 var bool vsync_bool, directional_maps_bool;
+
 var string bind_at, bind_bl, bind_menu;
 var string current_bind_cmd;
+
 var LF_options_save_info options_save_info;
 var LF_save_info save_info;
 //==================================================
@@ -51,6 +63,7 @@ function LoadGame()
 {
 	local actor Player_Location_Actor;
     local GD2PlayerPawn LF_pawn;
+
 	Player_Location_Actor = GetPC().Pawn;
     LF_pawn = GD2PlayerPawn(Player_Location_Actor);
 	save_info = class'LF_save_info'.static.load_options();
@@ -185,10 +198,12 @@ event bool WidgetInitialized(name WidgetName, name WidgetPath, GFxObject Widget)
 function apply()
 {
 	local float x;
+
 	//local string anti_alias;
 	lf_check_aa(aa_level.GetFloat("selectedIndex"));
 	options_save_info.AAIndex = aa_level.GetFloat("selectedIndex");
 	x = mouse_sense.GetFloat("value");
+
 	GetPC().ConsoleCommand("SetRes"@lf_check_res(res_men.GetFloat("selectedIndex")));
 	GetPC().ConsoleCommand("Scale Set Bloom "$bloom_b.GetBool("selected"));
 	GetPC().ConsoleCommand("Scale Set MotionBlur "$blur_b.GetBool("selected"));
@@ -203,6 +218,7 @@ function apply()
 	GetPC().ConsoleCommand("Scale Set Distortion "$distortion.GetBool("selected"));
 	GetPC().ConsoleCommand("Scale Set UseVSync "$vsync.GetBool("selected"));
 	GetPC().ConsoleCommand("Scale Set DirectionalLightMaps "$directional_maps.GetBool("selected"));
+
 	options_save_info.save_options();
 	refresh_video();
 }
@@ -223,7 +239,7 @@ function refresh_video()
 }
 function SetMyCheckBox(bool b)
 {
- ActionScriptVoid("SetMyCheckBox");
+	ActionScriptVoid("SetMyCheckBox");
 }
 function load_provider_array_brightness()
 {
@@ -239,12 +255,14 @@ function load_provider_array_brightness()
 function int FindRes(string reso)
 {
 	local array<string> resol;
+
 	getVariableStringArray("_root.res.dataProvider",0,resol);
 	return resol.Find(reso);
 }
 function int FindAA(string a_a)
 {	
 	local array<String> aa;
+
 	getVariableStringArray("_root.aa_lvl.dataProvider",0,aa);
 	return aa.Find(a_a);
 }
@@ -422,6 +440,7 @@ function ControlOptionsOpened()
 	spnt_bind = GetVariableObject("_root.spntt_bind");
 	jmp_bind = GetVariableObject("_root.jmrp_bind");
 	use_bind = GetVariableObject("_root.usee_bind");
+
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
 	load_options_save_info();
 }
@@ -432,6 +451,7 @@ function UpdateDataProvider()
 	local String GBA_BindValue;
 	//contains key-bind information
 	local array<UDKUIResourceDataProvider> ProviderList;
+
 	at_bind = GetVariableObject("_root.attack_bind");
 	bl_bind = GetVariableObject("_root.block_bind");
 	menu_bind = GetVariableObject("_root.menu_bind");
@@ -442,13 +462,17 @@ function UpdateDataProvider()
 	spnt_bind = GetVariableObject("_root.spntt_bind");
 	jmp_bind = GetVariableObject("_root.jmpp_bind");
 	use_bind = GetVariableObject("_root.usee_bind");
+
 	LFInput = LFPlayerInput(GetPC().PlayerInput);
 	if(LFInput==none)
+	{
 		return;
+	}
 	//blank is an empty object thing
 	Binded=Blank;
 	//loads keybinds into a list(array)
 	class'UDKUIDataStore_MenuItems'.static.GetAllResourceDataProviders(class'UTUIDataProvider_KeyBinding', ProviderList);
+
 	for(i=0; i<ProviderList.Length; i++)
 	{  
 		//binded is a array of LFUIProvideer objects
@@ -1872,6 +1896,7 @@ function OpenBindKeyMovie(string bind_name)
 	current_bind_cmd = bind_name;
 	BindingMovie.GotoAndStopI(2);
 	BindKeyTF = GetVariableObject("_root.dupeMC.dupeTF");
+
 	if(bind_name == "GBA_attack")
 	{
 		bind_name = "Attack";
@@ -1912,6 +1937,7 @@ function OpenBindKeyMovie(string bind_name)
 	{
 		bind_name = "Use";
 	}
+
 	BindKeyTF.SetText("Press The Key\n you want to use for\n" $ bind_name);
 	bCaptureForBind=true;
 }
@@ -1933,6 +1959,7 @@ event bool FilterButtonInput(int ControllerId, name ButtonName, EInputEvent Inpu
 
 		CapturedKey=ButtonName;
 		CapturedBind=ButtonName;
+
 		if(CheckForDuplicateKey())
 		{
 			bDublicateBindDetected=true;
@@ -2612,6 +2639,7 @@ function CheckBind()
 			if(CapturedKey == LFInput.Bindings[BindingIdx].Name)
 			{
 				RemoveBind(BindingIdx);
+
 				return;
 			}
 			else
@@ -2626,8 +2654,10 @@ function CheckBind()
 function RemoveBind(int RemovalIndex)
 {
 	if(LFInput == none)
+	{
 		return;
-	
+	}
+
 	LFInput.Bindings.Remove(RemovalIndex, 1);
 	UpdateDataProvider();
 	LFInput.SaveConfig();
@@ -2640,7 +2670,9 @@ function SetNewBind(name Key, string Command)
 	local bool bGamepad;
 
 	if(LFInput == none)
+	{
 		return;
+	}
 
 	bGamepad = (InStr(Locs(Key), "xboxtypes") != -1 || InStr(Locs(Key), "gamepad") != -1) ? true : false;
 
@@ -2675,105 +2707,105 @@ function BindFieldClick(string clicked_item)
 {
 	if(clicked_item == "attack_bind")
 	{
-	OpenBindKeyMovie("GBA_attack");
+		OpenBindKeyMovie("GBA_attack");
 	}
 	else if(clicked_item == "block_bind")
 	{
-	OpenBindKeyMovie("GBA_block");
+		OpenBindKeyMovie("GBA_block");
 	}
 	else if(clicked_item == "menu_bind")
 	{
-	OpenBindKeyMovie("GBA_mainmenu");
+		OpenBindKeyMovie("GBA_mainmenu");
 	}
 	else if(clicked_item == "fwdd_bind")
 	{
-	OpenBindKeyMovie("GBA_MoveForward");
+		OpenBindKeyMovie("GBA_MoveForward");
 	}
 	else if(clicked_item == "bwdd_bind")
 	{
-	OpenBindKeyMovie("GBA_Backward");
+		OpenBindKeyMovie("GBA_Backward");
 	}
 	else if(clicked_item == "lftt_bind")
 	{
-	OpenBindKeyMovie("GBA_StrafeLeft");
+		OpenBindKeyMovie("GBA_StrafeLeft");
 	}
 	else if(clicked_item == "rghtt_bind")
 	{
-	OpenBindKeyMovie("GBA_StrafeRight");
+		OpenBindKeyMovie("GBA_StrafeRight");
 	}
 	else if(clicked_item == "spntt_bind")
 	{
-	OpenBindKeyMovie("GBA_sprinting");
+		OpenBindKeyMovie("GBA_sprinting");
 	}
 	else if(clicked_item == "jmpp_bind")
 	{
-	OpenBindKeyMovie("GBA_Jump");
+		OpenBindKeyMovie("GBA_Jump");
 	}
 	else if(clicked_item == "usee_bind")
 	{
-	OpenBindKeyMovie("GBA_Use");
+		OpenBindKeyMovie("GBA_Use");
 	}
 }
 
 function AttackClik()
 {
-OpenBindKeyMovie("GBA_attack");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_attack");
+	UpdateDataProvider();
 }
 function BlockClik()
 {
 
-OpenBindKeyMovie("GBA_block");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_block");
+	UpdateDataProvider();
 }
 
 function MenuClik()
 {
-OpenBindKeyMovie("GBA_mainmenu");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_mainmenu");
+	UpdateDataProvider();
 }
 function ForwardClik()
 {
-OpenBindKeyMovie("GBA_MoveForward");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_MoveForward");
+	UpdateDataProvider();
 }
 function BackwardClik()
 {
-OpenBindKeyMovie("GBA_Backward");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_Backward");
+	UpdateDataProvider();
 }
 function LeftClik()
 {
-OpenBindKeyMovie("GBA_StrafeLeft");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_StrafeLeft");
+	UpdateDataProvider();
 }
 function RightClik()
 {
-OpenBindKeyMovie("GBA_StrafeRight");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_StrafeRight");
+	UpdateDataProvider();
 }
 function SprintClik()
 {
-OpenBindKeyMovie("GBA_sprinting");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_sprinting");
+	UpdateDataProvider();
 }
 function JumpClik()
 {
-OpenBindKeyMovie("GBA_Jump");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_Jump");
+	UpdateDataProvider();
 }
 function UseClik()
 {
-OpenBindKeyMovie("GBA_Use");
-UpdateDataProvider();
+	OpenBindKeyMovie("GBA_Use");
+	UpdateDataProvider();
 }
 function Play_game()
 {
-ConsoleCommand("open base");
+	ConsoleCommand("open base");
 }
 function Quit_game()
 {
-ConsoleCommand("quit");
+	ConsoleCommand("quit");
 }
 
 DefaultProperties
@@ -2781,6 +2813,7 @@ DefaultProperties
 	bDisplayWithHudOff=true
 	MovieInfo=SwfMovie'betamenu.betamenu'
 	bCaptureInput=true;
+
 	WidgetBindings(0) ={(WidgetName="master_v",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(1) ={(WidgetName="res",WidgetClass = class'GFxClikWidget')}
 	WidgetBindings(2) ={(WidgetName="bright_l",WidgetClass = class'GFxClikWidget')}

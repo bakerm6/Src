@@ -1,5 +1,13 @@
 class LF_options_save_info extends Object;
 
+
+/*
+Object file that holds playes visual preferences
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+
 var float Brightness;
 var int TextureLevel,FOVLevel;
 var float MasterVolume, MusicVolume, FXVolume, DialogVolume;

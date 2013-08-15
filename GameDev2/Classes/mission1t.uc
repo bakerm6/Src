@@ -14,23 +14,23 @@ var bool play;
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
 {
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
-	local rotatinumbrella p;
+    local GD2PlayerPawn LF_Pawn;
+	local rotatinumbrella umbr;
     super.Touch(Other, OtherComp, HitLocation, HitNormal);
 	
-		ForEach AllActors(class'rotatinumbrella',p) 
+		ForEach AllActors(class'rotatinumbrella',umbr) 
 		{
-		p.Go = true;
+		umbr.Go = true;
 		}
 			if (Pawn(Other) != none)
 			{
 			Player_Location_Actor = GetALocalPlayerController().Pawn;
-			a = GD2PlayerPawn(Player_Location_Actor);
-			a.mission1 = true;
+			LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
+			LF_Pawn.mission1 = true;
 				if(play == false)
 				{
-				PlaySound(player);
-				play = true;
+					PlaySound(player);
+					play = true;
 				}
 			}
 }

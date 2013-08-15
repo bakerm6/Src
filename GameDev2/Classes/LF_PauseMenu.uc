@@ -5,17 +5,20 @@ DangerZone Games: James Ross (rossj511@gmail.com)
 Date : 04/24/2013
 All code (c)2012 DangerZone Games inc. all rights reserved
 */
+
 //initialize variables
 var GFxObject  RootMC;
 var GFxObject progress, mission, objective;
 var LF_save_info save_ob;
 var bool bIsOpen;
+
 //Starts the movie
 function bool Start(optional bool StartPaused = false)
 {
 		local actor Player_Location_Actor;
 		local GD2PlayerPawn LF_pawn;
         super.Start();
+
 		bIsOpen = true;
 		Player_Location_Actor = GetPC().Pawn;
 		LF_pawn = GD2PlayerPawn(Player_Location_Actor);
@@ -24,8 +27,11 @@ function bool Start(optional bool StartPaused = false)
 		progress = GetVariableObject("_root.p_perc");
 		mission = GetVariableObject("_root.c_mis");
 		objective = GetVariableObject("_root.m_obj");
+
 		if(LF_Pawn.mission1 == true && LF_Pawn.mission2a == false)
 		{
+
+
 			progress.SetText("5%");
 			mission.SetText("Gather Supplies");
 			objective.SetText("It looks like I won't be leaving\n anytime soon.\n I better find some food, water,\n and some batteries to get this\n flashlight working.");
@@ -42,6 +48,7 @@ function bool Start(optional bool StartPaused = false)
 			mission.SetText("Repair the Telephone");
 			objective.SetText("This phone seems fixable..\n I'm going to need\n Wire Strippers\n Duct Tape\n and some Copper Wire.");
 		}
+
         return true;
 } 
 function save_game_info()
@@ -51,6 +58,7 @@ function save_game_info()
 	Player_Location_Actor = GetPC().Pawn;
     LF_pawn = GD2PlayerPawn(Player_Location_Actor);
 	save_ob = class'LF_save_info'.static.load_options();
+
 	if(save_ob == none)
 	{
 		save_ob = new class'LF_save_info';

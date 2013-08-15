@@ -11,7 +11,7 @@ var Soundcue laugh;
 var bool IsInInteractionRange;
 var(Rendertext) Font lf;
 var bool blaugh;
-
+var LF_trigger_interaction_prompt movie;
 
 //if the player touches the trigger they can interact with the game
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
@@ -34,23 +34,35 @@ event UnTouch(Actor Other)
  
     if (Pawn(Other) != none)
     {
-        PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
-        IsInInteractionRange = false;
-        blaugh = false;
+		if(movie != none)
+		{
+			movie.End();
+		}
+
+			PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
+			IsInInteractionRange = false;
+			blaugh = false;
     }
 }
 
 //Prompts user for interaction when touching trigger
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
-    local Font previous_font;
+   /* local Font previous_font;
     previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to interact"); 
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+    previous_font = Canvas.Font;*/
+
+    if (movie == None)
+    {
+        movie = new class'LF_trigger_interaction_prompt';            
+	}
+	movie.Init();
+
 }
 //if used the trigger will play a sound
 function bool UsedBy(Pawn User)

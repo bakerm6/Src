@@ -47,7 +47,7 @@ function bool Dodge(eDoubleClickDir DoubleClickMove)
 {
 	if(bCanDodge)
 	{
-	return super.Dodge(DoubleClickMove);
+		return super.Dodge(DoubleClickMove);
 	}
 
 	return false;
@@ -57,18 +57,18 @@ function bool Dodge(eDoubleClickDir DoubleClickMove)
 //initiates for dialog sequence
 function wait()
 {
-SetTimer(26,false,'reset');
+	SetTimer(26,false,'reset');
 }
 //resets player movement ability
 function reset()
 {
-groundspeed = 300;
-SetTimer(5,false,'mission3start');
+	groundspeed = 300;
+	SetTimer(5,false,'mission3start');
 }
 //allows for soundcue in controller class to activate
 function mission3start()
 {
-mission3 = true;
+	mission3 = true;
 }
 //////////////////////////////////////////
 
@@ -78,45 +78,52 @@ simulated function PostBeginPlay()
 	local string url;
 	local LF_save_info save_info;
 	local vector vec;
- super.PostBeginPlay();
-   Health = 700;
+	super.PostBeginPlay();
+
+    Health = 700;
     SetTimer(1,true,'regen');
 
 
- url = WorldInfo.GetLocalURL();
- `log(url);
- if(Instr(url,"?lf_load",,true)!=-1)
- {
-	save_info = class'LF_save_info'.static.load_options();
-	if(save_info == none)
+	url = WorldInfo.GetLocalURL();
+	`log(url);
+
+	//checks for load game
+	if(Instr(url,"?lf_load",,true)!=-1)
 	{
-		save_info = new class'LF_save_info';
-	}
-	mission1 = save_info.mission_1;
-	mission2a = save_info.mission_2;
-	mission3 = save_info.mission_3;
-	mission4 = save_info.mission_4;
-	mission5 = save_info.mission_5;
-	flashlightc = save_info.flashlight_state;
-	vec.x = save_info.loc_x;
-	vec.y = save_info.loc_y;
-	vec.z = save_info.loc_z;
-	`log(vec.z@vec.y@vec.z);
-	SetLocation(vec);
- 	`log(mission1);
-	`log(flashlightc);
-	if(flashlightc == 1)
-	{
-		fp_arms = Spawn(class'testweapon');
-		InvManager.addInventory(fp_arms);
-		InvManager.bMustHoldWeapon = true;
-		InvManager.SetCurrentWeapon(fp_arms);
+		save_info = class'LF_save_info'.static.load_options();
+
+		if(save_info == none)
+		{
+			save_info = new class'LF_save_info';
+		}
+		mission1 = save_info.mission_1;
+		mission2a = save_info.mission_2;
+		mission3 = save_info.mission_3;
+		mission4 = save_info.mission_4;
+		mission5 = save_info.mission_5;
+		flashlightc = save_info.flashlight_state;
+		vec.x = save_info.loc_x;
+		vec.y = save_info.loc_y;
+		vec.z = save_info.loc_z;
+		`log(vec.z@vec.y@vec.z);
+		SetLocation(vec);
+ 		`log(mission1);
+		`log(flashlightc);
+
+		if(flashlightc == 1)
+		{
+			fp_arms = Spawn(class'testweapon');
+			InvManager.addInventory(fp_arms);
+			InvManager.bMustHoldWeapon = true;
+			InvManager.SetCurrentWeapon(fp_arms);
 		//fp_arms.Holder = self;
-		if(fp_arms != None)
-		fp_arms.GiveTo(self);
-		`log(InvManager.InventoryChain);
-	}
- }
+			if(fp_arms != None)
+			{
+				fp_arms.GiveTo(self);
+			}
+			`log(InvManager.InventoryChain);
+		}
+	 }
 
 }
 //debug function
@@ -129,29 +136,32 @@ function bool regen()
 {
     if(Health < 700&& Health > 0)
     {
-    Health += 5;
-	return true; //Health += 700;
+		Health += 5;
+		return true; //Health += 700;
     }
-	else 
+	else
+	{
 	return false;
+	}
 }
 
 //////////////////////////////////////////
 //checks every frame for certain events such as dying,completing missions, and activiating kismet sequences
-event Tick( float DeltaTime ) {
+event Tick( float DeltaTime ) 
+{
     //DebugPrint1(Health);
-    local GD2PlayerController g;
+    local GD2PlayerController LF_Controller;
     super.Tick(DeltaTime);
-    g= GD2PlayerController(self.controller);
+    LF_Controller = GD2PlayerController(self.controller);
     //DebugPrint1(killcount);
 		if(Health <= 0)
 		{
-		self.Destroy();
+			self.Destroy();
 		}
 		if(done==false && batteryc == 1 && flashlightc == 1)
 		{
-		TriggerRemoteKismetEvent('flashlight_toggle' );
-		done = true;
+			TriggerRemoteKismetEvent('flashlight_toggle' );
+			done = true;
 		}
 		if(done == false && mission2a == true)
 		{
@@ -161,16 +171,16 @@ event Tick( float DeltaTime ) {
 		if(batteryc == 1 && flashlightc == 1 && foodc == 1 && waterbottlec == 1 && twocall == false)
 		{
 		//DebugPrint1(1);
-		mission2a = true;
-		twocall = true;
+			mission2a = true;
+			twocall = true;
 		}
 		if(mission4 == true)
 		{
-		g.mapc = 2;
+			LF_Controller.mapc = 2;
 		}
 		if(killcount > 5)
 		{
-		mission5 = true;
+			mission5 = true;
 		}
 
     

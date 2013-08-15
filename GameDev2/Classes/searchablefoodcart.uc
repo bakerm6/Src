@@ -22,7 +22,7 @@ var bool IsInInteractionRange;
 var bool firsttime;
 var bool play;
 var(Rendertext) Font lf;
-
+var LF_trigger_interaction_prompt movie_1;
 
 //Becomes interactable when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
@@ -45,6 +45,10 @@ event UnTouch(Actor Other)
  
     if (Pawn(Other) != none)
     {
+		if(movie_1 != none)
+		{
+			movie_1.End();
+		}
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
         if(search == 1)
@@ -68,17 +72,25 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
 	
     if(search == 0)
     {
-    previous_font = Canvas.Font;
+   /* previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to search"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+    previous_font = Canvas.Font;*/
+
+		if (movie_1 == None)
+		{
+			movie_1 = new class'LF_trigger_interaction_prompt';            
+		}
+
+	movie_1.Init();
     }
 	
     else if(search == 1)
     {
+	movie_1.End();
     previous_font = Canvas.Font;
     Canvas.Font = lf;
     Canvas.SetPos(400,300);

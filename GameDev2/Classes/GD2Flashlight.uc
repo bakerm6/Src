@@ -17,6 +17,8 @@ var name LightSocket;
 //checks for usage
 exec function Fire() 
 {
+
+
 	if (IsLightOn) 
 		LightAnimOff();
 	else

@@ -1,4 +1,4 @@
-class GD2Hud extends HUD;
+class LF_HUD extends HUD;
 /*
 HUD class for Landfall
 contains exec functions for returning to main menu
@@ -11,7 +11,6 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 
 //initialize variables
 var LF_PauseMenu PauseMenu;
-var bool y;
 var bool x;
 var bool player_m_1, player_obj_1, player_m_2;
 var(Rendertext) Font lf;
@@ -24,6 +23,7 @@ var LF_Heart_HUD h_HUD;
 var GFxObject obj_movie;
 var bool mission1_objc_mov_end_bool;
 var bool start;
+
 //Debug function
 simulated private function DebugPrint(int sMessage)
 {
@@ -42,18 +42,20 @@ exec function  mainmen()
             menu_prompt = new class'LF_Menu_Prompt';            
 		}
 	menu_prompt.Init();
-	//PlayerOwner.SetPause(True);
+
 }
 //goes to main menu if pressed while prompt is displayed
 exec function yes()
 {
 
- local bool check;
- check = menu_prompt.open_check();
+	local bool check;
+	check = menu_prompt.open_check();
+
 	if(check == true)
 	{
 	menu_prompt.End();
-	consolecommand("open alphamen1");
+	consolecommand("open betamen_1");
+
 		if (main_menu == None)
 		{
 			main_menu = new class'LF_Main_Menu';
@@ -66,7 +68,7 @@ exec function no()
 {
 	menu_prompt.End();
 	x = false;
-	//menu_prompt.End();
+
 }
 /////////////////////////////////////////////////////
 
@@ -87,7 +89,7 @@ function int TogglePauseMenu()
 		PauseMenu.AddFocusIgnoreKey('E');
 		PlayerOwner.SetPause(False);
 		PauseMenu.End();
-		 PauseMenu.bIsOpen = false;
+		PauseMenu.bIsOpen = false;
 		x = false;
 		return 1;
 	}
@@ -122,9 +124,9 @@ function mission1_movie()
 	}
 	if(player_m_1 == false)
 	{
-	mission1_mov.Init();
-	SetTimer(7,false,'close_mission1');
-	player_m_1 = true;
+		mission1_mov.Init();
+		SetTimer(7,false,'close_mission1');
+		player_m_1 = true;
 	}
 	else
 	{
@@ -147,8 +149,8 @@ function mission1_obj_movie()
 	}
 	if(player_obj_1 == false)
 	{
-	mission1_objc_mov.Init();
-	player_obj_1 = true;
+		mission1_objc_mov.Init();
+		player_obj_1 = true;
 	}
 	else
 	{
@@ -165,9 +167,9 @@ function mission2_movie()
 	}
 	if(player_m_2 == false)
 	{
-	mission2_mov.Init();
-	SetTimer(7,false,'close_mission2');
-	player_m_2 = true;
+		mission2_mov.Init();
+		SetTimer(7,false,'close_mission2');
+		player_m_2 = true;
 	}
 	else
 	{
@@ -327,14 +329,15 @@ function PostRender()
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Get the main switch working"); 
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
-    Canvas.Font = lf;; 
-    Canvas.SetPos(CenterX,CenterY);
-    Canvas.SetDrawColor(255,50,15,255);
-	//make a crosshair for user
-    Canvas.DrawText("+"); 
-    Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+
+		previous_font = Canvas.Font;
+		Canvas.Font = lf;; 
+		Canvas.SetPos(CenterX,CenterY);
+		Canvas.SetDrawColor(255,50,15,255);
+		//make a crosshair for user
+		Canvas.DrawText("+"); 
+		Canvas.Font = previous_font; 
+		previous_font = Canvas.Font;
     }
 	
 	// mission 4 text
@@ -401,8 +404,6 @@ function CheckViewPortAspectRatio()
 }
 defaultproperties
 {
-
-y = false;
 x = false;
 player_m_1 = false
 player_obj_1 = false

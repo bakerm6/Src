@@ -1,5 +1,12 @@
 class LF_save_info extends Object;
 
+/*
+Object file that holds player progress data
+DangerZone Games: James Ross (rossj511@gmail.com)
+Date : 04/24/2013
+All code (c)2012 DangerZone Games inc. all rights reserved
+*/
+
 var int loc_x,loc_y,loc_z;
 
 var bool mission_1,mission_2,mission_3,mission_4,mission_5;
@@ -35,14 +42,14 @@ static function LF_save_info load_options()
 }
 defaultproperties
 {
-loc_x = 28011;
-loc_y = 119499;
-loc_z = -2209;
-flashlight_state = 0;
-mission_1 = false;
-mission_2 = false;
-mission_3 = false;
-mission_4 = false;
-mission_5 = false;
-map_name = "base"
+	loc_x = 28011;
+	loc_y = 119499;
+	loc_z = -2209;
+	flashlight_state = 0;
+	mission_1 = false;
+	mission_2 = false;
+	mission_3 = false;
+	mission_4 = false;
+	mission_5 = false;
+	map_name = "base"
 }

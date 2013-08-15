@@ -1,4 +1,4 @@
-class kismettest extends SequenceCondition;
+class LF_kismettest extends SequenceCondition;
 //var(SequenceAction) int check;	
 // Here we set the default values of the variables //
 event Activated()

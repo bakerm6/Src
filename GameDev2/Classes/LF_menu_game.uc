@@ -9,7 +9,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var LF_Main_Menu main;
 var SoundCue main_menu_music;
 
-///////////////////////////////////////////////
+
 
 event PostLogin( PlayerController NewPlayer )
 {
@@ -20,6 +20,7 @@ event PostLogin( PlayerController NewPlayer )
  simulated function StartMatch()
  {
 	super.StartMatch();
+
 	main = new class'LF_Main_Menu';
 	//main.SetTimingMode(TM_Real);
 	main.Init();

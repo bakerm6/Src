@@ -84,11 +84,11 @@ function bool UsedBy(Pawn User)
 {
     local bool used;
     local actor Player_Location_Actor;
-    local GD2PlayerPawn a;
+    local GD2PlayerPawn LF_Pawn;
     //DebugPrint("f");
     used = super.UsedBy(User);
     Player_Location_Actor = GetALocalPlayerController().Pawn;
-    a = GD2PlayerPawn(Player_Location_Actor);
+    LF_Pawn = GD2PlayerPawn(Player_Location_Actor);
     if (IsInInteractionRange&&search!=1)//&&a.mission2b==true)
     {
         //DebugPrint("F");
@@ -98,9 +98,9 @@ function bool UsedBy(Pawn User)
         {
         PlaySound(clicky);
         play = true;
-        a.duct+=1;
+        LF_Pawn.duct+=1;
         }
-        //Put your own sound cue here. And ideally, don't directly reference assets in code.
+       
         return true;
     }
     return used;
