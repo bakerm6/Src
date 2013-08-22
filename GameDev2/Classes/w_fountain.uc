@@ -10,7 +10,7 @@ All code (c)2012 DangerZone Games inc. all rights reserved
 var Soundcue water;
 var bool IsInInteractionRange;
 var(Rendertext) Font lf;
-
+var LF_trigger_interaction_prompt movie;
 
 
 //Can be interacted with when touched
@@ -34,6 +34,10 @@ event UnTouch(Actor Other)
  
     if (Pawn(Other) != none)
     {
+		if(movie != none)
+		{
+			movie.End();
+		}
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
     }
@@ -42,7 +46,7 @@ event UnTouch(Actor Other)
 //Renders prompt if interactable
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
-    local Font previous_font;
+   /* local Font previous_font;
 	
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -50,7 +54,13 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to interact"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+    previous_font = Canvas.Font;*/
+	
+	if (movie == None)
+    {
+        movie = new class'LF_trigger_interaction_prompt';            
+	}
+	movie.Init();
 }
 
 //Plays sound when used

@@ -11,6 +11,7 @@ var Soundcue bell;
 var bool IsInInteractionRange;
 var bool bbell;
 var(Rendertext) Font lf;
+var LF_trigger_interaction_prompt movie;
 
 //becomes interactable when touched
 event Touch(Actor Other, PrimitiveComponent OtherComp, Vector HitLocation, Vector HitNormal)
@@ -33,6 +34,11 @@ event UnTouch(Actor Other)
  
     if (Pawn(Other) != none)
     {
+		if(movie != none)
+		{
+			movie.End();
+		}
+
         PlayerController(Pawn(Other).Controller).myHUD.RemovePostRenderedActor(self);
         IsInInteractionRange = false;
         bbell = false;
@@ -42,7 +48,7 @@ event UnTouch(Actor Other)
 //Renders propmt if interactable
 simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraPosition, Vector CameraDir)
 {
-    local Font previous_font;
+    /*local Font previous_font;
 	
     previous_font = Canvas.Font;
     Canvas.Font = lf;
@@ -50,7 +56,13 @@ simulated event PostRenderFor(PlayerController PC, Canvas Canvas, Vector CameraP
     Canvas.SetDrawColor(255,50,15,255);
     Canvas.DrawText("Press E to interact"); //Prompt is a string variable defined in our new actor's class.
     Canvas.Font = previous_font; 
-    previous_font = Canvas.Font;
+    previous_font = Canvas.Font;*/
+
+	if (movie == None)
+    {
+        movie = new class'LF_trigger_interaction_prompt';            
+	}
+	movie.Init();
 }
 
 //plays sound when used

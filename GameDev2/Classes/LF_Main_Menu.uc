@@ -12,6 +12,7 @@ var LFPlayerInput LFInput;
 // asset server ip 74.118.24.231
 //password: Landfall!
 //#960417
+
 //================BINDING STUFF==================
 var bool bCaptureForBind;
 var name CapturedKey;
